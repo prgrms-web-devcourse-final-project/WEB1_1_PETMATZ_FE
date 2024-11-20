@@ -4,5 +4,5 @@
 @tailwind utilities;
 
 html {
-    @apply font-suit;
+    font-family: 'SUIT Variable';
 }
