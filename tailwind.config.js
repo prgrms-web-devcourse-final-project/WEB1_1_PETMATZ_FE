@@ -63,7 +63,7 @@ export default {
                 },
             },
             fontFamily: {
-                suit: ['SUIT', 'sans-serif'],
+                suit: ['SUIT Variable', 'sans-serif'],
             },
         },
     },
