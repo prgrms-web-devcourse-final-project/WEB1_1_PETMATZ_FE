@@ -1,6 +1,16 @@
 import RootLayout from '@/layouts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Chat, Home, Intro, Login, Match, Profile, Signup, SOS } from '@/pages';
+import {
+    Chat,
+    ChatDetail,
+    Home,
+    Intro,
+    Login,
+    Match,
+    Profile,
+    Signup,
+    SOS,
+} from '@/pages';
 import { ToastContainer } from 'react-toastify';
 
 export default function AppRoutes() {
@@ -23,6 +33,7 @@ export default function AppRoutes() {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/match" element={<Match />} />
+                    <Route path="/chat/:roomId" element={<ChatDetail />} />
                 </Route>
             </Routes>
         </BrowserRouter>
