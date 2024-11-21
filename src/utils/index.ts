@@ -1,1 +1,1 @@
-export { default as transDateFormatForChat } from './transDateFormatForChat';
+export { default as utcToLocalTime } from './utcToLocalTime';
