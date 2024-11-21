@@ -65,6 +65,25 @@ export default {
             fontFamily: {
                 suit: ['SUIT Variable', 'sans-serif'],
             },
+            fontSize: {
+                'title-l': ['32px', { lineHeight: '150%' }],
+                'title-m': ['28px', { lineHeight: '150%' }],
+                'title-s': ['24px', { lineHeight: '150%' }],
+                'body-xl': ['22px', { lineHeight: '30%' }],
+                'body-l': ['18px', { lineHeight: '125%' }],
+                'body-m': ['16px', { lineHeight: '125%' }],
+                'body-s': ['14px', { lineHeight: '125%' }],
+                'label-l': ['14px', { lineHeight: '125%' }],
+                'label-m': ['12px', { lineHeight: '125%' }],
+                'label-s': ['10px', { lineHeight: '125%' }],
+                detail: ['8px', { lineHeight: '125%' }],
+            },
+            fontWeight: {
+                extrabold: 800, // ExtraBold
+                semibold: 600, // SemiBold
+                normal: 400, // Regular
+                extralight: 200, // ExtraLight
+            },
         },
     },
     plugins: [
