@@ -1,18 +1,33 @@
 import { BaseApiResponse } from './baseResponse';
 
-interface ISender {
+interface IChatUserInfo {
     id: string;
     nickname: string;
     profileImgUrl: string;
 }
 
+interface IChatRoomInfo {
+    id: string;
+    lastMessage: string;
+    messageCount: number;
+    lastMessageTimestamp: string;
+    participants: IChatUserInfo[];
+}
+
+interface IMessage {
+    id: string;
+    senderId: string;
+    receiverId: string;
+    msg: string;
+    msgTimestamp: string;
+    readStatus: boolean;
+}
+
 interface IChatRoom {
     id: string;
-    sender: ISender;
-    message: string;
-    unReadMessageCount: number;
-    createdAt: string;
-    updatedAt: string;
+    entrusted: IChatUserInfo;
+    caregiver: IChat;
+    messages: IMessage[];
 }
 
 //	GET	ChatRoom
@@ -20,4 +35,10 @@ interface ChatRoomListApiResponse extends BaseApiResponse {
     ChatRooms: IChatRoom[];
 }
 
-export type { ISender, IChatRoom, ChatRoomListApiResponse };
+export type {
+    IChatUserInfo,
+    IChatRoomInfo,
+    IChatRoom,
+    IMessage,
+    ChatRoomListApiResponse,
+};
