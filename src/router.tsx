@@ -7,6 +7,7 @@ import {
     Intro,
     Login,
     Match,
+    Please,
     Profile,
     Signup,
     SOS,
@@ -27,6 +28,7 @@ export default function AppRoutes() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/sos" element={<SOS />} />
                     <Route path="/chat" element={<Chat />} />
+                    <Route path="/please" element={<Please />} />
                 </Route>
                 <Route element={<RootLayout layout={false} />}>
                     <Route index={true} path="/" element={<Intro />} />
