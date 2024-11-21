@@ -8,9 +8,9 @@ interface RootLayoutProps {
 
 export default function RootLayout({ layout }: RootLayoutProps) {
     return (
-        <div className="min-h-screen relative max-w-[768px] bg-white text-secondary mx-auto flex flex-col justify-center">
+        <div className="h-screen relative max-w-[768px] bg-white mx-auto flex flex-col justify-center">
             {layout && <Header />}
-            <main className="flex-1">
+            <main className="flex flex-col h-full overflow-hidden">
                 <Outlet />
             </main>
             {layout && <BottomNav />}
