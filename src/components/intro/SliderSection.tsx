@@ -22,7 +22,7 @@ export default function SliderSection({ setCurrentSlide }: SliderSectionProps) {
     };
 
     return (
-        <section className="w-full max-w-[600px] flex-1 overflow-hidden mt-16 sm:mt-10 ">
+        <section className="w-full max-w-[600px] flex-1 overflow-hidden mt-16 sm:mt-32 ">
             <Slider {...settings}>
                 <SlideContent
                     image={<MiddleDog className="w-52 h-60 mr-4 sm:w-64" />}
