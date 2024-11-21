@@ -20,22 +20,23 @@ export default function Chat() {
     }, []);
 
     return (
-        <div>
+        <div className="flex flex-col h-full overflow-hidden">
             <h2>채팅</h2>
-            <div>
-                {user && dummy && (
-                    <div className="flex flex-col">
-                        {dummy.map((chatRoom, idx) => (
-                            <ChatRoom key={idx} data={chatRoom} user={user} />
-                        ))}
-                    </div>
-                )}
-                <div className="flex flex-col">
+            {user && dummy && (
+                <div className="flex flex-col overflow-y-auto">
+                    {dummy.map((chatRoom, idx) => (
+                        <ChatRoom key={idx} data={chatRoom} user={user} />
+                    ))}
+                    <ChatRoomSkeleton />
+                    <ChatRoomSkeleton />
+                    <ChatRoomSkeleton />
+                    <ChatRoomSkeleton />
+                    <ChatRoomSkeleton />
                     <ChatRoomSkeleton />
                     <ChatRoomSkeleton />
                     <ChatRoomSkeleton />
                 </div>
-            </div>
+            )}
         </div>
     );
 }
