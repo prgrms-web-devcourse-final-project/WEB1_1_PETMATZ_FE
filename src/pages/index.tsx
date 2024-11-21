@@ -7,3 +7,4 @@ export { default as Signup } from './Signup';
 export { default as SOS } from './SOS';
 export { default as Chat } from './Chat';
 export { default as ChatDetail } from './ChatDetail';
+export { default as Please } from './Please';
