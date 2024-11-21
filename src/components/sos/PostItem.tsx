@@ -1,4 +1,5 @@
 import { PostItemProps } from '@/types/Sos';
+import { utcToLocalDateTime } from '@/utils';
 import MaleIcon from '@/assets/images/sos/gender-male.svg?react';
 import FemaleIcon from '@/assets/images/sos/gender-female.svg?react';
 import CalenderIcon from '@/assets/images/sos/calender.svg?react';
@@ -67,7 +68,7 @@ export default function PostItem({ post, onClick }: PostItemProps) {
             </div>
             <p className="text-sm text-gray-600 flex justify-end gap-1 mt-2">
                 <PencilIcon className="w-5 h-5" />
-                {createdAt}
+                {utcToLocalDateTime(createdAt)}
             </p>
         </div>
     );
