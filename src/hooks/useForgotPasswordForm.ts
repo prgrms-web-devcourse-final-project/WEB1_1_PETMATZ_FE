@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 /**
@@ -20,6 +21,7 @@ export default function useForgotPasswordForm() {
     } = useForm<ForgotPasswordInputs>({
         mode: 'onChange',
     });
+    const [success, setSuccess] = useState(false);
 
     /**
      * Handles form submission
@@ -27,6 +29,7 @@ export default function useForgotPasswordForm() {
     const onSubmit = (data: ForgotPasswordInputs) => {
         console.log(data);
         // 여기에 로그인 로직을 구현하세요
+        setSuccess(true);
     };
 
     /**
@@ -46,5 +49,6 @@ export default function useForgotPasswordForm() {
         errors,
         onSubmit,
         isValid,
+        success,
     };
 }
