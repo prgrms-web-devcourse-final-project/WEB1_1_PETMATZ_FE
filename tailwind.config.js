@@ -86,9 +86,5 @@ export default {
             },
         },
     },
-    plugins: [
-        require('daisyui'),
-        require('tailwindcss'),
-        require('autoprefixer'),
-    ],
+    plugins: [require('tailwindcss'), require('autoprefixer')],
 };
