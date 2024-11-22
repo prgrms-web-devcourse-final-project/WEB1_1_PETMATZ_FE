@@ -87,8 +87,9 @@ export default {
         },
     },
     plugins: [
-        require('daisyui'),
         require('tailwindcss'),
         require('autoprefixer'),
+        require('./plugins/buttonPlugin'),
+        require('./plugins/inputPlugin'),
     ],
 };
