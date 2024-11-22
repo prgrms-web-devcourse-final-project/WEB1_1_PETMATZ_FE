@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import {
     Chat,
     ChatDetail,
+    ForgotPassword,
     Home,
     Intro,
     Login,
@@ -38,6 +39,10 @@ export default function AppRoutes() {
                     <Route path="/match" element={<Match />} />
                     <Route path="/chat/:roomId" element={<ChatDetail />} />
                     <Route path="/sos/write" element={<SOSWrite />} />
+                    <Route
+                        path="/forgot-password"
+                        element={<ForgotPassword />}
+                    />
                 </Route>
             </Routes>
         </BrowserRouter>
