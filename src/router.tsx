@@ -1,6 +1,7 @@
 import RootLayout from '@/layouts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import {
+    ChangePassword,
     Chat,
     ChatDetail,
     ForgotPassword,
@@ -15,13 +16,14 @@ import {
     SOSWrite,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AppRoutes() {
     return (
         <BrowserRouter>
             <ToastContainer
                 position="top-right"
-                autoClose={1000}
+                autoClose={3000}
                 pauseOnHover={false}
             />
             <Routes>
@@ -42,6 +44,10 @@ export default function AppRoutes() {
                     <Route
                         path="/forgot-password"
                         element={<ForgotPassword />}
+                    />
+                    <Route
+                        path="/change-password"
+                        element={<ChangePassword />}
                     />
                 </Route>
             </Routes>
