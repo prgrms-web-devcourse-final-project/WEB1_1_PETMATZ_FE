@@ -31,7 +31,7 @@ export default function ForgotPassword() {
             </header>
             {!success ? (
                 <>
-                    <main className="flex-1 flex flex-col justify-start">
+                    <section className="flex-1 flex flex-col justify-start">
                         <div className="bg-white px-6 pt-6 pb-12 flex flex-col">
                             <div className="text-title-s font-extrabold text-gray-800 pb-12">
                                 <p>임시 비밀번호를</p>
@@ -60,12 +60,12 @@ export default function ForgotPassword() {
                                 )}
                             </form>
                         </div>
-                    </main>
+                    </section>
                     <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
                         <button
                             type="submit"
                             form="forgot-form"
-                            className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                            className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
                             disabled={!isValid || !!errors.email}
                         >
                             확인

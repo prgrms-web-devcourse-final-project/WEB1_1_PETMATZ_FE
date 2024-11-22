@@ -36,7 +36,7 @@ export default function Login() {
                     로그인
                 </h1>
             </header>
-            <main className="flex-1 flex flex-col justify-start">
+            <section className="flex-1 flex flex-col justify-start">
                 <div className="bg-white px-6 pt-6 pb-12 flex flex-col">
                     <div className="text-title-s font-extrabold text-gray-800 pb-12">
                         <p>이메일로</p>
@@ -90,7 +90,7 @@ export default function Login() {
                         </div>
                     </form>
                 </div>
-            </main>
+            </section>
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
                 <div
                     onClick={handleRouteToSignUpBtn}
@@ -102,7 +102,7 @@ export default function Login() {
                 <button
                     type="submit"
                     form="login-form"
-                    className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600"
+                    className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600"
                 >
                     로그인
                 </button>
