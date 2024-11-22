@@ -26,7 +26,7 @@ interface IMessage {
 interface IChatRoom {
     id: string;
     entrusted: IChatUserInfo;
-    caregiver: IChat;
+    caregiver: IChatUserInfo;
     messages: IMessage[];
 }
 
