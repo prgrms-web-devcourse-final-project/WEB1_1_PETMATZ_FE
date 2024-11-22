@@ -69,7 +69,7 @@ export default {
                 'title-l': ['32px', { lineHeight: '150%' }],
                 'title-m': ['28px', { lineHeight: '150%' }],
                 'title-s': ['24px', { lineHeight: '150%' }],
-                'body-xl': ['22px', { lineHeight: '30%' }],
+                'body-xl': ['22px', { lineHeight: '150%' }],
                 'body-l': ['18px', { lineHeight: '125%' }],
                 'body-m': ['16px', { lineHeight: '125%' }],
                 'body-s': ['14px', { lineHeight: '125%' }],
