@@ -11,7 +11,7 @@ export default function SlideContent({
 }: SlideContentProps) {
     return (
         <div className="flex flex-col items-center justify-center text-center px-6 mt-6">
-            <div className="w-full h-80 mb-4 flex items-center justify-center">
+            <div className="w-full h-70 sm:h-80 mb-4 flex items-center justify-center">
                 {image}
             </div>
             <h2 className="mb-3 text-black font-extrabold text-body-xl sm:text-title-l">

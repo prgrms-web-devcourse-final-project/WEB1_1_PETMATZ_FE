@@ -22,10 +22,10 @@ export default function SliderSection({ setCurrentSlide }: SliderSectionProps) {
     };
 
     return (
-        <section className="w-full max-w-[600px] flex-1 overflow-hidden mt-16 sm:mt-32 ">
-            <Slider {...settings}>
+        <section className="w-full max-w-[600px] pb-10 flex-1 overflow-hidden">
+            <Slider {...settings} className="w-full">
                 <SlideContent
-                    image={<MiddleDog className="w-52 h-60 mr-4 sm:w-64" />}
+                    image={<MiddleDog className="w-52 mr-4 sm:w-64" />}
                     title={
                         <span>
                             우리 멍멍이를
@@ -42,7 +42,7 @@ export default function SliderSection({ setCurrentSlide }: SliderSectionProps) {
                     }
                 />
                 <SlideContent
-                    image={<SmallDog className="w-52 h-60 sm:w-64" />}
+                    image={<SmallDog className="w-52 sm:w-64" />}
                     title={
                         <span>
                             멍멍!{' '}
@@ -59,7 +59,7 @@ export default function SliderSection({ setCurrentSlide }: SliderSectionProps) {
                     }
                 />
                 <SlideContent
-                    image={<LargeDog className="w-52 h-60 sm:w-64" />}
+                    image={<LargeDog className="w-52 sm:w-64" />}
                     title={
                         <span>
                             멍멍이의 돌봄,
