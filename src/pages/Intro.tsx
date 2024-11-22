@@ -19,7 +19,9 @@ export default function Intro() {
             </header>
 
             {/* Slider Section */}
-            <SliderSection setCurrentSlide={setCurrentSlide} />
+            <div className="flex justify-center items-center">
+                <SliderSection setCurrentSlide={setCurrentSlide} />
+            </div>
 
             {/* Footer */}
             <section className="w-full max-w-[600px] px-6 py-2.5">
