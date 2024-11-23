@@ -16,6 +16,7 @@ export default function inputPlugin({ addComponents }) {
                 '',
             '@apply disabled:border-none disabled:placeholder:text-transparent':
                 '',
+            '@apply focus:border-point-300': '',
         },
         // Error 스타일
         '.input-warning': {
