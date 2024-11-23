@@ -16,7 +16,7 @@ import {
     SOSWrite,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 
 export default function AppRoutes() {
     return (
@@ -27,18 +27,19 @@ export default function AppRoutes() {
                 pauseOnHover={false}
             />
             <Routes>
-                <Route element={<RootLayout layout={true} />}>
+                <Route element={<RootLayout header={true} bottomNav={true} />}>
                     <Route path="/home" element={<Home />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/sos" element={<SOS />} />
                     <Route path="/chat" element={<Chat />} />
                     <Route path="/please" element={<Please />} />
                 </Route>
-                <Route element={<RootLayout layout={false} />}>
+                <Route
+                    element={<RootLayout header={false} bottomNav={false} />}
+                >
                     <Route index={true} path="/" element={<Intro />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/match" element={<Match />} />
                     <Route path="/chat/:roomId" element={<ChatDetail />} />
                     <Route path="/sos/write" element={<SOSWrite />} />
                     <Route
@@ -49,6 +50,9 @@ export default function AppRoutes() {
                         path="/change-password"
                         element={<ChangePassword />}
                     />
+                </Route>
+                <Route element={<RootLayout header={false} bottomNav={true} />}>
+                    <Route path="/match" element={<Match />} />
                 </Route>
             </Routes>
         </BrowserRouter>
