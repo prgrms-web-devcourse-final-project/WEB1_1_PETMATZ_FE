@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import useFadeNavigate from './useFadeNavigate';
 
 /**
  * Login form input type
@@ -18,8 +20,12 @@ export default function useLoginForm() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<LoginInputs>();
+        formState: { errors, isValid },
+    } = useForm<LoginInputs>({
+        mode: 'onChange',
+    });
+    const [success, setSuccess] = useState(false);
+    const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
@@ -27,6 +33,10 @@ export default function useLoginForm() {
     const onSubmit = (data: LoginInputs) => {
         console.log(data);
         // 여기에 로그인 로직을 구현하세요
+        setSuccess(true);
+        setTimeout(() => {
+            navigate('/home');
+        }, 3000);
     };
 
     /**
@@ -61,5 +71,7 @@ export default function useLoginForm() {
         handleSubmit,
         errors,
         onSubmit,
+        isValid,
+        success,
     };
 }
