@@ -78,6 +78,24 @@ export interface SOSCreateRequest {
     };
 }
 
+// SOS 글 작성 타입
+export interface FormData {
+    title: string;
+    content: string;
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
+    paymentType: '시급' | '일급' | '협의';
+    paymentAmount: number;
+    selectedDogs: string[];
+}
+
+export interface Dog {
+    id: string;
+    name: string;
+}
+
 // SOS 글 수정 요청 인터페이스
 export interface SOSUpdateRequest extends Partial<SOSCreateRequest> {
     postId: number; // 수정할 게시물 ID
