@@ -1,10 +1,9 @@
-import { useChangePasswordForm } from '@/hooks';
+import { useChangePasswordForm, useFadeNavigate } from '@/hooks';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Back from '@/assets/images/header/back.svg?react';
 
 export default function ChangePassword() {
-    const navigate = useNavigate();
+    const navigate = useFadeNavigate();
     const {
         currentPasswordValidation,
         newPasswordValidation,
@@ -93,16 +92,13 @@ export default function ChangePassword() {
                 </div>
             </section>
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto flex flex-col gap-[10px]">
-                <button
-                    onClick={handleBackBtn}
-                    className="w-full text-body-l font-extrabold text-point-600 py-3 rounded-lg bg-white active:bg-point-200 hover:bg-point-200 border-2 border-point-600"
-                >
+                <button onClick={handleBackBtn} className="btn-outline">
                     돌아가기
                 </button>
                 <button
                     type="submit"
                     form="change-form"
-                    className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    className="btn-solid mb-8"
                     disabled={
                         !isValid ||
                         !!errors.currentPassword ||
