@@ -41,7 +41,7 @@ export default function CustomInput<T extends FieldValues>({
 	`;
 
     return (
-        <div className="flex flex-col text-l-m text-gray-500 gap-[8px]">
+        <div className="flex flex-col text-gray-500 gap-[8px]">
             <label htmlFor={id} className="text-label-m">
                 {label}
             </label>
