@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+const flowbite = require('flowbite-react/tailwind');
 export default {
-    content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+    content: [
+        './index.html',
+        './src/**/*.{js,ts,jsx,tsx}',
+        './node_modules/flowbite/**/*.js',
+        flowbite.content(),
+    ],
     theme: {
         extend: {
             borderWidth: {
@@ -94,5 +100,6 @@ export default {
         require('autoprefixer'),
         require('./plugins/buttonPlugin'),
         require('./plugins/inputPlugin'),
+        flowbite.plugin(),
     ],
 };
