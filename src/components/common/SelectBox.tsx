@@ -1,8 +1,10 @@
 import { Option } from '@/hooks/useSelectBox';
 import ReactDOM from 'react-dom';
-import BottomArrow from '@/assets/images/bottomArrow.svg?react';
 import WarningIcon from '@/assets/images/warning.svg?react';
 import React from 'react';
+
+// SVG
+import ArrowBottomIcon from '@/assets/images/arrow/arrowBottom.svg?react';
 
 interface SelectBoxProps {
     id: string;
@@ -74,7 +76,7 @@ export default function SelectBox({
                     onClick={toggleSelectBox}
                 >
                     {value ? value.label : `${label}(을/를) 선택해주세요.`}
-                    <BottomArrow />
+                    <ArrowBottomIcon />
                 </div>
                 <p className="text-label-s px-[24px]">
                     {error ? (
