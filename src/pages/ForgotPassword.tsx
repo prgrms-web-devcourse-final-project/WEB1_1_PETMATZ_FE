@@ -37,28 +37,30 @@ export default function ForgotPassword() {
             {!success ? (
                 <>
                     <section className="flex-1 flex flex-col justify-start">
-                        <div className="bg-white px-6 pt-6 pb-12 flex flex-col">
-                            <div className="text-title-s font-extrabold text-gray-800 pb-12">
-                                <p>임시 비밀번호를</p>
-                                <p>이메일로 보내드릴게요!</p>
+                        <div className="bg-white pt-6 pb-12 flex flex-col">
+                            <div className="w-full max-w-[600px] px-6 mx-auto">
+                                <div className="text-title-s font-extrabold text-gray-800 pb-12">
+                                    <p>임시 비밀번호를</p>
+                                    <p>이메일로 보내드릴게요!</p>
+                                </div>
+                                <form
+                                    id="forgot-form"
+                                    onSubmit={handleSubmit(onSubmit)}
+                                >
+                                    <CustomInput
+                                        id="email"
+                                        label="이메일"
+                                        type="text"
+                                        placeholder="이메일을 입력해주세요."
+                                        register={register}
+                                        watch={watch}
+                                        validation={emailValidation}
+                                        error={errors.email?.message}
+                                        design="outline"
+                                        successMsg="좋아요!"
+                                    />
+                                </form>
                             </div>
-                            <form
-                                id="forgot-form"
-                                onSubmit={handleSubmit(onSubmit)}
-                            >
-                                <CustomInput
-                                    id="email"
-                                    label="이메일"
-                                    type="text"
-                                    placeholder="이메일을 입력해주세요."
-                                    register={register}
-                                    watch={watch}
-                                    validation={emailValidation}
-                                    error={errors.email?.message}
-                                    design="outline"
-                                    successMsg="좋아요!"
-                                />
-                            </form>
                         </div>
                     </section>
                     <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">

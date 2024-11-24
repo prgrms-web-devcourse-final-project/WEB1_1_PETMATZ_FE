@@ -47,51 +47,53 @@ export default function Login() {
                 </h1>
             </header>
             <section className="flex-1 flex flex-col justify-start">
-                <div className="bg-white px-6 pt-6 pb-12 flex flex-col">
-                    <div className="text-title-s font-extrabold text-gray-800 pb-12">
-                        <p>이메일로</p>
-                        <p>로그인을 해주세요.</p>
+                <div className="bg-white pt-6 pb-12 flex flex-col">
+                    <div className="w-full max-w-[600px] px-6 mx-auto">
+                        <div className="text-title-s font-extrabold text-gray-800 pb-12">
+                            <p>이메일로</p>
+                            <p>로그인을 해주세요.</p>
+                        </div>
+                        <form
+                            id="login-form"
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="flex flex-col"
+                        >
+                            <div className="flex flex-col gap-1">
+                                <CustomInput
+                                    id="email"
+                                    label="이메일"
+                                    type="text"
+                                    placeholder="이메일을 입력해주세요."
+                                    register={register}
+                                    watch={watch}
+                                    validation={emailValidation}
+                                    error={errors.email?.message}
+                                    design="outline"
+                                    successMsg="좋아요!"
+                                />
+                                <CustomInput
+                                    id="password"
+                                    label="비밀번호"
+                                    type="password"
+                                    placeholder="비밀번호를 입력해주세요."
+                                    register={register}
+                                    watch={watch}
+                                    validation={passwordValidation}
+                                    error={errors.password?.message}
+                                    design="outline"
+                                    successMsg="좋아요!"
+                                />
+                            </div>
+                            <div className="flex justify-end items-center w-full">
+                                <span
+                                    onClick={handleForgotPWBtn}
+                                    className="text-label-l font-semibold text-point-400 cursor-pointer"
+                                >
+                                    비밀번호를 잊으셨나요?
+                                </span>
+                            </div>
+                        </form>
                     </div>
-                    <form
-                        id="login-form"
-                        onSubmit={handleSubmit(onSubmit)}
-                        className="flex flex-col"
-                    >
-                        <div className="flex flex-col gap-1">
-                            <CustomInput
-                                id="email"
-                                label="이메일"
-                                type="text"
-                                placeholder="이메일을 입력해주세요."
-                                register={register}
-                                watch={watch}
-                                validation={emailValidation}
-                                error={errors.email?.message}
-                                design="outline"
-                                successMsg="좋아요!"
-                            />
-                            <CustomInput
-                                id="password"
-                                label="비밀번호"
-                                type="password"
-                                placeholder="비밀번호를 입력해주세요."
-                                register={register}
-                                watch={watch}
-                                validation={passwordValidation}
-                                error={errors.password?.message}
-                                design="outline"
-                                successMsg="좋아요!"
-                            />
-                        </div>
-                        <div className="flex justify-end items-center w-full">
-                            <span
-                                onClick={handleForgotPWBtn}
-                                className="text-label-l font-semibold text-point-400 cursor-pointer"
-                            >
-                                비밀번호를 잊으셨나요?
-                            </span>
-                        </div>
-                    </form>
                 </div>
             </section>
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
