@@ -1,6 +1,7 @@
 import { useChangePasswordForm, useFadeNavigate } from '@/hooks';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
+import Eye from '@/assets/images/change-password/eye.svg?react';
 import { CustomInput } from '@/components/common';
 
 export default function ChangePassword() {
@@ -16,9 +17,14 @@ export default function ChangePassword() {
         onSubmit,
         isValid,
     } = useChangePasswordForm();
+    const [show, setShow] = useState(false);
 
     const handleBackBtn = useCallback(() => {
         navigate('/profile');
+    }, []);
+
+    const handlePasswordShowBtn = useCallback(() => {
+        setShow((prev) => !prev);
     }, []);
 
     return (
@@ -56,18 +62,24 @@ export default function ChangePassword() {
                                 design="outline"
                                 successMsg="좋아요!"
                             />
-                            <CustomInput
-                                id="newPassword"
-                                label="새로운 비밀번호"
-                                type="password"
-                                placeholder="새로운 비밀번호를 입력해주세요."
-                                register={register}
-                                watch={watch}
-                                validation={newPasswordValidation}
-                                error={errors.newPassword?.message}
-                                design="outline"
-                                successMsg="좋아요!"
-                            />
+                            <div className="relative">
+                                <CustomInput
+                                    id="newPassword"
+                                    label="새로운 비밀번호"
+                                    type={show ? 'text' : 'password'}
+                                    placeholder="새로운 비밀번호를 입력해주세요."
+                                    register={register}
+                                    watch={watch}
+                                    validation={newPasswordValidation}
+                                    error={errors.newPassword?.message}
+                                    design="outline"
+                                    successMsg="좋아요!"
+                                />
+                                <Eye
+                                    onClick={handlePasswordShowBtn}
+                                    className={`absolute bottom-8 right-6 ${show ? 'text-point-500' : 'text-point-200'} cursor-pointer`}
+                                />
+                            </div>
                             <CustomInput
                                 id="confirmPassword"
                                 label="새로운 비밀번호 확인"
