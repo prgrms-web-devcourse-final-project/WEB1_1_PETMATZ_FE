@@ -12,7 +12,7 @@ export default function Success() {
 
     return (
         <>
-            <section className="bg-white flex-1 flex flex-col justify-center items-center">
+            <section className="flex-1 flex flex-col justify-center items-center">
                 <Check className="mb-2" />
                 <h2 className="text-gray-800 text-title-s font-extrabold">
                     전송 완료
@@ -24,10 +24,7 @@ export default function Success() {
                 <Dog />
             </section>
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
-                <button
-                    onClick={handleCheckBtn}
-                    className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600"
-                >
+                <button onClick={handleCheckBtn} className="btn-solid mb-8">
                     확인
                 </button>
             </footer>

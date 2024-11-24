@@ -19,7 +19,9 @@ export default function ForgotPassword() {
     }, []);
 
     return (
-        <div className="h-screen bg-gray-100 flex flex-col justify-between overflow-hidden">
+        <div
+            className={`h-screen ${success ? 'bg-white' : 'bg-gray-100'} flex flex-col justify-between overflow-hidden`}
+        >
             <header className="bg-white sm:h-24 h-14 w-full flex items-center justify-center">
                 <Back
                     onClick={handleBackBtn}
