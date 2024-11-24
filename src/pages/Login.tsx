@@ -3,12 +3,15 @@ import Back from '@/assets/images/header/back.svg?react';
 import Forward from '@/assets/images/login/forward.svg?react';
 import { useCallback } from 'react';
 import { Success } from '@/components/login';
+import { CustomInput } from '@/components/common';
 
 export default function Login() {
     const {
         emailValidation,
         passwordValidation,
+        register,
         handleSubmit,
+        watch,
         errors,
         onSubmit,
         isValid,
@@ -54,39 +57,32 @@ export default function Login() {
                         onSubmit={handleSubmit(onSubmit)}
                         className="flex flex-col"
                     >
-                        <label
-                            htmlFor="email"
-                            className="text-label-m text-gray-500 pb-2"
-                        >
-                            이메일
-                        </label>
-                        <input
-                            id="email"
-                            type="text"
-                            placeholder="이메일을 입력해주세요."
-                            {...emailValidation}
-                            className="mb-[22px]"
-                        />
-                        <label
-                            htmlFor="password"
-                            className="text-label-m text-gray-500 pb-2"
-                        >
-                            비밀번호
-                        </label>
-                        <input
-                            id="password"
-                            type="password"
-                            placeholder="비밀번호를 입력해주세요."
-                            {...passwordValidation}
-                            className="mb-[22px]"
-                        />
-                        {errors.email ? (
-                            <span>{errors.email.message}</span>
-                        ) : (
-                            errors.password && (
-                                <span>{errors.password.message}</span>
-                            )
-                        )}
+                        <div className="flex flex-col gap-1">
+                            <CustomInput
+                                id="email"
+                                label="이메일"
+                                type="text"
+                                placeholder="이메일을 입력해주세요."
+                                register={register}
+                                watch={watch}
+                                validation={emailValidation}
+                                error={errors.email?.message}
+                                design="outline"
+                                successMsg="좋아요!"
+                            />
+                            <CustomInput
+                                id="password"
+                                label="비밀번호"
+                                type="password"
+                                placeholder="비밀번호를 입력해주세요."
+                                register={register}
+                                watch={watch}
+                                validation={passwordValidation}
+                                error={errors.password?.message}
+                                design="outline"
+                                successMsg="좋아요!"
+                            />
+                        </div>
                         <div className="flex justify-end items-center w-full">
                             <span
                                 onClick={handleForgotPWBtn}
