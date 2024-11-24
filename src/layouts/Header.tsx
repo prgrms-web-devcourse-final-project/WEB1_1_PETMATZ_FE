@@ -4,7 +4,7 @@ import UserIcon from '@/assets/images/header/user.svg?react';
 
 export default function Header() {
     return (
-        <header className="flex items-center justify-between w-full p-4 text-gray-900">
+        <header className="flex items-center justify-between w-full p-4 text-gray-900 bg-gray-100">
             <div className="w-[60px] h-6"></div>
             <h1 className="flex-1 flex items-center justify-center">
                 <Logo className="cursor-pointer" />

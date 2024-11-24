@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+const flowbite = require('flowbite-react/tailwind');
 export default {
-    content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+    content: [
+        './index.html',
+        './src/**/*.{js,ts,jsx,tsx}',
+        './node_modules/flowbite/**/*.js',
+        flowbite.content(),
+    ],
     theme: {
         extend: {
             borderWidth: {
@@ -8,6 +14,7 @@ export default {
             },
             colors: {
                 point: {
+                    50: '#EEF0FF',
                     100: '#E6E9FF',
                     200: '#CDD4FF',
                     300: '#B4BEFF',
@@ -61,6 +68,8 @@ export default {
                     500: '#36662D',
                     600: '#1B3317',
                 },
+                dim: '#242629',
+                bgColor: '#EEF0FF',
             },
             fontFamily: {
                 suit: ['SUIT Variable', 'sans-serif'],
@@ -69,7 +78,7 @@ export default {
                 'title-l': ['32px', { lineHeight: '150%' }],
                 'title-m': ['28px', { lineHeight: '150%' }],
                 'title-s': ['24px', { lineHeight: '150%' }],
-                'body-xl': ['22px', { lineHeight: '30%' }],
+                'body-xl': ['22px', { lineHeight: '150%' }],
                 'body-l': ['18px', { lineHeight: '125%' }],
                 'body-m': ['16px', { lineHeight: '125%' }],
                 'body-s': ['14px', { lineHeight: '125%' }],
@@ -87,8 +96,10 @@ export default {
         },
     },
     plugins: [
-        require('daisyui'),
         require('tailwindcss'),
         require('autoprefixer'),
+        require('./plugins/buttonPlugin'),
+        require('./plugins/inputPlugin'),
+        flowbite.plugin(),
     ],
 };
