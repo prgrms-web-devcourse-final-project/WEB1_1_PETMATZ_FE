@@ -4,6 +4,7 @@ import {
     ChangePassword,
     Chat,
     ChatDetail,
+    DeleteAccount,
     ForgotPassword,
     Home,
     Intro,
@@ -50,6 +51,7 @@ export default function AppRoutes() {
                         path="/change-password"
                         element={<ChangePassword />}
                     />
+                    <Route path="/delete-account" element={<DeleteAccount />} />
                 </Route>
                 <Route element={<RootLayout header={false} bottomNav={true} />}>
                     <Route path="/match" element={<Match />} />

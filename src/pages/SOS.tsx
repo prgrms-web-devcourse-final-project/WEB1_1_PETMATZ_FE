@@ -2,7 +2,7 @@ import { Suspense, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Post } from '@/types/Sos';
 import { PostItem } from '@/components/sos';
-import Loading from '@/components/common/Loading';
+import { Loading } from '@/components/common';
 
 const PostList = ({ posts }: { posts: Post[] }) => {
     return (

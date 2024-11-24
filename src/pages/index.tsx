@@ -11,3 +11,4 @@ export { default as ChatDetail } from './ChatDetail';
 export { default as Please } from './Please';
 export { default as ForgotPassword } from './ForgotPassword';
 export { default as ChangePassword } from './ChangePassword';
+export { default as DeleteAccount } from './DeleteAccount';

@@ -2,6 +2,7 @@ import { useFadeNavigate, useLoginForm } from '@/hooks';
 import Back from '@/assets/images/header/back.svg?react';
 import Forward from '@/assets/images/login/forward.svg?react';
 import { useCallback } from 'react';
+import { Success } from '@/components/login';
 
 export default function Login() {
     const {
@@ -10,6 +11,8 @@ export default function Login() {
         handleSubmit,
         errors,
         onSubmit,
+        isValid,
+        success,
     } = useLoginForm();
     const navigate = useFadeNavigate();
 
@@ -24,6 +27,10 @@ export default function Login() {
     const handleRouteToSignUpBtn = useCallback(() => {
         navigate('/signup');
     }, []);
+
+    if (success) {
+        return <Success />;
+    }
 
     return (
         <div className="h-screen bg-gray-100 flex flex-col justify-between overflow-hidden">
@@ -102,7 +109,8 @@ export default function Login() {
                 <button
                     type="submit"
                     form="login-form"
-                    className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600"
+                    className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    disabled={!isValid || !!errors.email || !!errors.password}
                 >
                     로그인
                 </button>
