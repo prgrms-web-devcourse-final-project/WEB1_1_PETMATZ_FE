@@ -20,6 +20,7 @@ export default function useLoginForm() {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors, isValid },
     } = useForm<LoginInputs>({
         mode: 'onChange',
@@ -42,33 +43,35 @@ export default function useLoginForm() {
     /**
      * Email validation
      */
-    const emailValidation = register('email', {
-        required: '이메일은 필수입니다',
+    const emailValidation = {
+        required: '이메일은 필수입니다!',
         pattern: {
             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: '유효한 이메일 주소를 입력해주세요',
+            message: '유효한 이메일 주소를 입력해주세요!',
         },
-    });
+    };
 
     /**
      * Password validation
      */
-    const passwordValidation = register('password', {
-        required: '비밀번호는 필수입니다',
+    const passwordValidation = {
+        required: '비밀번호는 필수입니다!',
         minLength: {
             value: 8,
-            message: '비밀번호는 최소 8자 이상이어야 합니다',
+            message: '비밀번호는 최소 8자 이상이어야 합니다!',
         },
         pattern: {
             value: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
-            message: '비밀번호는 영어, 숫자, 특수문자를 포함해야 합니다',
+            message: '비밀번호는 영어, 숫자, 특수문자를 포함해야 합니다!',
         },
-    });
+    };
 
     return {
         emailValidation,
         passwordValidation,
+        register,
         handleSubmit,
+        watch,
         errors,
         onSubmit,
         isValid,
