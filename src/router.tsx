@@ -28,16 +28,15 @@ export default function AppRoutes() {
                 pauseOnHover={false}
             />
             <Routes>
-                <Route element={<RootLayout header={true} bottomNav={true} />}>
+                <Route element={<RootLayout layout={true} />}>
                     <Route path="/home" element={<Home />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/sos" element={<SOS />} />
                     <Route path="/chat" element={<Chat />} />
                     <Route path="/please" element={<Please />} />
+                    <Route path="/match" element={<Match />} />
                 </Route>
-                <Route
-                    element={<RootLayout header={false} bottomNav={false} />}
-                >
+                <Route element={<RootLayout layout={false} />}>
                     <Route index={true} path="/" element={<Intro />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
@@ -52,9 +51,6 @@ export default function AppRoutes() {
                         element={<ChangePassword />}
                     />
                     <Route path="/delete-account" element={<DeleteAccount />} />
-                </Route>
-                <Route element={<RootLayout header={false} bottomNav={true} />}>
-                    <Route path="/match" element={<Match />} />
                 </Route>
             </Routes>
         </BrowserRouter>
