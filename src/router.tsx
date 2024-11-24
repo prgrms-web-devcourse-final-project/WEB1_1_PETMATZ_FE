@@ -17,7 +17,7 @@ import {
     SOSWrite,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AppRoutes() {
     return (
