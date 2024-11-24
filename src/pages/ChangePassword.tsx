@@ -1,6 +1,7 @@
 import { useChangePasswordForm, useFadeNavigate } from '@/hooks';
 import { useCallback } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
+import { CustomInput } from '@/components/common';
 
 export default function ChangePassword() {
     const navigate = useFadeNavigate();
@@ -8,7 +9,9 @@ export default function ChangePassword() {
         currentPasswordValidation,
         newPasswordValidation,
         confirmPasswordValidation,
+        register,
         handleSubmit,
+        watch,
         errors,
         onSubmit,
         isValid,
@@ -38,56 +41,44 @@ export default function ChangePassword() {
                     <form
                         id="change-form"
                         onSubmit={handleSubmit(onSubmit)}
-                        className="flex flex-col"
+                        className="flex flex-col gap-1"
                     >
-                        <label
-                            htmlFor="currentPassword"
-                            className="text-label-m text-gray-500 pb-2"
-                        >
-                            현재 비밀번호
-                        </label>
-                        <input
+                        <CustomInput
                             id="currentPassword"
+                            label="현재 비밀번호"
                             type="text"
-                            placeholder="현재 비밀번호"
-                            {...currentPasswordValidation}
-                            className="mb-[22px]"
+                            placeholder="현재 비밀번호를 입력해주세요."
+                            register={register}
+                            watch={watch}
+                            validation={currentPasswordValidation}
+                            error={errors.currentPassword?.message}
+                            design="outline"
+                            successMsg="좋아요!"
                         />
-                        <label
-                            htmlFor="currentPassword"
-                            className="text-label-m text-gray-500 pb-2"
-                        >
-                            새로운 비밀번호
-                        </label>
-                        <input
+                        <CustomInput
                             id="newPassword"
+                            label="새로운 비밀번호"
                             type="password"
-                            placeholder="새 비밀번호"
-                            {...newPasswordValidation}
-                            className="mb-[22px]"
+                            placeholder="새로운 비밀번호를 입력해주세요."
+                            register={register}
+                            watch={watch}
+                            validation={newPasswordValidation}
+                            error={errors.newPassword?.message}
+                            design="outline"
+                            successMsg="좋아요!"
                         />
-                        <label
-                            htmlFor="currentPassword"
-                            className="text-label-m text-gray-500 pb-2"
-                        >
-                            새로운 비밀번호 확인
-                        </label>
-                        <input
+                        <CustomInput
                             id="confirmPassword"
+                            label="새로운 비밀번호 확인"
                             type="password"
-                            placeholder="새 비밀번호 재입력"
-                            {...confirmPasswordValidation}
-                            className="mb-[22px]"
+                            placeholder="새로운 비밀번호를 한번 더 입력해주세요."
+                            register={register}
+                            watch={watch}
+                            validation={confirmPasswordValidation}
+                            error={errors.confirmPassword?.message}
+                            design="outline"
+                            successMsg="좋아요!"
                         />
-                        {errors.currentPassword ? (
-                            <span>{errors.currentPassword.message}</span>
-                        ) : errors.newPassword ? (
-                            <span>{errors.newPassword.message}</span>
-                        ) : (
-                            errors.confirmPassword && (
-                                <span>{errors.confirmPassword.message}</span>
-                            )
-                        )}
                     </form>
                 </div>
             </section>
