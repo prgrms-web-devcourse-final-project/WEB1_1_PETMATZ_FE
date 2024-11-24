@@ -109,7 +109,7 @@ export default function Login() {
                 <button
                     type="submit"
                     form="login-form"
-                    className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    className="btn-solid mb-8"
                     disabled={!isValid || !!errors.email || !!errors.password}
                 >
                     로그인
