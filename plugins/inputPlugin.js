@@ -6,7 +6,8 @@ export default function inputPlugin({ addComponents }) {
                 '',
             '@apply bg-gray-100 text-gray-900 placeholder:text-gray-400 focus:caret-point-500':
                 '',
-            '@apply disabled:placeholder:text-gray-100': '',
+            '@apply disabled:placeholder:text-gray-200': '',
+            '@apply disabled:placeholder:bg-gray-200': '',
         },
         // Outline Input 스타일
         '.input-outline': {

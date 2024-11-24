@@ -14,6 +14,7 @@ export default {
             },
             colors: {
                 point: {
+                    50: '#EEF0FF',
                     100: '#E6E9FF',
                     200: '#CDD4FF',
                     300: '#B4BEFF',
@@ -67,6 +68,8 @@ export default {
                     500: '#36662D',
                     600: '#1B3317',
                 },
+                dim: '#242629',
+                bgColor: '#EEF0FF',
             },
             fontFamily: {
                 suit: ['SUIT Variable', 'sans-serif'],

@@ -13,7 +13,7 @@ export default function BottomNav() {
     const isAtive = (path: string) => pathname.startsWith(path);
 
     return (
-        <nav className="flex items-center justify-around w-full text-gray-300">
+        <nav className="flex items-center justify-around w-full text-gray-300 bg-white">
             <MatchIcon
                 onClick={() => navigate('/match')}
                 className={`w-[75px] h-[48px] cursor-pointer ${isAtive('/match') && 'text-point-500'}`}
