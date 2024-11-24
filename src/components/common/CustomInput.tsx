@@ -52,6 +52,10 @@ export default function CustomInput<T extends FieldValues>({
                     type={type}
                     placeholder={placeholder}
                     {...register(id, validation)}
+                    style={{
+                        WebkitBoxShadow: '0 0 0 30px white inset',
+                        WebkitTextFillColor: 'inherit',
+                    }}
                 />
                 <p className="text-label-s px-[24px]">
                     {error ? (
