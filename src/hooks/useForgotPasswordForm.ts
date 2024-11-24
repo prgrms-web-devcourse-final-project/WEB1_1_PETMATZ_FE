@@ -17,6 +17,7 @@ export default function useForgotPasswordForm() {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors, isValid },
     } = useForm<ForgotPasswordInputs>({
         mode: 'onChange',
@@ -35,17 +36,19 @@ export default function useForgotPasswordForm() {
     /**
      * Email validation
      */
-    const emailValidation = register('email', {
-        required: '이메일은 필수입니다',
+    const emailValidation = {
+        required: '이메일은 필수입니다!',
         pattern: {
             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: '유효한 이메일 주소를 입력해주세요',
+            message: '유효한 이메일 주소를 입력해주세요!',
         },
-    });
+    };
 
     return {
         emailValidation,
+        register,
         handleSubmit,
+        watch,
         errors,
         onSubmit,
         isValid,

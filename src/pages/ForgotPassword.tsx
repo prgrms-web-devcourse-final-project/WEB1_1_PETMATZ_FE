@@ -2,12 +2,15 @@ import { useFadeNavigate, useForgotPasswordForm } from '@/hooks';
 import { useCallback } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
 import Success from '@/components/forgot-password/Success';
+import { CustomInput } from '@/components/common';
 
 export default function ForgotPassword() {
     const navigate = useFadeNavigate();
     const {
         emailValidation,
+        register,
         handleSubmit,
+        watch,
         errors,
         onSubmit,
         isValid,
@@ -42,24 +45,19 @@ export default function ForgotPassword() {
                             <form
                                 id="forgot-form"
                                 onSubmit={handleSubmit(onSubmit)}
-                                className="flex flex-col"
                             >
-                                <label
-                                    htmlFor="email"
-                                    className="text-label-m text-gray-500 pb-2"
-                                >
-                                    이메일
-                                </label>
-                                <input
+                                <CustomInput
                                     id="email"
+                                    label="이메일"
                                     type="text"
                                     placeholder="이메일을 입력해주세요."
-                                    {...emailValidation}
-                                    className="mb-[22px]"
+                                    register={register}
+                                    watch={watch}
+                                    validation={emailValidation}
+                                    error={errors.email?.message}
+                                    design="outline"
+                                    successMsg="좋아요!"
                                 />
-                                {errors.email && (
-                                    <span>{errors.email.message}</span>
-                                )}
                             </form>
                         </div>
                     </section>
