@@ -65,7 +65,7 @@ export default function ForgotPassword() {
                         <button
                             type="submit"
                             form="forgot-form"
-                            className="w-full text-body-l font-extrabold text-white py-3 mb-8 rounded-lg bg-point-500 active:bg-point-600 hover:bg-point-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                            className="btn-solid mb-8"
                             disabled={!isValid || !!errors.email}
                         >
                             확인
