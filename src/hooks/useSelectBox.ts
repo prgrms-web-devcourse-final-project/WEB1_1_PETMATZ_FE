@@ -1,35 +1,18 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export interface Option {
     value: string | number;
     label: string;
 }
 
-const useSelectBox = (
-    initialOptions: Option[] = [],
-    initialSelected?: Option,
-    externalValue?: Option | null, // 외부에서 전달된 값
-    externalOnChange?: (option: Option) => void, // 외부에서 전달된 onChange
-) => {
-    const [options] = useState<Option[]>(initialOptions);
-    const [internalSelectedOption, setInternalSelectedOption] =
-        useState<Option | null>(initialSelected || null);
+const useSelectBox = (initialOptions: Option[] = [], initialValue?: Option) => {
+    const [selectedOption, setSelectedOption] = useState<Option | null>(
+        initialValue || null,
+    );
     const [isOpen, setIsOpen] = useState(false);
     const selectBoxRef = useRef<HTMLDivElement>(null);
 
-    // 선택된 옵션 (외부 값 우선 사용)
-    const selectedOption = externalValue ?? internalSelectedOption;
-
-    // 선택된 옵션 변경 (외부 onChange 우선 호출)
-    const setSelectedOption = (option: Option) => {
-        if (externalOnChange) {
-            externalOnChange(option);
-        } else {
-            setInternalSelectedOption(option);
-        }
-    };
-
-    // 드롭다운 열기/닫기
+    // 드롭다운 열기/닫기 토글
     const toggleSelectBox = () => {
         setIsOpen((prev) => !prev);
     };
@@ -41,13 +24,12 @@ const useSelectBox = (
     };
 
     return {
-        options,
-        selectedOption,
-        setSelectedOption,
-        isOpen,
-        toggleSelectBox,
-        selectOption,
-        selectBoxRef,
+        options: initialOptions, // 옵션 리스트
+        selectedOption, // 현재 선택된 옵션
+        isOpen, // 드롭다운 열림 상태
+        toggleSelectBox, // 드롭다운 토글 함수
+        selectOption, // 옵션 선택 함수
+        selectBoxRef, // 드롭다운 참조
     };
 };
 
