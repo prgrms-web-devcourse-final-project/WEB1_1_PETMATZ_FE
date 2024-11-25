@@ -8,6 +8,10 @@ export interface SignUpInputs {
     email: string;
     /** User's verification code */
     verificationCode: number;
+    /** User's password */
+    password: string;
+    /** User's confirm password */
+    confirmPassword: string;
 }
 
 export interface emailValidationType {
@@ -18,8 +22,25 @@ export interface emailValidationType {
     };
 }
 
-export interface verificationCodeValidation {
+export interface verificationCodeValidationType {
     required: string;
+}
+
+export interface passwordValidationType {
+    required: string;
+    minLength: {
+        value: number;
+        message: string;
+    };
+    pattern: {
+        value: RegExp;
+        message: string;
+    };
+}
+
+export interface confirmPasswordValidationType {
+    required: string;
+    validate: (value: string | number) => boolean | string;
 }
 
 /**
@@ -63,9 +84,35 @@ export default function useSignupForm() {
         required: '인증번호는 필수입니다!',
     };
 
+    /**
+     * Password validation
+     */
+    const passwordValidation = {
+        required: '비밀번호는 필수입니다!',
+        minLength: {
+            value: 8,
+            message: '비밀번호는 최소 8자 이상이어야 합니다!',
+        },
+        pattern: {
+            value: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
+            message: '비밀번호는 영어, 숫자, 특수문자를 포함해야 합니다!',
+        },
+    };
+
+    /**
+     * Confirm password validation
+     */
+    const confirmPasswordValidation = {
+        required: '비밀번호 확인은 필수입니다!',
+        validate: (value: string | number) =>
+            value === watch('password') || '비밀번호가 일치하지 않아요!',
+    };
+
     return {
         emailValidation,
         verificationCodeValidation,
+        passwordValidation,
+        confirmPasswordValidation,
         register,
         handleSubmit,
         watch,

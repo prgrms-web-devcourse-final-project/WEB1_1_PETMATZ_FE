@@ -1,7 +1,7 @@
 import {
     emailValidationType,
     SignUpInputs,
-    verificationCodeValidation,
+    verificationCodeValidationType,
 } from '@/hooks/useSignupForm';
 import { CustomInput } from '../common';
 import {
@@ -12,11 +12,12 @@ import {
 } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface FirstStep {
+interface FirstStepPropsType {
+    pageNumber: number;
     register: UseFormRegister<SignUpInputs>;
     watch: UseFormWatch<SignUpInputs>;
     emailValidation: emailValidationType;
-    verificationCodeValidation: verificationCodeValidation;
+    verificationCodeValidation: verificationCodeValidationType;
     errors: FieldErrors<SignUpInputs>;
     trigger: UseFormTrigger<SignUpInputs>;
     isValid: boolean;
@@ -24,6 +25,7 @@ interface FirstStep {
 }
 
 export default function FirstStep({
+    pageNumber,
     register,
     watch,
     emailValidation,
@@ -32,9 +34,10 @@ export default function FirstStep({
     trigger,
     isValid,
     setPageNumber,
-}: FirstStep) {
+}: FirstStepPropsType) {
     const emailTyped = useRef(false);
     const [sentNumber, setSentNumber] = useState(false);
+    const [firstVisit, setFirstVisit] = useState(true);
 
     const email = watch('email');
     const verificationCode = watch('verificationCode');
@@ -51,6 +54,7 @@ export default function FirstStep({
 
     const handleVerificateEmailBtn = useCallback(() => {
         console.log(email);
+        setFirstVisit(false);
         // api 요청
         setSentNumber(true);
     }, []);
@@ -64,7 +68,7 @@ export default function FirstStep({
 
     return (
         <>
-            <div>
+            <div className={`${pageNumber !== 1 && 'hidden'}`}>
                 {/* 프로그래스바 */}
                 <div className="w-full bg-white h-1">
                     <div className="bg-point-400 h-1 w-[25%]"></div>
@@ -72,8 +76,8 @@ export default function FirstStep({
                 <div className="bg-white pt-6 pb-12">
                     <div className="w-full max-w-[600px] px-6 mx-auto">
                         <div className="text-title-s font-extrabold text-gray-800 pb-12">
-                            <p>이메일로</p>
-                            <p>입력해주세요.</p>
+                            <p>이메일을</p>
+                            <p>입력해주세요!</p>
                         </div>
                         <div className="flex flex-col gap-1">
                             <div className="flex gap-2 items-center">
@@ -99,7 +103,7 @@ export default function FirstStep({
                                     }
                                     onClick={handleVerificateEmailBtn}
                                 >
-                                    인증번호
+                                    {firstVisit ? '인증번호' : '재요청'}
                                 </button>
                             </div>
                             <div className="flex gap-2 items-center">
@@ -122,12 +126,14 @@ export default function FirstStep({
                     </div>
                 </div>
             </div>
-            <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
+            <footer
+                className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 1 && 'hidden'}`}
+            >
                 <button
                     type="submit"
                     form="signup-form"
                     className="btn-solid mb-8"
-                    disabled={!isValid || !sentNumber}
+                    disabled={!sentNumber || !verificationCode}
                     onClick={handleNextBtn}
                 >
                     다음

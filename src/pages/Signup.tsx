@@ -1,5 +1,6 @@
 import Back from '@/assets/images/header/back.svg?react';
-import FirstStep from '@/components/signup/FirstStep';
+import { FirstStep, SecondStep } from '@/components/signup';
+
 import { useFadeNavigate, useSignupForm } from '@/hooks';
 import { useCallback, useState } from 'react';
 
@@ -8,6 +9,8 @@ export default function Signup() {
     const {
         emailValidation,
         verificationCodeValidation,
+        passwordValidation,
+        confirmPasswordValidation,
         register,
         handleSubmit,
         watch,
@@ -43,18 +46,26 @@ export default function Signup() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="h-full flex-1 flex flex-col justify-between"
             >
-                {pageNumber === 1 && (
-                    <FirstStep
-                        register={register}
-                        watch={watch}
-                        emailValidation={emailValidation}
-                        verificationCodeValidation={verificationCodeValidation}
-                        errors={errors}
-                        trigger={trigger}
-                        isValid={isValid}
-                        setPageNumber={setPageNumber}
-                    />
-                )}
+                <FirstStep
+                    pageNumber={pageNumber}
+                    register={register}
+                    watch={watch}
+                    emailValidation={emailValidation}
+                    verificationCodeValidation={verificationCodeValidation}
+                    errors={errors}
+                    trigger={trigger}
+                    isValid={isValid}
+                    setPageNumber={setPageNumber}
+                />
+                <SecondStep
+                    pageNumber={pageNumber}
+                    register={register}
+                    watch={watch}
+                    passwordValidation={passwordValidation}
+                    confirmPasswordValidation={confirmPasswordValidation}
+                    errors={errors}
+                    setPageNumber={setPageNumber}
+                />
             </form>
         </div>
     );
