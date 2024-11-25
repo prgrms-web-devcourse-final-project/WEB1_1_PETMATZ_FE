@@ -12,6 +12,7 @@ import {
     Match,
     Please,
     Profile,
+    Register,
     Signup,
     SOS,
     SOSWrite,
@@ -51,6 +52,7 @@ export default function AppRoutes() {
                         element={<ChangePassword />}
                     />
                     <Route path="/delete-account" element={<DeleteAccount />} />
+                    <Route path="/register" element={<Register />} />
                 </Route>
             </Routes>
         </BrowserRouter>
