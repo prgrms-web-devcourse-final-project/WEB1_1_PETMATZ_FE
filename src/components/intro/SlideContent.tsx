@@ -10,7 +10,7 @@ export default function SlideContent({
     description,
 }: SlideContentProps) {
     return (
-        <div className="flex flex-col items-center justify-center text-center px-6 mt-6">
+        <div className="flex flex-col items-center justify-center text-center px-6 mt-7">
             <div className="w-full h-70 sm:h-80 mb-4 flex items-center justify-center">
                 {image}
             </div>
