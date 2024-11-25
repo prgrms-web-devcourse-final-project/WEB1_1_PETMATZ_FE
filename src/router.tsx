@@ -23,9 +23,14 @@ export default function AppRoutes() {
     return (
         <BrowserRouter>
             <ToastContainer
-                position="top-right"
+                position="bottom-center"
                 autoClose={3000}
                 pauseOnHover={false}
+                hideProgressBar
+                closeOnClick
+                style={{
+                    minWidth: 'fit-content',
+                }}
             />
             <Routes>
                 <Route element={<RootLayout layout={true} />}>
