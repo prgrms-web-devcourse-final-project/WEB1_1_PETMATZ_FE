@@ -84,7 +84,7 @@ export default function ChangePassword() {
                                 id="confirmPassword"
                                 label="새로운 비밀번호 확인"
                                 type="password"
-                                placeholder="새로운 비밀번호를 한번 더 입력해주세요."
+                                placeholder="비밀번호를 확인해주세요."
                                 register={register}
                                 watch={watch}
                                 validation={confirmPasswordValidation}
