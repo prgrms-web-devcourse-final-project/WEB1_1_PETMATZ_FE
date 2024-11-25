@@ -29,6 +29,9 @@ export default function SecondStep({
 }: SecondStepPropsType) {
     const [show, setShow] = useState(false);
 
+    const password = watch('password');
+    const confirmPassword = watch('confirmPassword');
+
     const handlePasswordShowBtn = useCallback(() => {
         setShow((prev) => !prev);
     }, []);
@@ -97,6 +100,8 @@ export default function SecondStep({
                     form="signup-form"
                     className="btn-solid mb-8"
                     disabled={
+                        password === '' ||
+                        confirmPassword === '' ||
                         !!errors.password?.message ||
                         !!errors.confirmPassword?.message
                     }

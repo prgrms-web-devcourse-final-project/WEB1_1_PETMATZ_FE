@@ -99,7 +99,8 @@ export default function FirstStep({
                                     className="btn-solid btn-md"
                                     disabled={
                                         (!emailTyped.current && !isValid) ||
-                                        !!errors.email
+                                        !!errors.email ||
+                                        email === ''
                                     }
                                     onClick={handleVerificateEmailBtn}
                                 >
@@ -133,7 +134,9 @@ export default function FirstStep({
                     type="submit"
                     form="signup-form"
                     className="btn-solid mb-8"
-                    disabled={!sentNumber || !verificationCode}
+                    disabled={
+                        !sentNumber || !!errors.email || !verificationCode
+                    }
                     onClick={handleNextBtn}
                 >
                     다음
