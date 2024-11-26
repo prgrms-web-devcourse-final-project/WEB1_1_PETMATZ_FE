@@ -46,17 +46,31 @@ export default function CustomInput<T extends FieldValues>({
                 {label}
             </label>
             <div className="flex flex-col gap-[4px]">
-                <input
-                    className={inputClasses.trim()}
-                    id={id}
-                    type={type}
-                    placeholder={placeholder}
-                    {...register(id, validation)}
-                    style={{
-                        WebkitBoxShadow: '0 0 0 30px white inset',
-                        WebkitTextFillColor: 'inherit',
-                    }}
-                />
+                {type !== 'textarea' ? (
+                    <input
+                        className={inputClasses.trim()}
+                        id={id}
+                        type={type}
+                        placeholder={placeholder}
+                        {...register(id, validation)}
+                        style={{
+                            WebkitBoxShadow: '0 0 0 30px white inset',
+                            WebkitTextFillColor: 'inherit',
+                        }}
+                    />
+                ) : (
+                    <textarea
+                        className="w-full py-[12px] px-[24px] border-1 border-gray-200 focus:outline-none rounded-lg text-body-m text-gray-900 placeholder:text-gray-400 focus:caret-point-500 disabled:placeholder:text-gray-200 disabled:placeholder:bg-gray-200 h-32 resize-none bg-white"
+                        rows={3}
+                        id={id}
+                        placeholder={placeholder}
+                        {...register(id, validation)}
+                        style={{
+                            WebkitBoxShadow: '0 0 0 30px white inset',
+                            WebkitTextFillColor: 'inherit',
+                        }}
+                    />
+                )}
                 <p className="text-label-s px-[24px]">
                     {error ? (
                         <span className="text-warning-400 flex items-center gap-[0.5px]">

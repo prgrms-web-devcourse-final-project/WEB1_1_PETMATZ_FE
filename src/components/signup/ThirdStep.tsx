@@ -54,7 +54,6 @@ export default function ThirdStep({
                         </div>
                         {pageNumber === 3 && (
                             <div className="flex flex-col gap-1">
-                                input
                                 <ImageSelectBox
                                     label="프로필 사진"
                                     bottomSheetLabel="프로필 이미지를 선택하세요."
