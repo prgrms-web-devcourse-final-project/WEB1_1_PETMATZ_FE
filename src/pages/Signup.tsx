@@ -1,26 +1,28 @@
 import Back from '@/assets/images/header/back.svg?react';
-import { FirstStep, SecondStep } from '@/components/signup';
-
+import { FirstStep, SecondStep, ThirdStep } from '@/components/signup';
 import { useFadeNavigate, useSignupForm } from '@/hooks';
 import { useCallback, useState } from 'react';
 
 export default function Signup() {
     const navigate = useFadeNavigate();
     const {
+        pageNumber,
+        setPageNumber,
         emailValidation,
         verificationCodeValidation,
         passwordValidation,
         confirmPasswordValidation,
+        nicknameValidation,
+        introduceValidation,
         register,
         handleSubmit,
         watch,
         errors,
         onSubmit,
-        trigger,
         isValid,
     } = useSignupForm();
 
-    const [pageNumber, setPageNumber] = useState(1);
+    const [imgName, setImgName] = useState('profile=1');
 
     const handleBackBtn = useCallback(() => {
         if (pageNumber === 1) {
@@ -53,7 +55,6 @@ export default function Signup() {
                     emailValidation={emailValidation}
                     verificationCodeValidation={verificationCodeValidation}
                     errors={errors}
-                    trigger={trigger}
                     isValid={isValid}
                     setPageNumber={setPageNumber}
                 />
@@ -65,6 +66,17 @@ export default function Signup() {
                     confirmPasswordValidation={confirmPasswordValidation}
                     errors={errors}
                     setPageNumber={setPageNumber}
+                />
+                <ThirdStep
+                    pageNumber={pageNumber}
+                    register={register}
+                    watch={watch}
+                    nicknameValidation={nicknameValidation}
+                    introduceValidation={introduceValidation}
+                    errors={errors}
+                    setPageNumber={setPageNumber}
+                    imgName={imgName}
+                    setImgName={setImgName}
                 />
             </form>
         </div>

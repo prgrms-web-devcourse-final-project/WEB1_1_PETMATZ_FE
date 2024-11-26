@@ -4,12 +4,7 @@ import {
     verificationCodeValidationType,
 } from '@/hooks/useSignupForm';
 import { CustomInput } from '../common';
-import {
-    FieldErrors,
-    UseFormRegister,
-    UseFormTrigger,
-    UseFormWatch,
-} from 'react-hook-form';
+import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface FirstStepPropsType {
@@ -19,7 +14,6 @@ interface FirstStepPropsType {
     emailValidation: emailValidationType;
     verificationCodeValidation: verificationCodeValidationType;
     errors: FieldErrors<SignUpInputs>;
-    trigger: UseFormTrigger<SignUpInputs>;
     isValid: boolean;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -31,7 +25,6 @@ export default function FirstStep({
     emailValidation,
     verificationCodeValidation,
     errors,
-    trigger,
     isValid,
     setPageNumber,
 }: FirstStepPropsType) {
@@ -43,17 +36,10 @@ export default function FirstStep({
     const verificationCode = watch('verificationCode');
 
     useEffect(() => {
-        if (email) {
-            trigger('email');
-        }
-        if (verificationCode) {
-            trigger('verificationCode');
-        }
         emailTyped.current = true;
-    }, [email, verificationCode, trigger]);
+    });
 
     const handleVerificateEmailBtn = useCallback(() => {
-        console.log(email);
         setFirstVisit(false);
         // api 요청
         setSentNumber(true);
@@ -63,7 +49,7 @@ export default function FirstStep({
         // api 요청
         console.log('1번 페이지 성공');
         setSentNumber(false);
-        setPageNumber(2);
+        setPageNumber((prev) => prev + 1);
     }, []);
 
     return (
@@ -96,6 +82,7 @@ export default function FirstStep({
                                     />
                                 </div>
                                 <button
+                                    form="none"
                                     className="btn-solid btn-md"
                                     disabled={
                                         (!emailTyped.current && !isValid) ||
@@ -131,8 +118,7 @@ export default function FirstStep({
                 className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 1 && 'hidden'}`}
             >
                 <button
-                    type="submit"
-                    form="signup-form"
+                    form="none"
                     className="btn-solid mb-8"
                     disabled={
                         !sentNumber || !!errors.email || !verificationCode
