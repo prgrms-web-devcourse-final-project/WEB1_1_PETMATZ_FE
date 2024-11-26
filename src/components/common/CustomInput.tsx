@@ -60,7 +60,7 @@ export default function CustomInput<T extends FieldValues>({
                     />
                 ) : (
                     <textarea
-                        className="w-full py-[12px] px-[24px] border-1 border-gray-200 focus:outline-none rounded-lg text-body-m text-gray-900 placeholder:text-gray-400 focus:caret-point-500 disabled:placeholder:text-gray-200 disabled:placeholder:bg-gray-200 h-32 resize-none bg-white"
+                        className={`${error ? 'input-warning' : successMsg && inputValue ? 'input-success' : 'border-gray-200'} w-full py-[12px] px-[24px] border-1 focus:outline-none rounded-lg text-body-m text-gray-900 placeholder:text-gray-400 focus:caret-point-500 disabled:placeholder:text-gray-200 disabled:placeholder:bg-gray-200 h-32 resize-none bg-white`}
                         rows={3}
                         id={id}
                         placeholder={placeholder}
