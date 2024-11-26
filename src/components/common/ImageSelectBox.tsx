@@ -18,10 +18,21 @@ export default function ImageSelectBox({
     className = '',
 }: ImageSelectBoxProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [chosenImgName, setChosenImgName] = useState(imgName);
 
-    const handleShowBottomSheetBtn = useCallback(() => {
-        setIsOpen(true);
+    const handleToggleBottomSheetBtn = useCallback(() => {
+        setChosenImgName(imgName);
+        setIsOpen((prev) => !prev);
+    }, [imgName]);
+
+    const handleChooseImg = useCallback((name: string) => {
+        setChosenImgName(name);
     }, []);
+
+    const handleDecideImg = useCallback(() => {
+        setImgName(chosenImgName);
+        setIsOpen((prev) => !prev);
+    }, [chosenImgName]);
 
     const modalContent = (
         <div
@@ -36,7 +47,7 @@ export default function ImageSelectBox({
                     <section className="flex flex-col gap-6">
                         <div className="flex justify-center">
                             <img
-                                src={`src/assets/images/signup/${imgName}.svg`}
+                                src={`src/assets/images/signup/${chosenImgName}.svg`}
                                 alt="기본 프로필 이미지"
                                 className="w-100 h-100 rounded-full border-[1px] border-gray-200"
                             />
@@ -45,23 +56,36 @@ export default function ImageSelectBox({
                             <img
                                 src={`src/assets/images/signup/profile=1.svg`}
                                 alt="기본 프로필 이미지 1"
+                                onClick={() => handleChooseImg('profile=1')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                             <img
                                 src={`src/assets/images/signup/profile=2.svg`}
                                 alt="기본 프로필 이미지 2"
+                                onClick={() => handleChooseImg('profile=2')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                             <img
                                 src={`src/assets/images/signup/profile=3.svg`}
                                 alt="기본 프로필 이미지 3"
+                                onClick={() => handleChooseImg('profile=3')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                         </div>
                     </section>
                     <section className="flex gap-[10px]">
-                        <button className="btn-outline flex-1">돌아가기</button>
-                        <button className="btn-solid flex-1">확인</button>
+                        <button
+                            onClick={handleToggleBottomSheetBtn}
+                            className="btn-outline flex-1"
+                        >
+                            돌아가기
+                        </button>
+                        <button
+                            onClick={handleDecideImg}
+                            className="btn-solid flex-1"
+                        >
+                            확인
+                        </button>
                     </section>
                 </div>
             </div>
@@ -79,7 +103,7 @@ export default function ImageSelectBox({
                         className="w-100 h-100 rounded-full border-[1px] border-gray-200"
                     />
                     <CameraBtn
-                        onClick={handleShowBottomSheetBtn}
+                        onClick={handleToggleBottomSheetBtn}
                         className="absolute bottom-0 right-0 cursor-pointer"
                     />
                 </div>
