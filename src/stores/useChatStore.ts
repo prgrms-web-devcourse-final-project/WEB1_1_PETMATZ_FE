@@ -1,134 +1,195 @@
-import { Client, IMessage } from '@stomp/stompjs';
+import { useFadeNavigate } from '@/hooks';
+import {
+    createChatRoom,
+    getChatMessageList,
+    getChatRoomList,
+} from '@/hooks/api/Chat';
+import { IChatMessage, IChatRoom } from '@/types/chat';
+import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { create } from 'zustand';
 
-interface Message {
-    roomId: string;
-    senderId: string;
-    message: string;
-}
-
-interface ChatRoom {
-    id: string;
-    name: string;
-    lastMessage: Message | null;
-    unreadCount: number;
-}
-
 interface ChatStore {
-    messages: Record<string, Message[]>;
-    chatRooms: ChatRoom[];
-    stompClient: Client | null;
-    connect: (roomId: string) => void;
-    disconnect: () => void;
-    subToRoom: (roomId: string) => void;
-    sendMsg: (roomId: string, msg: Message) => void;
-    updateRoom: (roomId: string, message: Message) => void;
-    resetUnreadCount: (roomId: string) => void;
+    // 상태
+    chatRoomList: IChatRoom[];
+    messageList: IChatMessage[];
+    connectedSocketList: Map<string, Client>;
+    curRoomInfo: Pick<IChatRoom, '_id' | 'other'> | null;
+
+    // 채팅방 생성
+    createChatRoom: (entrustedName: string) => Promise<void>;
+
+    // 채팅방 리스트
+    fetchChatRoomList: () => Promise<void>;
+    unSubFromChatRoomList: () => void;
+
+    // 특정 채팅방
+    fetchChatMessageList: (chatRoomId: string) => Promise<void>;
+    subToChatRoom: (chatRoomId: string) => void;
+    unSubFromChatRoom: () => void;
+
+    // 메세지 전송
+    sendMsg: (chatRoomId: string, msg: string, msg_type: 'msg' | 'plz') => void;
 }
 
 const STOMP_CONNECT_URL = import.meta.env.VITE_STOMP_CONNECT_URL as string;
 const STOMP_SUB_PATH = import.meta.env.VITE_STOMP_SUB_PATH as string;
+const STOMP_PUB_PATH = import.meta.env.VITE_STOMP_PUB_PATH as string;
 
 const useChatStore = create<ChatStore>((set, get) => ({
-    messages: {},
-    chatRooms: [],
-    stompClient: null,
+    chatRoomList: [],
+    messageList: [],
+    connectedSocketList: new Map(),
+    curRoomInfo: null,
 
-    // STOMP 연결
-    connect: (roomId: string) => {
-        const client = new Client({
-            webSocketFactory: () =>
-                new SockJS(`${STOMP_CONNECT_URL}/${roomId}`),
-            reconnectDelay: 5000,
-            debug: (str) => console.log(str),
+    // 채팅방 리스트 가져오기 및 소켓 연결
+    fetchChatRoomList: async () => {
+        const { ok, data } = await getChatRoomList();
+
+        if (!ok) {
+            console.error('채팅방 리스트 가져오기에 실패했습니다.');
+            return;
+        }
+
+        set({ chatRoomList: data.result });
+
+        const connectedSocketList = new Map();
+
+        data.result.forEach((room) => {
+            const socket = new SockJS(
+                `${STOMP_CONNECT_URL}?roomId=${room._id}`,
+            );
+            const stompClient = new Client({ webSocketFactory: () => socket });
+
+            stompClient.onConnect = () => {
+                stompClient.subscribe(STOMP_SUB_PATH, (message) => {
+                    const newMsg = JSON.parse(message.body);
+                    set((state) => ({
+                        chatRoomList: state.chatRoomList.map((chatRoom) =>
+                            chatRoom._id === room._id
+                                ? {
+                                      ...chatRoom,
+                                      lastMessage: newMsg.msg,
+                                      messageCount: chatRoom.unreadCount + 1,
+                                  }
+                                : chatRoom,
+                        ),
+                    }));
+                });
+            };
+
+            stompClient.activate();
+            connectedSocketList.set(room._id, stompClient);
         });
 
-        client.onConnect = () => {
-            console.log('STOMP 연결 성공');
+        set({ connectedSocketList });
+    },
 
-            // 모든 채팅방 구독
-            const chatRooms = get().chatRooms;
-            chatRooms.forEach((room) => {
-                get().subToRoom(room.id);
+    // 모든 채팅방 소켓 연결 해제
+    unSubFromChatRoomList: () => {
+        const connectedSocketList = get().connectedSocketList;
+        connectedSocketList.forEach((client) => client.deactivate());
+        set({ connectedSocketList: new Map() });
+    },
+
+    // 특정 채팅방 메시지 가져오기
+    fetchChatMessageList: async (chatRoomId) => {
+        const { ok, data } = await getChatMessageList({
+            chatRoomId,
+            pageSize: 15,
+            startPage: 1,
+        });
+
+        if (!ok) {
+            console.log('채팅방 메시지를 가져오는데 실패했습니다.');
+            return;
+        }
+
+        set({
+            messageList: data.result.messages,
+            curRoomInfo: {
+                _id: data.result._id,
+                other: data.result.other,
+            },
+        });
+
+        // 소켓 연결
+        get().subToChatRoom(chatRoomId);
+    },
+
+    // 특정 채팅방 구독
+    subToChatRoom: (chatRoomId) => {
+        const connectedSocketList = get().connectedSocketList;
+
+        // 소켓 연결 판단
+        if (connectedSocketList.has(chatRoomId)) {
+            console.log('이미 소켓이 연결되어 있습니다.');
+            return;
+        }
+
+        const socket = new SockJS(`${STOMP_CONNECT_URL}?roomId=${chatRoomId}`);
+        const stompClient = new Client({ webSocketFactory: () => socket });
+
+        stompClient.onConnect = () => {
+            stompClient.subscribe(STOMP_SUB_PATH, (message) => {
+                const rawData = JSON.parse(message.body);
+                const newMsg: IChatMessage = {
+                    senderId: rawData.senderId,
+                    receiverId: rawData.receiverId,
+                    msg: rawData.msg,
+                    msg_type: rawData.msg_type,
+                    msgTimestamp: new Date().toISOString(),
+                    readStatus: true,
+                };
+                set((state) => ({
+                    messageList: [...state.messageList, newMsg],
+                }));
             });
         };
 
-        client.onStompError = (frame) => {
-            console.error('STOMP 에러', frame);
-        };
-
-        client.activate();
-        set({ stompClient: client });
+        stompClient.activate();
+        set(() => ({
+            connectedSocketList: new Map([[chatRoomId, stompClient]]),
+        }));
     },
 
-    // STOMP 연결 종료
-    disconnect: () => {
-        const client = get().stompClient;
+    // 특정 채팅방 구독 해제
+    unSubFromChatRoom: () => {
+        const connectedSocketList = get().connectedSocketList;
+        const roomId = get().curRoomInfo?._id;
 
-        if (client) {
-            client.deactivate();
-            set({ stompClient: null });
+        if (roomId && connectedSocketList.has(roomId)) {
+            connectedSocketList.get(roomId)?.deactivate();
+            connectedSocketList.delete(roomId);
         }
-    },
 
-    // 채팅방 Sub
-    subToRoom: (roomId) => {
-        const client = get().stompClient;
-
-        if (client) {
-            client.subscribe(
-                `${STOMP_SUB_PATH}/${roomId}`,
-                (message: IMessage) => {
-                    const receivedMsg: Message = JSON.parse(message.body);
-                    get().updateRoom(roomId, receivedMsg);
-                },
-            );
-        }
+        set({ connectedSocketList, curRoomInfo: null });
     },
 
     // 메시지 전송
-    sendMsg: (roomId, message) => {
-        const client = get().stompClient;
+    sendMsg: (chatRoomId, msg, msg_type) => {
+        const connectedSocketList = get().connectedSocketList;
+        const stompClient = connectedSocketList.get(chatRoomId);
 
-        if (client && client.connected) {
-            client.publish({
-                destination: `${STOMP_SUB_PATH}/${roomId}`,
-                body: JSON.stringify(message),
+        if (stompClient) {
+            stompClient.publish({
+                destination: STOMP_PUB_PATH,
+                body: JSON.stringify({ chatRoomId, msg, msg_type }),
             });
         }
     },
 
-    // 채팅방 상태 업데이트
-    updateRoom: (roomId, message) => {
-        set((state) => {
-            const updatedRooms = state.chatRooms.map((room) =>
-                room.id === roomId
-                    ? {
-                          ...room,
-                          lastMessage: message,
-                          unreadCount: room.unreadCount + 1,
-                      }
-                    : room,
-            );
+    // 채팅방 생성
+    createChatRoom: async (entrustedEmail) => {
+        const { ok, data } = await createChatRoom({ entrustedEmail });
+        const navigate = useFadeNavigate();
 
-            return {
-                chatRooms: updatedRooms,
-                messages: {
-                    ...state.messages,
-                    [roomId]: [...(state.messages[roomId] || []), message],
-                },
-            };
-        });
-    },
+        if (!ok) {
+            console.log('채팅방 생성에 실패했습니다.');
+            return;
+        }
 
-    // 읽음 처리
-    resetUnreadCount: (roomId) => {
-        set((state) => ({
-            chatRooms: state.chatRooms.map((room) =>
-                room.id === roomId ? { ...room, unreadCount: 0 } : room,
-            ),
-        }));
+        navigate(`/chat/${data.result}`);
     },
 }));
 
