@@ -39,7 +39,8 @@ export default function SecondStep({
     const handleNextBtn = useCallback(() => {
         // api 요청
         console.log('2번 페이지 성공');
-        setPageNumber(3);
+        // react-hook-form의 submit 함수와의 충돌 방지
+        setPageNumber((prev) => prev + 1);
     }, []);
 
     return (
@@ -96,8 +97,7 @@ export default function SecondStep({
                 className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 2 && 'hidden'}`}
             >
                 <button
-                    type="submit"
-                    form="signup-form"
+                    form="none"
                     className="btn-solid mb-8"
                     disabled={
                         password === '' ||

@@ -73,7 +73,7 @@ export default function ImageSelectBox({
                             />
                         </div>
                     </section>
-                    <section className="flex gap-[10px]">
+                    <section className="flex gap-[10px] w-full max-w-[600px] mx-auto">
                         <button
                             onClick={handleToggleBottomSheetBtn}
                             className="btn-outline flex-1"
@@ -94,7 +94,7 @@ export default function ImageSelectBox({
 
     return (
         <div className={`w-full mx-auto flex flex-col gap-2 ${className}`}>
-            <label className="text-label-m">{label}</label>
+            <label className="text-label-m text-gray-500">{label}</label>
             <div className="w-full flex justify-center pb-[18px]">
                 <div className="relative">
                     <img
