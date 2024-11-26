@@ -1,5 +1,10 @@
 import Back from '@/assets/images/header/back.svg?react';
-import { FirstStep, SecondStep, ThirdStep } from '@/components/signup';
+import {
+    FirstStep,
+    FourthStep,
+    SecondStep,
+    ThirdStep,
+} from '@/components/signup';
 import { useFadeNavigate, useSignupForm } from '@/hooks';
 import { useCallback, useState } from 'react';
 
@@ -20,6 +25,7 @@ export default function Signup() {
         errors,
         onSubmit,
         isValid,
+        control,
     } = useSignupForm();
 
     const [imgName, setImgName] = useState('profile=1');
@@ -77,6 +83,13 @@ export default function Signup() {
                     setPageNumber={setPageNumber}
                     imgName={imgName}
                     setImgName={setImgName}
+                />
+                <FourthStep
+                    pageNumber={pageNumber}
+                    register={register}
+                    watch={watch}
+                    errors={errors}
+                    control={control}
                 />
             </form>
         </div>

@@ -17,6 +17,10 @@ export interface SignUpInputs {
     nickname: string;
     /** User's introduce */
     introduce: string;
+    /** User's preference of dog sizes */
+    dogSizes: string[];
+    /** User's mbti */
+    mbti: string;
 }
 
 export interface emailValidationType {
@@ -81,6 +85,7 @@ export default function useSignupForm() {
         handleSubmit,
         watch,
         formState: { errors, isValid },
+        control,
     } = useForm<SignUpInputs>({
         shouldFocusError: false,
         mode: 'onChange',
@@ -182,5 +187,6 @@ export default function useSignupForm() {
         errors,
         onSubmit,
         isValid,
+        control,
     };
 }
