@@ -1,44 +1,72 @@
 import { BaseApiResponse } from './baseResponse';
 
-interface IChatUserInfo {
-    id: string;
+interface IChatUser {
+    _id: string;
+    email: string;
     nickname: string;
     profileImgUrl: string;
 }
 
-interface IChatRoomInfo {
-    id: string;
-    lastMessage: string;
-    messageCount: number;
+interface IChatRoom {
+    _id: string;
+    lastMessage: string | 'first';
+    unreadCount: number;
     lastMessageTimestamp: string;
-    participants: IChatUserInfo[];
+    other: IChatUser;
 }
 
-interface IMessage {
-    id: string;
+interface IChatMessage {
     senderId: string;
     receiverId: string;
     msg: string;
+    msg_type: 'msg' | 'plz';
     msgTimestamp: string;
     readStatus: boolean;
 }
 
-interface IChatRoom {
-    id: string;
-    entrusted: IChatUserInfo;
-    caregiver: IChatUserInfo;
-    messages: IMessage[];
+//	POST create ChatRoom
+interface ChatRoomCreateApiRequest {
+    entrustedEmail: string;
+}
+interface ChatRoomCreateApiResponse extends BaseApiResponse {
+    data: {
+        result: string;
+    };
 }
 
-//	GET	ChatRoom
+//	GET	ChatRoomList
 interface ChatRoomListApiResponse extends BaseApiResponse {
-    ChatRooms: IChatRoom[];
+    data: {
+        result: IChatRoom[];
+    };
+}
+
+//	GET	MessageList
+interface ChatMessageListApiRequest {
+    chatRoomId: string;
+    pageSize?: number;
+    startPage?: number;
+}
+interface ChatMessageListApiResponse extends BaseApiResponse {
+    data: {
+        result: {
+            _id: string;
+            messages: IChatMessage[];
+            other: IChatUser;
+            pageNumber: number;
+            totalPages: number;
+            totalElements: number;
+        };
+    };
 }
 
 export type {
-    IChatUserInfo,
-    IChatRoomInfo,
+    IChatUser,
     IChatRoom,
-    IMessage,
+    IChatMessage,
     ChatRoomListApiResponse,
+    ChatRoomCreateApiRequest,
+    ChatRoomCreateApiResponse,
+    ChatMessageListApiRequest,
+    ChatMessageListApiResponse,
 };
