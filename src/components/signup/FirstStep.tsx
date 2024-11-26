@@ -118,7 +118,6 @@ export default function FirstStep({
                 className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 1 && 'hidden'}`}
             >
                 <button
-                    form="none"
                     className="btn-solid mb-8"
                     disabled={
                         !sentNumber || !!errors.email || !verificationCode
