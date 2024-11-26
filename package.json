@@ -11,6 +11,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@stomp/stompjs": "^7.0.0",
         "@lottiefiles/dotlottie-react": "^0.10.0",
         "@tanstack/react-query": "^5.60.5",
         "axios": "^1.7.7",
@@ -23,6 +24,7 @@
         "react-router-dom": "^6.28.0",
         "react-slick": "^0.30.2",
         "react-toastify": "^10.0.6",
+        "sockjs-client": "^1.6.1",
         "slick-carousel": "^1.8.1",
         "zustand": "^5.0.1"
     },
@@ -32,6 +34,7 @@
         "@types/node": "^22.9.0",
         "@types/react": "^18.3.12",
         "@types/react-dom": "^18.3.1",
+        "@types/sockjs-client": "^1.5.4",
         "@types/react-slick": "^0.23.13",
         "@vite-pwa/assets-generator": "^0.2.6",
         "@vitejs/plugin-react-swc": "^3.5.0",

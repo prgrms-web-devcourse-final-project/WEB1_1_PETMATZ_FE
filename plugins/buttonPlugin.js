@@ -24,7 +24,7 @@ export default function buttonPlugin({ addComponents }) {
             '@apply w-auto': '',
         },
         '.btn-md': {
-            '@apply w-auto text-body-m min-w-[100px] h-[44px] py-[12px]': '',
+            '@apply w-auto text-body-m min-w-[100px] h-[48px] py-[12px]': '',
         },
         '.btn-sm': {
             '@apply w-auto text-body-s min-w-[81px] h-[34px] py-[8px] px-[16px]':
