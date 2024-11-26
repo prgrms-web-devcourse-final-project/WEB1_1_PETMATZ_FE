@@ -56,7 +56,7 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-white flex flex-col items-center justify-between overflow-hidden">
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-between overflow-hidden">
             {step < 4 ? (
                 <header className="bg-white sm:h-24 h-14 w-full flex items-center justify-center">
                     <Back
@@ -73,7 +73,7 @@ export default function Register() {
                 </header>
             )}
 
-            {step < 4 && (
+            {/* {step < 4 && (
                 <div className="w-full h-14 flex justify-center mt-4">
                     <StepIndicator
                         currentStep={step}
@@ -81,8 +81,8 @@ export default function Register() {
                         stepTitles={STEP_TITLES}
                     />
                 </div>
-            )}
-            <main className="px-6 w-full flex flex-1 overflow-hidden">
+            )} */}
+            <main className="w-full flex flex-1 overflow-hidden">
                 <AnimatePresence mode="wait">
                     {step === 1 && (
                         <motion.div
