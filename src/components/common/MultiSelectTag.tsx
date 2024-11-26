@@ -17,7 +17,7 @@ export default function MultiSelectTag<T extends FieldValues>({
     rules = {},
 }: MultiSelectTagProps<T>) {
     return (
-        <div className="mb-4">
+        <div className="mb-4 w-[fit-content]">
             <label className="block text-gray-500 text-label-m mb-2">
                 {label}
             </label>
