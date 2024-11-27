@@ -20,7 +20,7 @@ export default function ChangePassword() {
     const [show, setShow] = useState(false);
 
     const handleBackBtn = useCallback(() => {
-        navigate('/profile');
+        navigate(-1);
     }, []);
 
     const handlePasswordShowBtn = useCallback(() => {
@@ -29,7 +29,7 @@ export default function ChangePassword() {
 
     return (
         <div className="h-screen bg-gray-100 flex flex-col justify-between overflow-hidden">
-            <header className="bg-white sm:h-24 h-14 w-full flex items-center justify-center">
+            <header className="bg-white h-14 w-full flex items-center justify-center">
                 <Back
                     onClick={handleBackBtn}
                     className="absolute left-[26px] cursor-pointer"
@@ -103,7 +103,7 @@ export default function ChangePassword() {
                 <button
                     type="submit"
                     form="change-form"
-                    className="btn-solid mb-8"
+                    className="btn-solid"
                     disabled={
                         !isValid ||
                         !!errors.currentPassword ||

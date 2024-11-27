@@ -24,7 +24,7 @@ export default function Success() {
                 <Dog />
             </section>
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
-                <button onClick={handleCheckBtn} className="btn-solid mb-8">
+                <button onClick={handleCheckBtn} className="btn-solid">
                     확인
                 </button>
             </footer>
