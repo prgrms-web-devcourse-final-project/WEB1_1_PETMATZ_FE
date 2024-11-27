@@ -9,6 +9,9 @@ import {
 import { CustomToggle, MultiSelectTag, SelectBox } from '../common';
 import { useSelectBox } from '@/hooks';
 import { Option } from '@/hooks/useSelectBox';
+import { useCallback, useState } from 'react';
+import ReactDOM from 'react-dom';
+import Check from '@/assets/images/forgot-password/check.svg?react';
 
 interface FourthStepPropsType {
     pageNumber: number;
@@ -16,6 +19,7 @@ interface FourthStepPropsType {
     watch: UseFormWatch<SignUpInputs>;
     errors: FieldErrors<SignUpInputs>;
     control: Control<SignUpInputs, any>;
+    isValid: boolean;
 }
 
 export default function FourthStep({
@@ -24,6 +28,7 @@ export default function FourthStep({
     watch,
     errors,
     control,
+    isValid,
 }: FourthStepPropsType) {
     // 강아지 크기 옵션 정의
     const dogSizeOptions = [
@@ -59,6 +64,59 @@ export default function FourthStep({
         selectedOption,
         selectBoxRef,
     } = useSelectBox(options);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const handleNextBtn = useCallback(() => {
+        // api 요청
+        console.log('4번 페이지 성공');
+        setShowModal(true);
+    }, []);
+
+    const handleCancelBtn = useCallback(() => {
+        setShowModal(false);
+    }, []);
+
+    const modalContent = (
+        <div
+            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 mx-auto z-50 flex justify-center items-center min-w-[360px] max-w-[768px]"
+        >
+            {/* 배경에만 opacity 적용 */}
+            <div className="absolute inset-0 bg-dim opacity-90"></div>
+            {/* 모달 컨텐츠 */}
+            <section className="z-10 w-[303px] min-w-[303px] h-[406px] bg-white rounded-xl p-6 flex flex-col gap-[16px]">
+                <div className="flex flex-col gap-2 items-center">
+                    <Check />
+                    <h1 className="text-gray-900 text-body-xl font-extrabold flex flex-col items-center">
+                        <div className="items-center">동의하고</div>
+                        <div>가입 완료하기!</div>
+                    </h1>
+                    <div className="w-full text-label-l text-gray-500 items-center flex flex-col gap-2">
+                        <span>지역별 돌봄 랭킹을 사용하시려면</span>
+                        <span>아래 항목의 동의가 필요해요!</span>
+                    </div>
+                </div>
+                <div className="border-[0.5px] border-gray-100"></div>
+                <div className="flex flex-col gap-2 w-full text-body-s text-gray-900 font-semibold">
+                    <article className="rounded-lg w-full bg-gray-100 px-2 py-[10px]">{`(필수) 개인정보 수집 및 이용에 대한 동의`}</article>
+                    <article className="rounded-lg w-full bg-gray-100 px-2 py-[10px]">{`(필수) 사용자 위치 서비스 이용에 대한 동의`}</article>
+                </div>
+                <div className="flex gap-[10px] w-full">
+                    <button onClick={handleCancelBtn} className="btn-outline">
+                        취소하기
+                    </button>
+                    <button
+                        type="submit"
+                        form="signup-form"
+                        className="btn-solid"
+                    >
+                        동의하기
+                    </button>
+                </div>
+            </section>
+        </div>
+    );
 
     return (
         <>
@@ -141,16 +199,19 @@ export default function FourthStep({
                 className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 4 && 'hidden'}`}
             >
                 <button
-                    type="submit"
-                    form="signup-form"
+                    form="none"
                     className="btn-solid mb-8"
                     disabled={
-                        !!errors.dogSizes?.message || !!errors.mbti?.message
+                        !isValid ||
+                        !!errors.dogSizes?.message ||
+                        !!errors.mbti?.message
                     }
+                    onClick={handleNextBtn}
                 >
                     다음
                 </button>
             </footer>
+            {showModal && ReactDOM.createPortal(modalContent, document.body)}
         </>
     );
 }

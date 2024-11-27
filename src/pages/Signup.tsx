@@ -3,6 +3,7 @@ import {
     FirstStep,
     FourthStep,
     SecondStep,
+    Success,
     ThirdStep,
 } from '@/components/signup';
 import { useFadeNavigate, useSignupForm } from '@/hooks';
@@ -26,17 +27,20 @@ export default function Signup() {
         onSubmit,
         isValid,
         control,
+        success,
     } = useSignupForm();
 
     const [imgName, setImgName] = useState('profile=1');
 
     const handleBackBtn = useCallback(() => {
         if (pageNumber === 1) {
-            navigate('/login');
+            navigate(-1);
         } else {
             setPageNumber((prev) => prev - 1);
         }
     }, [pageNumber]);
+
+    if (success) return <Success />;
 
     return (
         <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
@@ -90,6 +94,7 @@ export default function Signup() {
                     watch={watch}
                     errors={errors}
                     control={control}
+                    isValid={isValid}
                 />
             </form>
         </div>
