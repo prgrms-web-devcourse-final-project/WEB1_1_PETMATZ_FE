@@ -106,7 +106,13 @@ export default function FourthStep({
                     <button onClick={handleCancelBtn} className="btn-outline">
                         취소하기
                     </button>
-                    <button className="btn-solid">동의하기</button>
+                    <button
+                        type="submit"
+                        form="signup-form"
+                        className="btn-solid"
+                    >
+                        동의하기
+                    </button>
                 </div>
             </section>
         </div>

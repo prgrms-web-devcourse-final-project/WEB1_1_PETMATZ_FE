@@ -3,6 +3,7 @@ import {
     FirstStep,
     FourthStep,
     SecondStep,
+    Success,
     ThirdStep,
 } from '@/components/signup';
 import { useFadeNavigate, useSignupForm } from '@/hooks';
@@ -26,6 +27,7 @@ export default function Signup() {
         onSubmit,
         isValid,
         control,
+        success,
     } = useSignupForm();
 
     const [imgName, setImgName] = useState('profile=1');
@@ -37,6 +39,8 @@ export default function Signup() {
             setPageNumber((prev) => prev - 1);
         }
     }, [pageNumber]);
+
+    if (success) return <Success />;
 
     return (
         <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
