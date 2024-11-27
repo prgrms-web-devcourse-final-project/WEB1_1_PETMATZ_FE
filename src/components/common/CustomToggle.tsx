@@ -47,7 +47,7 @@ export default function CustomToggle({
                 <input
                     type="checkbox"
                     {...register(name)}
-                    defaultChecked={defaultChecked}
+                    checked={value ?? defaultChecked}
                     id={name}
                     className="peer sr-only"
                 />

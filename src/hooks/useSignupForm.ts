@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import useFadeNavigate from './useFadeNavigate';
 
 /**
  * Signup form types
@@ -17,6 +18,10 @@ export interface SignUpInputs {
     nickname: string;
     /** User's introduce */
     introduce: string;
+    /** User's gender */
+    gender: boolean;
+    /** User's possibility of caring dogs */
+    possible: boolean;
     /** User's preference of dog sizes */
     dogSizes: string[];
     /** User's mbti */
@@ -92,6 +97,8 @@ export default function useSignupForm() {
     });
 
     const [pageNumber, setPageNumber] = useState(1);
+    const [success, setSuccess] = useState(false);
+    const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
@@ -99,6 +106,10 @@ export default function useSignupForm() {
     const onSubmit = (data: SignUpInputs) => {
         console.log(data);
         // 여기에 로그인 로직을 구현하세요
+        setSuccess(true);
+        setTimeout(() => {
+            navigate('/login');
+        }, 3000);
     };
 
     /**
@@ -188,5 +199,6 @@ export default function useSignupForm() {
         onSubmit,
         isValid,
         control,
+        success,
     };
 }
