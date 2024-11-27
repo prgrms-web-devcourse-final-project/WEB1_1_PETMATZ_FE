@@ -5,7 +5,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 export default function Success() {
     return (
         <div className="h-screen bg-white flex flex-col justify-between overflow-hidden">
-            <header className="sm:h-24 h-14 w-full flex items-center justify-center">
+            <header className="h-14 w-full flex items-center justify-center">
                 <Logo />
             </header>
             <section className="bg-white flex-1 flex flex-col justify-center items-center mb-16">

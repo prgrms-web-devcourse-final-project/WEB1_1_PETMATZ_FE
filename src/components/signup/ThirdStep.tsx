@@ -99,7 +99,7 @@ export default function ThirdStep({
             >
                 <button
                     form="none"
-                    className="btn-solid mb-8"
+                    className="btn-solid"
                     disabled={
                         nickname === '' ||
                         !!errors.nickname?.message ||

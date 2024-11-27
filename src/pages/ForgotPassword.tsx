@@ -25,7 +25,7 @@ export default function ForgotPassword() {
         <div
             className={`h-screen ${success ? 'bg-white' : 'bg-gray-100'} flex flex-col justify-between overflow-hidden`}
         >
-            <header className="bg-white sm:h-24 h-14 w-full flex items-center justify-center">
+            <header className="bg-white h-14 w-full flex items-center justify-center">
                 <Back
                     onClick={handleBackBtn}
                     className="absolute left-[26px] cursor-pointer"
@@ -67,7 +67,7 @@ export default function ForgotPassword() {
                         <button
                             type="submit"
                             form="forgot-form"
-                            className="btn-solid mb-8"
+                            className="btn-solid"
                             disabled={!isValid || !!errors.email}
                         >
                             확인
