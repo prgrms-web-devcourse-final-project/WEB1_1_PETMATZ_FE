@@ -1,8 +1,8 @@
 import { useFadeNavigate, useForgotPasswordForm } from '@/hooks';
 import { useCallback } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
-import Success from '@/components/forgot-password/Success';
 import { CustomInput } from '@/components/common';
+import { Success } from '@/components/forgot-password';
 
 export default function ForgotPassword() {
     const navigate = useFadeNavigate();
