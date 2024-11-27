@@ -67,7 +67,7 @@ export default function ForgotPassword() {
                         <button
                             type="submit"
                             form="forgot-form"
-                            className="btn-solid mb-8"
+                            className="btn-solid"
                             disabled={!isValid || !!errors.email}
                         >
                             확인

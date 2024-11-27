@@ -98,7 +98,7 @@ export default function SecondStep({
             >
                 <button
                     form="none"
-                    className="btn-solid mb-8"
+                    className="btn-solid"
                     disabled={
                         password === '' ||
                         confirmPassword === '' ||

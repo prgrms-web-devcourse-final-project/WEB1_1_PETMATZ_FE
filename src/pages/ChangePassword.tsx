@@ -20,7 +20,7 @@ export default function ChangePassword() {
     const [show, setShow] = useState(false);
 
     const handleBackBtn = useCallback(() => {
-        navigate('/profile');
+        navigate(-1);
     }, []);
 
     const handlePasswordShowBtn = useCallback(() => {
@@ -103,7 +103,7 @@ export default function ChangePassword() {
                 <button
                     type="submit"
                     form="change-form"
-                    className="btn-solid mb-8"
+                    className="btn-solid"
                     disabled={
                         !isValid ||
                         !!errors.currentPassword ||

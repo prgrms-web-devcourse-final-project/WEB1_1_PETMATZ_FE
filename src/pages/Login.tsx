@@ -107,7 +107,7 @@ export default function Login() {
                 <button
                     type="submit"
                     form="login-form"
-                    className="btn-solid mb-8"
+                    className="btn-solid"
                     disabled={!isValid || !!errors.email || !!errors.password}
                 >
                     로그인

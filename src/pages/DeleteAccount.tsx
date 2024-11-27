@@ -42,14 +42,11 @@ export default function ForgotPassword() {
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
                 <button
                     onClick={handleBackBtn}
-                    className="btn-outline absolute bottom-[103px] left-6 right-6 max-w-[552px] mx-auto w-auto"
+                    className="btn-outline absolute bottom-[71px] left-6 right-6 max-w-[552px] mx-auto w-auto"
                 >
                     돌아가기
                 </button>
-                <button
-                    onClick={handleDeleteAccountBtn}
-                    className="btn-solid mb-8"
-                >
+                <button onClick={handleDeleteAccountBtn} className="btn-solid">
                     탈퇴하기
                 </button>
             </footer>
