@@ -30,7 +30,7 @@ export default function Register() {
             ownerName: '',
             registrationNumber: '',
             dogName: '',
-            breed: '',
+            breed: '', // 품종
             age: '',
             favoritePlace: '',
             gender: '',
@@ -105,7 +105,7 @@ export default function Register() {
                                 register={register}
                                 errors={errors}
                                 watch={watch}
-                                getValue={getValues}
+                                // getValue={getValues}
                                 setValue={setValue}
                             />
                         </motion.div>

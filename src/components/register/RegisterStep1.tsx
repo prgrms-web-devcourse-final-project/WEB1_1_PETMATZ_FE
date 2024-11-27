@@ -1,14 +1,17 @@
+import { useAnimalRegistration } from '@/hooks';
 import { CustomInput } from '@/components/common';
 import { RegisterStep1Props } from '@/types/register';
+import { ToastAnchor } from '@/components/common';
 
 export default function RegisterStep1({
     onNext,
     register,
     watch,
     errors,
-    getValue,
+    // getValue,
     setValue,
 }: RegisterStep1Props) {
+    const { fetchAnimalRegistration } = useAnimalRegistration();
     const registrationNumber = watch('registrationNumber');
     const ownerName = watch('ownerName');
 
@@ -30,12 +33,24 @@ export default function RegisterStep1({
         !!errors.registrationNumber ||
         !!errors.ownerName;
 
-    const handleSearch = () => {
-        // api 요청
-        setValue('ownerName', ownerName);
-        setValue('registrationNumber', registrationNumber);
-        console.log('업데이트 :', getValue());
-        onNext();
+    const handleSearch = async () => {
+        const response = await fetchAnimalRegistration({
+            dog_reg_no: registrationNumber,
+            owner_nm: ownerName,
+        });
+
+        if (response?.response.body.item) {
+            const item = response.response.body.item;
+            setValue('dogName', item.dogNm);
+            setValue('registrationNumber', item.dogRegNo);
+            setValue('breed', item.kindNm);
+            setValue('neutered', item.neuterYn);
+            setValue('gender', item.sexNm);
+            setTimeout(() => {
+                onNext();
+            }, 1000);
+        }
+        // console.log('formData :,', getValue());
     };
 
     return (
@@ -91,14 +106,16 @@ export default function RegisterStep1({
             </section>
 
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
-                <button
-                    type="button"
-                    className="btn-solid w-full"
-                    onClick={handleSearch}
-                    disabled={isButtonDisabled}
-                >
-                    조회하기
-                </button>
+                <ToastAnchor>
+                    <button
+                        type="button"
+                        className="btn-solid w-full"
+                        onClick={handleSearch}
+                        disabled={isButtonDisabled}
+                    >
+                        조회하기
+                    </button>
+                </ToastAnchor>
             </footer>
         </div>
     );
