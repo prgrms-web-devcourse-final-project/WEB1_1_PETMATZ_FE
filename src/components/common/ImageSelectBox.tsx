@@ -37,8 +37,9 @@ export default function ImageSelectBox({
     const modalContent = (
         <div
             onClick={(e) => e.stopPropagation()}
-            className="fixed inset-0 mx-auto z-50 bg-dim opacity-90 w-full"
+            className="fixed inset-0 mx-auto z-50 w-full min-w-[360px] max-w-[768px]"
         >
+            <div className="absolute inset-0 bg-dim opacity-90"></div>
             <div className="absolute w-full bottom-0 rounded-t-2xl bg-white">
                 <div className="flex justify-begin items-center rounded-t-2xl text-body-m text-black font-extrabold p-6">
                     {bottomSheetLabel}
