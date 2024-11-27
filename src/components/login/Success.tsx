@@ -10,13 +10,16 @@ export default function Success() {
             </header>
             <section className="bg-white flex-1 flex flex-col justify-center items-center mb-16">
                 <DotLottieReact
-                    src="https://lottie.host/e4ad48bc-09f4-4f46-af93-f81f16209fc7/YjELnsaSRT.lottie"
+                    src="https://lottie.host/0ec6bf75-6681-413d-8992-4aba08e67c7b/8PPFhpM9DL.lottie"
                     autoplay
                     style={{
                         position: 'absolute',
+                        height: '202.26px',
+                        width: '352px',
+                        top: '24vh',
                     }}
                 />
-                <SmallDog className="mb-8" />
+                <SmallDog className="mb-8 z-10" />
                 <p className="text-body-s font-semibold text-gray-400 mb-2">
                     로그인 완료
                 </p>
