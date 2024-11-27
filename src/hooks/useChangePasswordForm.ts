@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
-import useFadeNavigate from './useFadeNavigate';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 /**
  * ChangePassword form input type
@@ -27,7 +26,7 @@ export default function useChangePasswordForm() {
     } = useForm<ChangePasswordInputs>({
         mode: 'onChange',
     });
-    const navigate = useFadeNavigate();
+    const [success, setSuccess] = useState(false);
 
     /**
      * Handles form submission
@@ -35,8 +34,7 @@ export default function useChangePasswordForm() {
     const onSubmit = (data: ChangePasswordInputs) => {
         console.log(data);
         // 여기에 로직을 구현하세요
-        toast.info('비밀번호가 정상적으로 변경되었습니다!');
-        navigate('/profile');
+        setSuccess(true);
     };
 
     /**
@@ -92,5 +90,6 @@ export default function useChangePasswordForm() {
         errors,
         onSubmit,
         isValid,
+        success,
     };
 }
