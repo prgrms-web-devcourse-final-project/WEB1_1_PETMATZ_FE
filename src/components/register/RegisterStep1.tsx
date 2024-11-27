@@ -6,6 +6,7 @@ export default function RegisterStep1({
     register,
     watch,
     errors,
+    getValue,
     setValue,
 }: RegisterStep1Props) {
     const registrationNumber = watch('registrationNumber');
@@ -33,6 +34,7 @@ export default function RegisterStep1({
         // api 요청
         setValue('ownerName', ownerName);
         setValue('registrationNumber', registrationNumber);
+        console.log('업데이트 :', getValue());
         onNext();
     };
 
