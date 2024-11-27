@@ -1,30 +1,43 @@
 import { useState, useCallback } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useFadeNavigate } from '@/hooks';
 import Back from '@/assets/images/header/back.svg?react';
 import Logo from '@/assets/images/header/logo.svg?react';
-import { StepIndicator } from '@/components/register';
+import { motion, AnimatePresence } from 'framer-motion';
 import { RegisterStep1 } from '@/components/register';
 import { RegisterStep2 } from '@/components/register';
 import { RegisterStep3 } from '@/components/register';
 import { RegisterComplete } from '@/components/register';
-import { motion, AnimatePresence } from 'framer-motion';
+import { RegisterFormData } from '@/types/register';
 
-const STEP_TITLES = ['등록번호 조회', '추가 정보입력', 'DMBTI'];
-
+// 폼 데이터 타입 정의
 export default function Register() {
     const navigate = useFadeNavigate();
     const [step, setStep] = useState(1);
 
-    // 강아지 정보 상태 관리
-    const [formData, setFormData] = useState({
-        dogName: '',
-        breed: '',
-        age: '',
-        favoritePlace: '',
-        gender: '',
-        neutered: '',
-        size: '',
-        dmbti: '',
+    // react-hook-form 사용
+    const {
+        register,
+        handleSubmit,
+        watch,
+        trigger,
+        formState: { errors },
+        getValues,
+        setValue,
+    } = useForm<RegisterFormData>({
+        mode: 'onChange',
+        defaultValues: {
+            ownerName: '',
+            registrationNumber: '',
+            dogName: '',
+            breed: '',
+            age: '',
+            favoritePlace: '',
+            gender: '',
+            neutered: '',
+            size: '',
+            dmbti: '',
+        },
     });
 
     const handleBackBtn = useCallback(() => {
@@ -35,17 +48,16 @@ export default function Register() {
         }
     }, [step, navigate]);
 
-    const handleNextStep = () => {
-        if (step < 4) {
+    const handleNextStep = async () => {
+        const isStepValid = await trigger();
+        if (isStepValid && step < 4) {
             setStep((prevStep) => prevStep + 1);
         }
     };
 
-    const updateFormData = (field: string, value: string) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            [field]: value,
-        }));
+    const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
+        console.log('전체 폼 데이터:', data);
+        // 최종 제출 로직
     };
 
     // 애니메이션 설정
@@ -56,9 +68,12 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-between overflow-hidden">
+        <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="min-h-screen bg-gray-100 flex flex-col items-center justify-between overflow-hidden"
+        >
             {step < 4 ? (
-                <header className="bg-white sm:h-24 h-14 w-full flex items-center justify-center">
+                <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
                         onClick={handleBackBtn}
                         className="absolute left-[26px] cursor-pointer"
@@ -73,15 +88,6 @@ export default function Register() {
                 </header>
             )}
 
-            {/* {step < 4 && (
-                <div className="w-full h-14 flex justify-center mt-4">
-                    <StepIndicator
-                        currentStep={step}
-                        totalSteps={STEP_TITLES.length}
-                        stepTitles={STEP_TITLES}
-                    />
-                </div>
-            )} */}
             <main className="w-full flex flex-1 overflow-hidden">
                 <AnimatePresence mode="wait">
                     {step === 1 && (
@@ -94,7 +100,14 @@ export default function Register() {
                             variants={pageVariants}
                             transition={{ duration: 0.5 }}
                         >
-                            <RegisterStep1 onNext={handleNextStep} />
+                            <RegisterStep1
+                                onNext={handleNextStep}
+                                register={register}
+                                errors={errors}
+                                watch={watch}
+                                getValue={getValues}
+                                setValue={setValue}
+                            />
                         </motion.div>
                     )}
                     {step === 2 && (
@@ -109,8 +122,8 @@ export default function Register() {
                         >
                             <RegisterStep2
                                 onNext={handleNextStep}
-                                updateFormData={updateFormData}
-                                formData={formData}
+                                updateFormData={getValues}
+                                formData={getValues()}
                             />
                         </motion.div>
                     )}
@@ -126,7 +139,7 @@ export default function Register() {
                         >
                             <RegisterStep3
                                 onNext={handleNextStep}
-                                updateFormData={updateFormData}
+                                updateFormData={getValues}
                             />
                         </motion.div>
                     )}
@@ -140,11 +153,11 @@ export default function Register() {
                             variants={pageVariants}
                             transition={{ duration: 0.5 }}
                         >
-                            <RegisterComplete formData={formData} />
+                            <RegisterComplete formData={getValues()} />
                         </motion.div>
                     )}
                 </AnimatePresence>
             </main>
-        </div>
+        </form>
     );
 }
