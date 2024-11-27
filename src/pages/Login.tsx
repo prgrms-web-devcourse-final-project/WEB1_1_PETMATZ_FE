@@ -2,8 +2,8 @@ import { useFadeNavigate, useLoginForm } from '@/hooks';
 import Back from '@/assets/images/header/back.svg?react';
 import Forward from '@/assets/images/login/forward.svg?react';
 import { useCallback } from 'react';
-import { Success } from '@/components/login';
 import { CustomInput } from '@/components/common';
+import { Success } from '@/components/login';
 
 export default function Login() {
     const {
