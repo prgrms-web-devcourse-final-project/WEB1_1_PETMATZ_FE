@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
-import CameraBtn from '@/assets/images/signup/camera-s.svg?react';
-import { useCallback, useState } from 'react';
+import CameraBtn from '@/assets/images/profile/camera-s.svg?react';
+import AlbumBtn from '@/assets/images/profile/camera-g.svg?react';
+import { useCallback, useRef, useState } from 'react';
 
 interface ImageSelectBoxProps {
     label: string;
@@ -19,6 +20,7 @@ export default function ImageSelectBox({
 }: ImageSelectBoxProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [chosenImgName, setChosenImgName] = useState(imgName);
+    const fileInput = useRef<HTMLInputElement>(null);
 
     const handleToggleBottomSheetBtn = useCallback(() => {
         setChosenImgName(imgName);
@@ -34,6 +36,24 @@ export default function ImageSelectBox({
         setIsOpen((prev) => !prev);
     }, [chosenImgName]);
 
+    const handleButtonClick = () => {
+        if (fileInput.current) {
+            fileInput.current.click();
+        }
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e: ProgressEvent<FileReader>) => {
+                const result = e.target?.result as string; // 타입 단언 사용
+                setChosenImgName(result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const modalContent = (
         <div
             onClick={(e) => e.stopPropagation()}
@@ -46,30 +66,47 @@ export default function ImageSelectBox({
                 </div>
                 <div className="px-[43px] py-[16px] flex flex-col gap-8">
                     <section className="flex flex-col gap-6">
-                        <div className="flex justify-center">
-                            <img
-                                src={`src/assets/images/signup/${chosenImgName}.svg`}
-                                alt="기본 프로필 이미지"
-                                className="w-100 h-100 rounded-full border-[1px] border-gray-200"
-                            />
+                        <div className="w-full flex justify-center ">
+                            <div className="relative w-[100px] h-[100px]">
+                                <img
+                                    src={
+                                        chosenImgName.startsWith('profile')
+                                            ? `src/assets/images/profile/${chosenImgName}.svg`
+                                            : chosenImgName
+                                    }
+                                    alt="프로필 이미지"
+                                    className="object-cover w-full h-full rounded-full border-[1px] border-gray-200"
+                                />
+                            </div>
                         </div>
                         <div className="flex justify-center gap-4">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                ref={fileInput}
+                                onChange={handleFileChange}
+                            />
+                            <AlbumBtn
+                                onClick={handleButtonClick}
+                                className="cursor-pointer"
+                            />
                             <img
-                                src={`src/assets/images/signup/profile=1.svg`}
+                                src={`src/assets/images/profile/profile1.svg`}
                                 alt="기본 프로필 이미지 1"
-                                onClick={() => handleChooseImg('profile=1')}
+                                onClick={() => handleChooseImg('profile1')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                             <img
-                                src={`src/assets/images/signup/profile=2.svg`}
+                                src={`src/assets/images/profile/profile2.svg`}
                                 alt="기본 프로필 이미지 2"
-                                onClick={() => handleChooseImg('profile=2')}
+                                onClick={() => handleChooseImg('profile2')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                             <img
-                                src={`src/assets/images/signup/profile=3.svg`}
+                                src={`src/assets/images/profile/profile3.svg`}
                                 alt="기본 프로필 이미지 3"
-                                onClick={() => handleChooseImg('profile=3')}
+                                onClick={() => handleChooseImg('profile3')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                         </div>
@@ -98,11 +135,17 @@ export default function ImageSelectBox({
             <label className="text-label-m text-gray-500">{label}</label>
             <div className="w-full flex justify-center pb-[18px]">
                 <div className="relative">
-                    <img
-                        src={`src/assets/images/signup/${imgName}.svg`}
-                        alt="기본 프로필 이미지"
-                        className="w-100 h-100 rounded-full border-[1px] border-gray-200"
-                    />
+                    <div className="relative w-[100px] h-[100px]">
+                        <img
+                            src={
+                                imgName.startsWith('profile')
+                                    ? `src/assets/images/profile/${imgName}.svg`
+                                    : imgName
+                            }
+                            alt="기본 프로필 이미지"
+                            className="object-cover w-full h-full rounded-full border-[1px] border-gray-200"
+                        />
+                    </div>
                     <CameraBtn
                         onClick={handleToggleBottomSheetBtn}
                         className="absolute bottom-0 right-0 cursor-pointer"
