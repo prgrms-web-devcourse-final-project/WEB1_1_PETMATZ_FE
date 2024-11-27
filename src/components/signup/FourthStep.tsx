@@ -16,6 +16,7 @@ interface FourthStepPropsType {
     watch: UseFormWatch<SignUpInputs>;
     errors: FieldErrors<SignUpInputs>;
     control: Control<SignUpInputs, any>;
+    isValid: boolean;
 }
 
 export default function FourthStep({
@@ -24,6 +25,7 @@ export default function FourthStep({
     watch,
     errors,
     control,
+    isValid,
 }: FourthStepPropsType) {
     // 강아지 크기 옵션 정의
     const dogSizeOptions = [
@@ -145,7 +147,9 @@ export default function FourthStep({
                     form="signup-form"
                     className="btn-solid mb-8"
                     disabled={
-                        !!errors.dogSizes?.message || !!errors.mbti?.message
+                        !isValid ||
+                        !!errors.dogSizes?.message ||
+                        !!errors.mbti?.message
                     }
                 >
                     다음

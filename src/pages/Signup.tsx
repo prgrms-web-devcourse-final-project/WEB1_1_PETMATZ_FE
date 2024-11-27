@@ -32,7 +32,7 @@ export default function Signup() {
 
     const handleBackBtn = useCallback(() => {
         if (pageNumber === 1) {
-            navigate('/login');
+            navigate(-1);
         } else {
             setPageNumber((prev) => prev - 1);
         }
@@ -90,6 +90,7 @@ export default function Signup() {
                     watch={watch}
                     errors={errors}
                     control={control}
+                    isValid={isValid}
                 />
             </form>
         </div>
