@@ -44,55 +44,53 @@ export default function useLoginForm() {
         }
         setLoading(true);
         // 여기에 로그인 로직을 구현하세요.
-        await postLogin(data)
-            .then((response) => {
-                if (response.data.responseCode === 'SU') {
-                    const {
-                        id,
-                        accountId,
-                        nickname,
-                        loginRole,
-                        loginType,
-                        role,
-                        preferredSize,
-                        gender,
-                        isRegistered,
-                        recommendationCount,
-                        careCompletionCount,
-                        isCareAvailable,
-                        mbti,
-                    } = response.data;
-                    setUser({
-                        id,
-                        accountId,
-                        nickname,
-                        loginRole,
-                        loginType,
-                        role,
-                        preferredSize,
-                        gender,
-                        isRegistered,
-                        recommendationCount,
-                        careCompletionCount,
-                        isCareAvailable,
-                        mbti,
-                    });
-                    setSuccess(true);
-                    setTimeout(() => {
-                        navigate('/home');
-                    }, 3000);
-                } else if (response.data.responseCode === 'VF') {
+        await postLogin(data).then((response) => {
+            console.log(response);
+            if (response.ok) {
+                const {
+                    id,
+                    accountId,
+                    nickname,
+                    loginRole,
+                    loginType,
+                    role,
+                    preferredSize,
+                    gender,
+                    isRegistered,
+                    recommendationCount,
+                    careCompletionCount,
+                    isCareAvailable,
+                    mbti,
+                } = response.data;
+                setUser({
+                    id,
+                    accountId,
+                    nickname,
+                    loginRole,
+                    loginType,
+                    role,
+                    preferredSize,
+                    gender,
+                    isRegistered,
+                    recommendationCount,
+                    careCompletionCount,
+                    isCareAvailable,
+                    mbti,
+                });
+                setSuccess(true);
+                setTimeout(() => {
+                    navigate('/home');
+                }, 3000);
+            } else {
+                if (response.error?.status === 400) {
                     showToast('유효하지 않은 입력값입니다!', 'warning');
-                } else if (response.data.responseCode === 'SF') {
+                } else if (response.error?.status === 401) {
                     showToast('로그인 정보가 일치하지 않습니다!', 'warning');
-                } else if (response.data.responseCode === 'DBE') {
-                    showToast('DB 서버에 오류가 발생했습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
                 }
-            })
-            .catch((error) => {
-                console.error(error);
-                showToast('서버 연결 문제가 발생했습니다!', 'warning');
-            });
+            }
+        });
         setLoading(false);
     };
 
