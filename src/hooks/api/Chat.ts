@@ -34,8 +34,9 @@ export const getChatMessageList = async ({
     chatRoomId,
     pageSize,
     startPage,
+    lastTimeStamp,
 }: ChatMessageListApiRequest): Promise<ChatMessageListApiResponse> =>
     await http.get<ChatMessageListApiResponse, ChatMessageListApiRequest>(
         '/chat/message',
-        { chatRoomId, pageSize, startPage },
+        { chatRoomId, pageSize, startPage, lastTimeStamp },
     );
