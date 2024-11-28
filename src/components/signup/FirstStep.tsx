@@ -3,7 +3,7 @@ import {
     SignUpInputs,
     verificationCodeValidationType,
 } from '@/hooks/useSignupForm';
-import { CustomInput } from '../common';
+import { CustomInput, ToastAnchor, useCustomToast } from '../common';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { postEmailVerificationCode } from '@/hooks/api/signup';
@@ -32,6 +32,7 @@ export default function FirstStep({
     const emailTyped = useRef(false);
     const [sentNumber, setSentNumber] = useState(false);
     const [firstVisit, setFirstVisit] = useState(true);
+    const { showToast } = useCustomToast();
 
     const email = watch('email');
     const verificationCode = watch('verificationCode');
@@ -47,12 +48,12 @@ export default function FirstStep({
         await postEmailVerificationCode({ accountId }).then((response) => {
             if (response.ok) {
                 setSentNumber(true);
-                // 토스트
+                showToast('인증코드를 전송하였습니다!', 'success');
             } else {
                 if (response.error?.status === 400) {
-                    // 토스트
+                    showToast('이미 사용하고 있는 이메일입니다!', 'warning');
                 } else {
-                    // 토스트
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
                 }
             }
         });
@@ -94,18 +95,20 @@ export default function FirstStep({
                                         successMsg="좋아요!"
                                     />
                                 </div>
-                                <button
-                                    form="none"
-                                    className="btn-solid btn-md"
-                                    disabled={
-                                        (!emailTyped.current && !isValid) ||
-                                        !!errors.email ||
-                                        email === ''
-                                    }
-                                    onClick={handleVerificateEmailBtn}
-                                >
-                                    {firstVisit ? '인증번호' : '재요청'}
-                                </button>
+                                <ToastAnchor>
+                                    <button
+                                        form="none"
+                                        className="btn-solid btn-md"
+                                        disabled={
+                                            (!emailTyped.current && !isValid) ||
+                                            !!errors.email ||
+                                            email === ''
+                                        }
+                                        onClick={handleVerificateEmailBtn}
+                                    >
+                                        {firstVisit ? '인증번호' : '재요청'}
+                                    </button>
+                                </ToastAnchor>
                             </div>
                             <div className="flex gap-2 items-center">
                                 <div className="flex-1">
