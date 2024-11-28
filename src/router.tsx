@@ -40,7 +40,7 @@ export default function AppRoutes() {
                     <Route index={true} path="/" element={<Intro />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/chat/:roomId" element={<ChatDetail />} />
+                    <Route path="/chat/:chatRoomId" element={<ChatDetail />} />
                     <Route path="/sos/write" element={<SOSWrite />} />
                     <Route
                         path="/forgot-password"
