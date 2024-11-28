@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useFadeNavigate } from '@/hooks';
 import Back from '@/assets/images/header/back.svg?react';
@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RegisterStep1 } from '@/components/register';
 import { RegisterStep2 } from '@/components/register';
 import { RegisterStep3 } from '@/components/register';
+import { RegisterStep4 } from '@/components/register';
 import { RegisterComplete } from '@/components/register';
 import { RegisterFormData } from '@/types/register';
 
@@ -22,6 +23,7 @@ export default function Register() {
         handleSubmit,
         watch,
         trigger,
+        control,
         formState: { errors },
         getValues,
         setValue,
@@ -35,12 +37,24 @@ export default function Register() {
             age: '',
             favoritePlace: '',
             gender: '',
-            neutered: '',
+            neutered: false,
             size: '',
             dmbti: '',
             dogImg: 'profile1', // 기본 이미지
         },
     });
+
+    // Step3에서 neutered 값이 "미중성"으로 설정될 때를 처리하는 로직
+    useEffect(() => {
+        if (step === 3) {
+            const currentNeutered = getValues('neutered');
+            if (currentNeutered === '미중성') {
+                setValue('neutered', false);
+            } else if (currentNeutered === '중성') {
+                setValue('neutered', true);
+            }
+        }
+    }, [step]);
 
     const handleBackBtn = useCallback(() => {
         if (step > 1) {
@@ -52,7 +66,7 @@ export default function Register() {
 
     const handleNextStep = async () => {
         const isStepValid = await trigger();
-        if (isStepValid && step < 4) {
+        if (isStepValid && step < 5) {
             setStep((prevStep) => prevStep + 1);
         }
     };
@@ -74,7 +88,7 @@ export default function Register() {
             onSubmit={handleSubmit(onSubmit)}
             className="min-h-screen bg-gray-100 flex flex-col items-center justify-between overflow-hidden"
         >
-            {step < 4 ? (
+            {step < 5 ? (
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
                         onClick={handleBackBtn}
@@ -107,7 +121,7 @@ export default function Register() {
                                 register={register}
                                 errors={errors}
                                 watch={watch}
-                                // getValue={getValues}
+                                getValue={getValues}
                                 setValue={setValue}
                             />
                         </motion.div>
@@ -144,11 +158,31 @@ export default function Register() {
                         >
                             <RegisterStep3
                                 onNext={handleNextStep}
-                                updateFormData={getValues}
+                                register={register}
+                                control={control}
+                                watch={watch}
+                                errors={errors}
+                                getValue={getValues}
                             />
                         </motion.div>
                     )}
                     {step === 4 && (
+                        <motion.div
+                            key="step4"
+                            className="w-full"
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            variants={pageVariants}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <RegisterStep4
+                                onNext={handleNextStep}
+                                updateFormData={getValues}
+                            />
+                        </motion.div>
+                    )}
+                    {step === 5 && (
                         <motion.div
                             key="complete"
                             className="w-full flex flex-col items-center justify-center"

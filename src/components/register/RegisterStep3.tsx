@@ -1,164 +1,124 @@
-import { useState } from 'react';
-
-interface RegisterStep3Props {
-    onNext: () => void;
-    updateFormData: (field: string, value: string) => void;
-}
+import { CustomInput, CustomToggle, MultiSelectTag } from '../common';
+import { ToastAnchor } from '@/components/common';
+import { RegisterStep3Props } from '@/types/register';
 
 export default function RegisterStep3({
     onNext,
-    updateFormData,
+    register,
+    watch,
+    errors,
+    control,
+    getValue,
 }: RegisterStep3Props) {
-    const [answers, setAnswers] = useState({
-        first: '', // E or I
-        second: '', // S or N
-        third: '', // F or T
-        fourth: '', // P or J
-    });
+    const dogSizeOptions = [
+        { value: 'small', label: '소형견' },
+        { value: 'medium', label: '중형견' },
+        { value: 'large', label: '대형견' },
+    ];
 
-    const handleAnswer = (question: string, value: string) => {
-        setAnswers((prev) => ({
-            ...prev,
-            [question]: value,
-        }));
+    const neutered = watch('neutered');
+    const size = watch('size');
+    const age = watch('age');
+
+    // 나이 validation
+    const ageValidation = {
+        required: '나이는 필수 입력사항입니다.',
+        pattern: {
+            value: /^[0-9]+$/,
+            message: '숫자만 입력 가능합니다',
+        },
     };
 
-    const handleSubmit = () => {
-        // DMBTI 계산
-        const dmbti = `${answers.first}${answers.second}${answers.third}${answers.fourth}`;
-        updateFormData('dmbti', dmbti); // 상태 업데이트
-        onNext(); // 다음 단계로 이동
+    const isNextButtonDisabled =
+        !age || !size?.length || neutered === undefined;
+
+    const handleNext = () => {
+        if (getValue) {
+            console.log(getValue());
+        }
+        onNext();
     };
 
     return (
-        <div>
-            <p className="text-lg py-4 font-extrabold">
-                애견의 성향을 입력해주세요.
-            </p>
+        <div className="flex flex-col justify-between h-full">
+            {/* 프로그래스바 */}
+            <div className="w-full bg-white h-1">
+                <div className="bg-point-400 h-1 w-[75%]"></div>
+            </div>
 
-            {/* Question 1 */}
-            <div className="mb-4">
-                <p>새로운 사람이나 애견 친구를 만나면 금방 친해지나요?</p>
-                <div className="flex gap-4">
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.first === 'E'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('first', 'E')}
-                    >
-                        예 (E)
-                    </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.first === 'I'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('first', 'I')}
-                    >
-                        아니오 (I)
-                    </button>
+            <section className="flex flex-col w-full flex-1">
+                <div className="bg-white pt-6 pb-12 flex flex-col">
+                    <div className="w-full max-w-[600px] px-6 mx-auto">
+                        <h1 className="mb-12 text-title-s text-gray-800 font-extrabold">
+                            멍멍이의
+                            <br /> 추가 정보를 알려주세요
+                        </h1>
+
+                        {/* 중성화 여부 */}
+                        <div className="flex flex-col gap-7 mb-4">
+                            <CustomToggle
+                                name="neutered"
+                                label="중성화 여부"
+                                leftText="Yes"
+                                rightText="No"
+                                register={register}
+                                watch={watch}
+                            />
+
+                            {/* 애견 크기 */}
+                            <MultiSelectTag
+                                label="애견 크기"
+                                name="size"
+                                options={dogSizeOptions}
+                                control={control}
+                                rules={{
+                                    required: '크기를 선택해주세요!',
+                                    validate: (value: string[]) =>
+                                        value.length > 0 ||
+                                        '크기를 선택해주세요!',
+                                }}
+                            />
+
+                            {/* 나이 입력 */}
+                            <CustomInput
+                                id="age"
+                                label="나이"
+                                placeholder="나이를 연 단위로 입력해주세요 (예: 3)"
+                                register={register}
+                                watch={watch}
+                                validation={ageValidation}
+                                error={errors.age?.message?.toString()}
+                                design="outline"
+                                successMsg=""
+                            />
+
+                            {/* 선호 산책 장소 입력 */}
+                            <CustomInput
+                                id="favoritePlace"
+                                label="선호 산책 장소"
+                                placeholder="(선택)선호 산책 장소를 입력해주세요"
+                                register={register}
+                                watch={watch}
+                                design="outline"
+                                successMsg=""
+                            />
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            {/* Question 2 */}
-            <div className="mb-4">
-                <p>산책 중 새로운 냄새를 맡으면 바로 반응하나요?</p>
-                <div className="flex gap-4">
+            <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
+                <ToastAnchor>
                     <button
-                        className={`px-4 py-2 rounded ${
-                            answers.second === 'S'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('second', 'S')}
+                        type="button"
+                        className="btn-solid w-full"
+                        onClick={handleNext}
+                        disabled={isNextButtonDisabled}
                     >
-                        예 (S)
+                        다음
                     </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.second === 'N'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('second', 'N')}
-                    >
-                        아니오 (N)
-                    </button>
-                </div>
-            </div>
-
-            {/* Question 3 */}
-            <div className="mb-4">
-                <p>애견이 주인의 기분 변화에 민감하게 반응하나요?</p>
-                <div className="flex gap-4">
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.third === 'F'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('third', 'F')}
-                    >
-                        예 (F)
-                    </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.third === 'T'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('third', 'T')}
-                    >
-                        아니오 (T)
-                    </button>
-                </div>
-            </div>
-
-            {/* Question 4 */}
-            <div className="mb-4">
-                <p>애견이 산책 중 우연히 발견한 것에 강한 호기심을 보이나요?</p>
-                <div className="flex gap-4">
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.fourth === 'P'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('fourth', 'P')}
-                    >
-                        예 (P)
-                    </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.fourth === 'J'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('fourth', 'J')}
-                    >
-                        아니오 (J)
-                    </button>
-                </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="fixed py-2.5 bottom-0 w-full left-0 px-4">
-                <button
-                    className="btn-solid bg-point-500 w-full py-2 text-white"
-                    onClick={handleSubmit}
-                    disabled={
-                        !answers.first ||
-                        !answers.second ||
-                        !answers.third ||
-                        !answers.fourth
-                    } // 모든 질문에 응답해야 활성화
-                >
-                    DMBTI 완료
-                </button>
-            </div>
+                </ToastAnchor>
+            </footer>
         </div>
     );
 }
