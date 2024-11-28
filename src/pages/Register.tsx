@@ -14,6 +14,7 @@ import { RegisterFormData } from '@/types/register';
 export default function Register() {
     const navigate = useFadeNavigate();
     const [step, setStep] = useState(1);
+    const [imgName, setImgName] = useState('profile1');
 
     // react-hook-form 사용
     const {
@@ -37,6 +38,7 @@ export default function Register() {
             neutered: '',
             size: '',
             dmbti: '',
+            dogImg: 'profile1', // 기본 이미지
         },
     });
 
@@ -122,8 +124,11 @@ export default function Register() {
                         >
                             <RegisterStep2
                                 onNext={handleNextStep}
-                                updateFormData={getValues}
-                                formData={getValues()}
+                                watch={watch}
+                                getValue={getValues}
+                                setValue={setValue}
+                                imgName={imgName}
+                                setImgName={setImgName}
                             />
                         </motion.div>
                     )}
