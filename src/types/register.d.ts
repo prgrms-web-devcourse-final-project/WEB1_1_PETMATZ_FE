@@ -2,7 +2,7 @@ import { BaseApiResponse } from './baseResponse';
 
 export interface RegisterFormData {
     ownerName: string;
-    registrationNumber: string;
+    dogRegNo: string;
     dogName: string;
     breed: string;
     age: string;
@@ -67,5 +67,11 @@ export interface RegisterStep3Props {
     watch: UseFormWatch<RegisterFormData>;
     errors: FieldErrors<RegisterFormData>;
     control: Control<RegisterFormData, any>;
+    getValue?: UseFormWatch<RegisterFormData>;
+}
+
+export interface RegisterStep4Props {
+    onNext: () => void;
+    setValue: UseFormSetValue<RegisterFormData>;
     getValue?: UseFormWatch<RegisterFormData>;
 }

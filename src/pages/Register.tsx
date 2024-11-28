@@ -31,7 +31,7 @@ export default function Register() {
         mode: 'onChange',
         defaultValues: {
             ownerName: '',
-            registrationNumber: '',
+            dogRegNo: '',
             dogName: '',
             breed: '', // 품종
             age: '',
@@ -178,7 +178,8 @@ export default function Register() {
                         >
                             <RegisterStep4
                                 onNext={handleNextStep}
-                                updateFormData={getValues}
+                                setValue={setValue}
+                                getValue={getValues}
                             />
                         </motion.div>
                     )}
