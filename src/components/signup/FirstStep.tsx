@@ -32,6 +32,7 @@ export default function FirstStep({
     const emailTyped = useRef(false);
     const [sentNumber, setSentNumber] = useState(false);
     const [firstVisit, setFirstVisit] = useState(true);
+    const [loading, setLoading] = useState(false);
     const { showToast } = useCustomToast();
 
     const email = watch('email');
@@ -42,6 +43,8 @@ export default function FirstStep({
     });
 
     const handleVerificateEmailBtn = useCallback(async () => {
+        if (loading) return;
+        setLoading(true);
         setFirstVisit(false);
         // api 요청
         const accountId = email;
@@ -57,7 +60,8 @@ export default function FirstStep({
                 }
             }
         });
-    }, [email]);
+        setLoading(false);
+    }, [email, loading]);
 
     const handleNextBtn = useCallback(() => {
         // api 요청
