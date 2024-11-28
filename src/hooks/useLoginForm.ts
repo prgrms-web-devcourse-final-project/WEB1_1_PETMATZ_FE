@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
+import { postLogin } from './api/login';
+import { useUserStore } from '@/stores';
+import useCustomToast from './useCustomToast';
 
 /**
  * Login form input type
  */
 interface LoginInputs {
     /** User's email address */
-    email: string;
+    accountId: string;
     /** User's password */
     password: string;
 }
@@ -25,19 +28,70 @@ export default function useLoginForm() {
     } = useForm<LoginInputs>({
         mode: 'onChange',
     });
+    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const { user, setUser } = useUserStore();
+    const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
-    const onSubmit = (data: LoginInputs) => {
-        console.log(data);
-        // 여기에 로그인 로직을 구현하세요
-        setSuccess(true);
-        setTimeout(() => {
-            navigate('/home');
-        }, 3000);
+    const onSubmit = async (data: LoginInputs) => {
+        // ⭐️ 중요: 토스트가 이미 활성화되어 있다면 폼 제출 중단
+        if (isToastActive()) {
+            return;
+        }
+        setLoading(true);
+        // 여기에 로그인 로직을 구현하세요.
+        await postLogin(data).then((response) => {
+            console.log(response);
+            if (response.ok) {
+                const {
+                    id,
+                    accountId,
+                    nickname,
+                    loginRole,
+                    loginType,
+                    role,
+                    preferredSize,
+                    gender,
+                    isRegistered,
+                    recommendationCount,
+                    careCompletionCount,
+                    isCareAvailable,
+                    mbti,
+                } = response.data;
+                setUser({
+                    id,
+                    accountId,
+                    nickname,
+                    loginRole,
+                    loginType,
+                    role,
+                    preferredSize,
+                    gender,
+                    isRegistered,
+                    recommendationCount,
+                    careCompletionCount,
+                    isCareAvailable,
+                    mbti,
+                });
+                setSuccess(true);
+                setTimeout(() => {
+                    navigate('/home');
+                }, 3000);
+            } else {
+                if (response.error?.status === 400) {
+                    showToast('유효하지 않은 입력값입니다!', 'warning');
+                } else if (response.error?.status === 401) {
+                    showToast('로그인 정보가 일치하지 않습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
+            }
+        });
+        setLoading(false);
     };
 
     /**
@@ -76,5 +130,6 @@ export default function useLoginForm() {
         onSubmit,
         isValid,
         success,
+        loading,
     };
 }

@@ -7,7 +7,7 @@ export default function Success() {
     const navigate = useFadeNavigate();
 
     const handleCheckBtn = useCallback(() => {
-        navigate('/login');
+        navigate('/profile');
     }, []);
 
     return (
@@ -15,11 +15,11 @@ export default function Success() {
             <section className="flex-1 flex flex-col justify-center items-center">
                 <Check className="mb-2" />
                 <h2 className="text-gray-800 text-title-s font-extrabold">
-                    전송 완료
+                    변경 완료
                 </h2>
                 <div className="text-gray-500 text-body-m text-center mb-2">
-                    <p>이메일로 보내드린 임시 비밀번호로</p>
-                    <p>다시 로그인 해주세요!</p>
+                    <p>새로운 비밀번호로 변경을</p>
+                    <p>완료하였습니다.</p>
                 </div>
                 <Dog />
             </section>

@@ -21,13 +21,13 @@ export default function Success() {
                 />
                 <SmallDog className="mb-8 z-10" />
                 <p className="text-body-s font-semibold text-gray-400 mb-2">
-                    로그인 완료
+                    회원가입 완료
                 </p>
                 <div className="text-black text-body-xl font-extrabold text-center">
+                    <p>가입된 정보로</p>
                     <p>
-                        <span className="text-point-500">{'정향'}</span>님,
+                        <span className="text-point-500">로그인</span> 해주세요!
                     </p>
-                    <p>환영해요 멍멍!</p>
                 </div>
             </section>
         </div>

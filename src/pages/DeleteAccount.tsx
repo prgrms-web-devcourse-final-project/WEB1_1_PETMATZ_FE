@@ -19,7 +19,7 @@ export default function ForgotPassword() {
 
     return (
         <div className="relative h-screen bg-white flex flex-col justify-between overflow-hidden">
-            <header className="bg-white sm:h-24 h-14 w-full flex items-center justify-center">
+            <header className="bg-white h-14 w-full flex items-center justify-center">
                 <Back
                     onClick={handleBackBtn}
                     className="absolute left-[26px] cursor-pointer"
@@ -42,14 +42,11 @@ export default function ForgotPassword() {
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
                 <button
                     onClick={handleBackBtn}
-                    className="btn-outline absolute bottom-[103px] left-6 right-6 max-w-[552px] mx-auto w-auto"
+                    className="btn-outline absolute bottom-[71px] left-6 right-6 max-w-[552px] mx-auto w-auto"
                 >
                     돌아가기
                 </button>
-                <button
-                    onClick={handleDeleteAccountBtn}
-                    className="btn-solid mb-8"
-                >
+                <button onClick={handleDeleteAccountBtn} className="btn-solid">
                     탈퇴하기
                 </button>
             </footer>

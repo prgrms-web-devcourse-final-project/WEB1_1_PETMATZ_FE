@@ -12,6 +12,7 @@ import {
     Match,
     Please,
     Profile,
+    Register,
     Signup,
     SOS,
     SOSWrite,
@@ -23,9 +24,14 @@ export default function AppRoutes() {
     return (
         <BrowserRouter>
             <ToastContainer
-                position="top-right"
+                position="bottom-center"
                 autoClose={3000}
                 pauseOnHover={false}
+                hideProgressBar
+                closeOnClick
+                style={{
+                    minWidth: 'fit-content',
+                }}
             />
             <Routes>
                 <Route element={<RootLayout layout={true} />}>
@@ -51,6 +57,7 @@ export default function AppRoutes() {
                         element={<ChangePassword />}
                     />
                     <Route path="/delete-account" element={<DeleteAccount />} />
+                    <Route path="/register" element={<Register />} />
                 </Route>
             </Routes>
         </BrowserRouter>
