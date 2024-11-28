@@ -31,13 +31,13 @@ export default function ChatDetail() {
     useEffect(() => {
         if (chatRoomId) {
             // 첫 페이지 메시지 가져오기
-            fetchChatMessageList(chatRoomId, pageRef.current);
+            fetchChatMessageList(Number(chatRoomId), pageRef.current);
 
             // 소켓 연결
-            subToChatRoom(chatRoomId);
+            subToChatRoom(Number(chatRoomId));
 
             // 읽음 처리
-            markMsgAsRead(chatRoomId, user?.id || '');
+            markMsgAsRead(Number(chatRoomId), user?.accountId || '');
         }
 
         return () => {
@@ -60,7 +60,7 @@ export default function ChatDetail() {
                     chatRoomId
                 ) {
                     pageRef.current += 1;
-                    fetchChatMessageList(chatRoomId, pageRef.current);
+                    fetchChatMessageList(Number(chatRoomId), pageRef.current);
                 }
             },
             { root: null, rootMargin: '0px', threshold: 0.1 },
@@ -79,7 +79,7 @@ export default function ChatDetail() {
             <main className="flex flex-col h-full overflow-y-auto px-[24px] py-[16px] gap-[16px]">
                 {messageList.length > 0 && curRoomInfo
                     ? messageList.map((message, idx) =>
-                          message.senderId !== user?.id ? (
+                          message.senderId !== user?.accountId ? (
                               <LeftBubble
                                   key={idx}
                                   other={curRoomInfo.other}

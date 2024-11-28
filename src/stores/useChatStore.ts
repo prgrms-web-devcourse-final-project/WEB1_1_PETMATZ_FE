@@ -28,19 +28,19 @@ interface ChatStore {
     unSubFromChatRoomList: () => void;
 
     // 특정 채팅방
-    fetchChatMessageList: (chatRoomId: string, page: number) => Promise<void>;
-    subToChatRoom: (chatRoomId: string) => void;
+    fetchChatMessageList: (chatRoomId: number, page: number) => Promise<void>;
+    subToChatRoom: (chatRoomId: number) => void;
     unSubFromChatRoom: () => void;
 
     // 메세지 전송
     sendMsg: (
-        chatRoomId: string,
+        chatRoomId: number,
         msg: string,
         msg_type: 'msg' | 'plz',
         senderId: string,
         reciverId: string,
     ) => void;
-    markMsgAsRead: (chatRoomId: string, senderId: string) => void;
+    markMsgAsRead: (chatRoomId: number, senderId: string) => void;
 }
 
 const STOMP_CONNECT_URL = import.meta.env.VITE_STOMP_CONNECT_URL as string;

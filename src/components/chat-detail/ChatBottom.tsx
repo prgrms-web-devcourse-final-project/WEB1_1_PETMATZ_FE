@@ -18,7 +18,7 @@ export default function ChatBottom() {
                 curRoomInfo._id,
                 message,
                 'msg',
-                user.email,
+                user.accountId,
                 curRoomInfo.other.email,
             );
             setMessage('');

@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 interface ChatRoomProps {
     chatRoom: IChatRoom;
-    swipedRoom: string | null;
-    setSwipedRoom: (chatRoomId: string | null) => void;
+    swipedRoom: number | null;
+    setSwipedRoom: (chatRoomId: number | null) => void;
 }
 
 export default function ChatRoom({
@@ -26,7 +26,7 @@ export default function ChatRoom({
 
     const handleDragMove = (
         e: React.TouchEvent | React.MouseEvent,
-        roomId: string,
+        roomId: number,
     ) => {
         if (startX === null) return;
 
