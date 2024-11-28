@@ -1,7 +1,17 @@
 interface IUser {
-    id: string;
+    id: number;
+    accountId: string;
     nickname: string;
-    profileImgUrl: string;
+    loginRole: string;
+    loginType: string;
+    role: string;
+    preferredSize: string;
+    gender: string;
+    isRegistered: boolean;
+    recommendationCount: number;
+    careCompletionCount: number;
+    isCareAvailable: boolean;
+    mbti: string;
 }
 
 export type { IUser };
