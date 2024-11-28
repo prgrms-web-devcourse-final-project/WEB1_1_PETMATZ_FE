@@ -1,81 +1,101 @@
 import {
-    ChatBar,
-    ChatTopbar,
-    DateViewer,
-    MyMessage,
-    OtherMessage,
-    PostGuid,
+    ChatBottom,
+    ChatDetailTitle,
+    LeftBubble,
+    RightBubble,
 } from '@/components/chat-detail';
+import { useChatStore } from '@/stores';
 import useUserStore from '@/stores/useUserStore';
-import { IChatRoom, IMessage } from '@/types/chat';
-import { getOtherUserForChat, groupMessagesByDate } from '@/utils/chat';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 
 export default function ChatDetail() {
-    const [data, setData] = useState<IChatRoom | null>(null);
-    const [messages, setMessages] = useState<IMessage[] | null>(null);
-    const { user, setUser } = useUserStore();
+    const { chatRoomId } = useParams();
+    const {
+        curRoomInfo,
+        messageList,
+        fetchChatMessageList,
+        unSubFromChatRoom,
+        subToChatRoom,
+        markMsgAsRead,
+        isLoading,
+        hasMore,
+    } = useChatStore();
 
-    const groupedMessages = useMemo(
-        () => groupMessagesByDate(messages),
-        [messages],
-    );
-    const otherUser = useMemo(() => {
-        return getOtherUserForChat(data, user?.id);
-    }, [data, user]);
+    const observerRef = useRef<IntersectionObserver | null>(null);
+    const triggerRef = useRef<HTMLDivElement | null>(null);
+    const pageRef = useRef(1);
+    const { user } = useUserStore();
 
+    // 메시지 가져오기 및 소켓 연결
     useEffect(() => {
-        setUser({
-            id: 'my_unique_user_id',
-            nickname: '내닉네임',
-            profileImgUrl: 'https://dummyimage.com/492x260',
-        });
+        if (chatRoomId) {
+            // 첫 페이지 메시지 가져오기
+            fetchChatMessageList(chatRoomId, pageRef.current);
 
-        fetch('/data/chat.json')
-            .then((res) => res.json())
-            .then((res) => {
-                setData(res);
-                setMessages(res.messages);
-            });
-    }, []);
+            // 소켓 연결
+            subToChatRoom(chatRoomId);
+
+            // 읽음 처리
+            markMsgAsRead(chatRoomId, user?.id || '');
+        }
+
+        return () => {
+            // 페이지 언마운트 시 솤멧 연결&구독 해제
+            unSubFromChatRoom();
+        };
+    }, [chatRoomId]);
+
+    // 무한 스크롤 트리거
+    useEffect(() => {
+        if (!triggerRef.current) return;
+
+        observerRef.current = new IntersectionObserver(
+            (entries) => {
+                const traget = entries[0];
+                if (
+                    traget.isIntersecting &&
+                    hasMore &&
+                    !isLoading &&
+                    chatRoomId
+                ) {
+                    pageRef.current += 1;
+                    fetchChatMessageList(chatRoomId, pageRef.current);
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 0.1 },
+        );
+
+        observerRef.current.observe(triggerRef.current);
+
+        return () => {
+            observerRef.current?.disconnect();
+        };
+    }, [triggerRef, hasMore, isLoading, messageList]);
 
     return (
-        <div className="flex flex-col h-full overflow-hidden">
-            <ChatTopbar user={otherUser} />
-            <PostGuid />
-            <div className="flex-1 flex flex-col overflow-y-auto px-4">
-                <div className="flex flex-col items-center text-xs py-4">
-                    <span>우리 앱은 따뜻한 도움을 나누는 공간이에요.🐾</span>
-                    <span>
-                        너무 무리한 부탁이나 뾰족한 말투는 멍멍이도 싫어할
-                        거에요.
-                    </span>
-                    <span>즐겁고 따뜻한 대화를 만들어주세요!</span>
-                </div>
-                {groupedMessages?.map((message, idx) => {
-                    if ('date' in message) {
-                        return (
-                            <DateViewer
-                                key={`${message.date}-${idx}`}
-                                date={message.date}
-                            />
-                        );
-                    }
-
-                    const isMyMesage = message.senderId === user?.id;
-
-                    return isMyMesage ? (
-                        <MyMessage key={message.id} message={message} />
-                    ) : (
-                        <OtherMessage
-                            key={message.id}
-                            message={message}
-                            user={otherUser}
-                        />
-                    );
-                })}
-            </div>
-            <ChatBar />
+        <div className="flex flex-col h-full overflow-hidden bg-gray-100">
+            <ChatDetailTitle />
+            <main className="flex flex-col h-full overflow-y-auto px-[24px] py-[16px] gap-[16px]">
+                {messageList.length > 0 && curRoomInfo
+                    ? messageList.map((message, idx) =>
+                          message.senderId !== user?.id ? (
+                              <LeftBubble
+                                  key={idx}
+                                  other={curRoomInfo.other}
+                                  message={message}
+                              />
+                          ) : (
+                              <RightBubble
+                                  key={idx}
+                                  other={curRoomInfo.other}
+                                  message={message}
+                              />
+                          ),
+                      )
+                    : null}
+            </main>
+            <ChatBottom />
         </div>
     );
 }
