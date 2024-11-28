@@ -8,7 +8,7 @@ export interface RegisterFormData {
     age: string;
     favoritePlace: string;
     gender: string;
-    neutered: string;
+    neutered: string | boolean; //open api: string, post api: boolean
     size: string;
     dmbti: string;
     dogImg: string;
@@ -19,7 +19,7 @@ export interface RegisterStep1Props {
     register: UseFormRegister<RegisterFormData>;
     watch: UseFormWatch<RegisterFormData>;
     errors: FieldErrors<RegisterFormData>;
-    // getValue: UseFormGetValues<RegisterFormData>;
+    getValue?: UseFormGetValues<RegisterFormData>;
     setValue: UseFormSetValue<RegisterFormData>;
 }
 
@@ -59,4 +59,13 @@ export interface RegisterStep2Props {
     setValue: UseFormSetValue<RegisterFormData>;
     imgName: string;
     setImgName: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface RegisterStep3Props {
+    onNext: () => void;
+    register: UseFormRegister<RegisterFormData>;
+    watch: UseFormWatch<RegisterFormData>;
+    errors: FieldErrors<RegisterFormData>;
+    control: Control<RegisterFormData, any>;
+    getValue?: UseFormWatch<RegisterFormData>;
 }
