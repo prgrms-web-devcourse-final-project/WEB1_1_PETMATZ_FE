@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useFadeNavigate } from '@/hooks';
 import Back from '@/assets/images/header/back.svg?react';
@@ -37,12 +37,24 @@ export default function Register() {
             age: '',
             favoritePlace: '',
             gender: '',
-            neutered: '',
+            neutered: false,
             size: '',
             dmbti: '',
             dogImg: 'profile1', // 기본 이미지
         },
     });
+
+    // Step3에서 neutered 값이 "미중성"으로 설정될 때를 처리하는 로직
+    useEffect(() => {
+        if (step === 3) {
+            const currentNeutered = getValues('neutered');
+            if (currentNeutered === '미중성') {
+                setValue('neutered', false);
+            } else if (currentNeutered === '중성') {
+                setValue('neutered', true);
+            }
+        }
+    }, [step]);
 
     const handleBackBtn = useCallback(() => {
         if (step > 1) {
@@ -109,7 +121,7 @@ export default function Register() {
                                 register={register}
                                 errors={errors}
                                 watch={watch}
-                                // getValue={getValues}
+                                getValue={getValues}
                                 setValue={setValue}
                             />
                         </motion.div>
@@ -151,7 +163,6 @@ export default function Register() {
                                 watch={watch}
                                 errors={errors}
                                 getValue={getValues}
-                                setValue={setValue}
                             />
                         </motion.div>
                     )}
