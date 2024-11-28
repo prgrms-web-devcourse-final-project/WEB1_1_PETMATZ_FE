@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RegisterStep1 } from '@/components/register';
 import { RegisterStep2 } from '@/components/register';
 import { RegisterStep3 } from '@/components/register';
+import { RegisterStep4 } from '@/components/register';
 import { RegisterComplete } from '@/components/register';
 import { RegisterFormData } from '@/types/register';
 
@@ -52,7 +53,7 @@ export default function Register() {
 
     const handleNextStep = async () => {
         const isStepValid = await trigger();
-        if (isStepValid && step < 4) {
+        if (isStepValid && step < 5) {
             setStep((prevStep) => prevStep + 1);
         }
     };
@@ -74,7 +75,7 @@ export default function Register() {
             onSubmit={handleSubmit(onSubmit)}
             className="min-h-screen bg-gray-100 flex flex-col items-center justify-between overflow-hidden"
         >
-            {step < 4 ? (
+            {step < 5 ? (
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
                         onClick={handleBackBtn}
@@ -149,6 +150,22 @@ export default function Register() {
                         </motion.div>
                     )}
                     {step === 4 && (
+                        <motion.div
+                            key="step4"
+                            className="w-full"
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            variants={pageVariants}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <RegisterStep4
+                                onNext={handleNextStep}
+                                updateFormData={getValues}
+                            />
+                        </motion.div>
+                    )}
+                    {step === 5 && (
                         <motion.div
                             key="complete"
                             className="w-full flex flex-col items-center justify-center"
