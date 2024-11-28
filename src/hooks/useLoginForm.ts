@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
 import { postLogin } from './api/login';
 import { useUserStore } from '@/stores';
+import useCustomToast from './useCustomToast';
 
 /**
  * Login form input type
@@ -30,13 +31,17 @@ export default function useLoginForm() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const { user, setUser } = useUserStore();
+    const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
     const onSubmit = async (data: LoginInputs) => {
-        console.log(data);
+        // ⭐️ 중요: 토스트가 이미 활성화되어 있다면 폼 제출 중단
+        if (isToastActive()) {
+            return;
+        }
         setLoading(true);
         // 여기에 로그인 로직을 구현하세요.
         await postLogin(data)
@@ -77,12 +82,16 @@ export default function useLoginForm() {
                         navigate('/home');
                     }, 3000);
                 } else if (response.data.responseCode === 'VF') {
+                    showToast('유효하지 않은 입력값입니다!', 'warning');
                 } else if (response.data.responseCode === 'SF') {
+                    showToast('로그인 정보가 일치하지 않습니다!', 'warning');
                 } else if (response.data.responseCode === 'DBE') {
+                    showToast('DB 서버에 오류가 발생했습니다!', 'warning');
                 }
             })
             .catch((error) => {
                 console.error(error);
+                showToast('서버 연결 문제가 발생했습니다!', 'warning');
             });
         setLoading(false);
     };
