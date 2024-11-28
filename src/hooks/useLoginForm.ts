@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
+import { postLogin } from './api/login';
+import { useUserStore } from '@/stores';
 
 /**
  * Login form input type
  */
 interface LoginInputs {
     /** User's email address */
-    email: string;
+    accountId: string;
     /** User's password */
     password: string;
 }
@@ -25,19 +27,64 @@ export default function useLoginForm() {
     } = useForm<LoginInputs>({
         mode: 'onChange',
     });
+    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const { user, setUser } = useUserStore();
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
-    const onSubmit = (data: LoginInputs) => {
+    const onSubmit = async (data: LoginInputs) => {
         console.log(data);
-        // 여기에 로그인 로직을 구현하세요
-        setSuccess(true);
-        setTimeout(() => {
-            navigate('/home');
-        }, 3000);
+        setLoading(true);
+        // 여기에 로그인 로직을 구현하세요.
+        await postLogin(data)
+            .then((response) => {
+                if (response.data.responseCode === 'SU') {
+                    const {
+                        id,
+                        accountId,
+                        nickname,
+                        loginRole,
+                        loginType,
+                        role,
+                        preferredSize,
+                        gender,
+                        isRegistered,
+                        recommendationCount,
+                        careCompletionCount,
+                        isCareAvailable,
+                        mbti,
+                    } = response.data;
+                    setUser({
+                        id,
+                        accountId,
+                        nickname,
+                        loginRole,
+                        loginType,
+                        role,
+                        preferredSize,
+                        gender,
+                        isRegistered,
+                        recommendationCount,
+                        careCompletionCount,
+                        isCareAvailable,
+                        mbti,
+                    });
+                    setSuccess(true);
+                    setTimeout(() => {
+                        navigate('/home');
+                    }, 3000);
+                } else if (response.data.responseCode === 'VF') {
+                } else if (response.data.responseCode === 'SF') {
+                } else if (response.data.responseCode === 'DBE') {
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        setLoading(false);
     };
 
     /**
@@ -76,5 +123,6 @@ export default function useLoginForm() {
         onSubmit,
         isValid,
         success,
+        loading,
     };
 }

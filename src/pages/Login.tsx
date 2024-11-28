@@ -2,7 +2,7 @@ import { useFadeNavigate, useLoginForm } from '@/hooks';
 import Back from '@/assets/images/header/back.svg?react';
 import Forward from '@/assets/images/login/forward.svg?react';
 import { useCallback } from 'react';
-import { CustomInput } from '@/components/common';
+import { CustomInput, Loading } from '@/components/common';
 import { Success } from '@/components/login';
 
 export default function Login() {
@@ -16,6 +16,7 @@ export default function Login() {
         onSubmit,
         isValid,
         success,
+        loading,
     } = useLoginForm();
     const navigate = useFadeNavigate();
 
@@ -30,6 +31,10 @@ export default function Login() {
     const handleRouteToSignUpBtn = useCallback(() => {
         navigate('/signup');
     }, []);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     if (success) {
         return <Success />;
@@ -60,14 +65,14 @@ export default function Login() {
                         >
                             <div className="flex flex-col gap-1">
                                 <CustomInput
-                                    id="email"
+                                    id="accountId"
                                     label="이메일"
                                     type="text"
                                     placeholder="이메일을 입력해주세요."
                                     register={register}
                                     watch={watch}
                                     validation={emailValidation}
-                                    error={errors.email?.message}
+                                    error={errors.accountId?.message}
                                     design="outline"
                                     successMsg="좋아요!"
                                 />
@@ -108,7 +113,9 @@ export default function Login() {
                     type="submit"
                     form="login-form"
                     className="btn-solid"
-                    disabled={!isValid || !!errors.email || !!errors.password}
+                    disabled={
+                        !isValid || !!errors.accountId || !!errors.password
+                    }
                 >
                     로그인
                 </button>
