@@ -19,7 +19,7 @@ interface IChatMessage {
     senderId: string;
     receiverId: string;
     msg: string;
-    msg_type: 'msg' | 'plz';
+    msg_type: 'msg' | 'plz' | 'end';
     msgTimestamp: string;
     readStatus: boolean;
 }
@@ -46,6 +46,7 @@ interface ChatMessageListApiRequest {
     chatRoomId: string;
     pageSize?: number;
     startPage?: number;
+    lastTimeStamp?: string;
 }
 interface ChatMessageListApiResponse extends BaseApiResponse {
     data: {
