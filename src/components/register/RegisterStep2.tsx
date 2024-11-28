@@ -1,185 +1,100 @@
-interface RegisterStep2Props {
-    onNext: () => void;
-    updateFormData: (field: string, value: string) => void;
-    formData: {
-        dogName: string;
-        breed: string;
-        age: string;
-        favoritePlace: string;
-        gender: string;
-        neutered: string;
-        size: string;
-    };
-}
+import { ImageSelectBox } from '../common';
+import { ToastAnchor } from '@/components/common';
+import { RegisterStep2Props } from '@/types/register';
 
 export default function RegisterStep2({
     onNext,
-    updateFormData,
-    formData,
+    watch,
+    // getValue,
+    setValue,
+    imgName,
+    setImgName,
 }: RegisterStep2Props) {
+    const handleNext = () => {
+        setValue('dogImg', imgName);
+        // console.log(getValue());
+
+        onNext();
+    };
+
     return (
-        <div className="flex flex-col w-full h-screen">
-            {/* 중앙 스크롤 영역 */}
-            <div className="flex-1 px-4 pt-6 pb-24">
-                {/* 멍멍이 이름 */}
-                <div className="flex w-full flex-col gap-2 mb-4">
-                    <p className="text-label-m font-normal text-gray-500">
-                        멍멍이 이름
-                    </p>
-                    <input
-                        type="text"
-                        className="input-outline"
-                        value={formData.dogName}
-                        onChange={(e) =>
-                            updateFormData('dogName', e.target.value)
-                        }
-                    />
-                </div>
-                {/* 품종 입력 */}
-                <div className="flex w-full flex-col gap-2 mb-4">
-                    <p className="text-label-m font-normal text-gray-500">
-                        품종 입력
-                    </p>
-                    <input
-                        type="text"
-                        className="input-outline"
-                        value={formData.breed}
-                        onChange={(e) =>
-                            updateFormData('breed', e.target.value)
-                        }
-                    />
-                </div>
-                {/* 나이 */}
-                <div className="flex w-full flex-col gap-2 mb-4">
-                    <p className="text-label-m font-normal text-gray-500">
-                        나이
-                    </p>
-                    <input
-                        type="number"
-                        className="input-outline"
-                        value={formData.age}
-                        onChange={(e) => updateFormData('age', e.target.value)}
-                    />
-                </div>
-                {/* 선호 산책 장소 */}
-                <div className="flex w-full flex-col gap-2 mb-4">
-                    <p className="text-label-m font-normal text-gray-500">
-                        선호 산책 장소
-                    </p>
-                    <input
-                        type="text"
-                        className="input-outline"
-                        value={formData.favoritePlace}
-                        onChange={(e) =>
-                            updateFormData('favoritePlace', e.target.value)
-                        }
-                    />
-                </div>
-                {/* 성별 선택 */}
-                <div className="flex w-full flex-col gap-2 mb-4">
-                    <p className="text-label-m font-normal text-gray-500">
-                        성별
-                    </p>
-                    <div className="flex gap-4">
-                        <button
-                            className={`px-4 py-2 rounded ${
-                                formData.gender === '남'
-                                    ? 'bg-point-500 text-white'
-                                    : 'bg-gray-200 text-gray-500'
-                            }`}
-                            onClick={() => updateFormData('gender', '남')}
-                        >
-                            남
-                        </button>
-                        <button
-                            className={`px-4 py-2 rounded ${
-                                formData.gender === '여'
-                                    ? 'bg-point-500 text-white'
-                                    : 'bg-gray-200 text-gray-500'
-                            }`}
-                            onClick={() => updateFormData('gender', '여')}
-                        >
-                            여
-                        </button>
-                    </div>
-                </div>
-                {/* 중성화 여부 */}
-                <div className="flex w-full flex-col gap-2 mb-4">
-                    <p className="text-label-m font-normal text-gray-500">
-                        중성화 여부
-                    </p>
-                    <div className="flex gap-4">
-                        <button
-                            className={`px-4 py-2 rounded ${
-                                formData.neutered === '예'
-                                    ? 'bg-point-500 text-white'
-                                    : 'bg-gray-200 text-gray-500'
-                            }`}
-                            onClick={() => updateFormData('neutered', '예')}
-                        >
-                            예
-                        </button>
-                        <button
-                            className={`px-4 py-2 rounded ${
-                                formData.neutered === '아니오'
-                                    ? 'bg-point-500 text-white'
-                                    : 'bg-gray-200 text-gray-500'
-                            }`}
-                            onClick={() => updateFormData('neutered', '아니오')}
-                        >
-                            아니오
-                        </button>
-                    </div>
-                </div>
-                {/* 멍멍이 사이즈 */}
-                <div className="flex w-full flex-col gap-2">
-                    <p className="text-label-m font-normal text-gray-500">
-                        멍멍이 사이즈
-                    </p>
-                    <div className="flex gap-4">
-                        <button
-                            className={`px-4 py-2 rounded ${
-                                formData.size === '소'
-                                    ? 'bg-point-500 text-white'
-                                    : 'bg-gray-200 text-gray-500'
-                            }`}
-                            onClick={() => updateFormData('size', '소')}
-                        >
-                            소
-                        </button>
-                        <button
-                            className={`px-4 py-2 rounded ${
-                                formData.size === '중'
-                                    ? 'bg-point-500 text-white'
-                                    : 'bg-gray-200 text-gray-500'
-                            }`}
-                            onClick={() => updateFormData('size', '중')}
-                        >
-                            중
-                        </button>
-                        <button
-                            className={`px-4 py-2 rounded ${
-                                formData.size === '대'
-                                    ? 'bg-point-500 text-white'
-                                    : 'bg-gray-200 text-gray-500'
-                            }`}
-                            onClick={() => updateFormData('size', '대')}
-                        >
-                            대
-                        </button>
-                    </div>
-                </div>
+        <div className="flex flex-col justify-between h-full">
+            {/* 프로그래스바 */}
+            <div className="w-full bg-white h-1">
+                <div className="bg-point-400 h-1 w-[50%]"></div>
             </div>
 
-            {/* 하단 고정 버튼 */}
-            <div className="fixed py-2.5 bottom-0 w-full left-0 px-4 bg-white shadow-md">
-                <button
-                    className="btn-solid bg-point-500 w-full py-2 text-white"
-                    onClick={onNext}
-                >
-                    멍멍이 등록완료
-                </button>
-            </div>
+            <section className="flex flex-col w-full flex-1">
+                <div className="bg-white pt-6 pb-12 flex flex-col">
+                    <div className="w-full max-w-[600px] px-6 mx-auto">
+                        <h1 className="mb-12 text-title-s text-gray-800 font-extrabold">
+                            멍멍이 정보를
+                            <br /> 확인해주세요
+                        </h1>
+
+                        {/* 프로필 사진 */}
+                        <div className="flex w-full flex-col gap-2 mb-4">
+                            <ImageSelectBox
+                                label="프로필 사진"
+                                bottomSheetLabel="프로필 이미지를 선택하세요."
+                                imgName={imgName}
+                                setImgName={setImgName}
+                            />
+                        </div>
+
+                        {/* 멍멍이 이름 */}
+                        <div className="flex w-full flex-col gap-2 mb-4">
+                            <p className="text-label-m font-normal text-gray-500">
+                                멍멍이 이름
+                            </p>
+                            <input
+                                type="text"
+                                className="input-outline bg-gray-200"
+                                value={watch('dogName')}
+                                disabled
+                            />
+                        </div>
+
+                        {/* 품종 입력 */}
+                        <div className="flex w-full flex-col gap-2 mb-4">
+                            <p className="text-label-m font-normal text-gray-500">
+                                품종 입력
+                            </p>
+                            <input
+                                type="text"
+                                className="input-outline bg-gray-200"
+                                value={watch('breed')}
+                                disabled
+                            />
+                        </div>
+
+                        {/* 성별 선택 */}
+                        <div className="flex w-full flex-col gap-2 mb-4">
+                            <p className="text-label-m font-normal text-gray-500">
+                                성별
+                            </p>
+                            <input
+                                type="text"
+                                className="input-outline bg-gray-200"
+                                value={watch('gender')}
+                                disabled
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
+                <ToastAnchor>
+                    <button
+                        type="button"
+                        className="btn-solid w-full"
+                        onClick={handleNext}
+                    >
+                        다음
+                    </button>
+                </ToastAnchor>
+            </footer>
         </div>
     );
 }
