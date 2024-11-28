@@ -39,7 +39,9 @@ export default function Login() {
     return (
         <>
             {loading && <Loading />}
-            <div className="h-screen bg-gray-100 flex flex-col justify-between overflow-hidden">
+            <div
+                className={`${loading && 'hidden'} h-screen bg-gray-100 flex flex-col justify-between overflow-hidden`}
+            >
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
                         onClick={handleBackBtn}
