@@ -11,6 +11,7 @@ export interface RegisterFormData {
     neutered: string;
     size: string;
     dmbti: string;
+    dogImg: string;
 }
 
 export interface RegisterStep1Props {
@@ -49,4 +50,13 @@ export interface AnimalRegistrationResponse {
             item?: AnimalRegistrationData;
         };
     };
+}
+
+export interface RegisterStep2Props {
+    onNext: () => void;
+    watch: UseFormWatch<RegisterFormData>;
+    getValue?: UseFormGetValues<RegisterFormData>;
+    setValue: UseFormSetValue<RegisterFormData>;
+    imgName: string;
+    setImgName: React.Dispatch<React.SetStateAction<string>>;
 }
