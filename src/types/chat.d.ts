@@ -1,14 +1,14 @@
 import { BaseApiResponse } from './baseResponse';
 
 interface IChatUser {
-    _id: string;
+    _id: number;
     email: string;
     nickname: string;
     profileImgUrl: string;
 }
 
 interface IChatRoom {
-    _id: string;
+    _id: number;
     lastMessage: string | 'first';
     unreadCount: number;
     lastMessageTimestamp: string;
@@ -19,7 +19,7 @@ interface IChatMessage {
     senderId: string;
     receiverId: string;
     msg: string;
-    msg_type: 'msg' | 'plz';
+    msg_type: 'msg' | 'plz' | 'end';
     msgTimestamp: string;
     readStatus: boolean;
 }
@@ -43,14 +43,15 @@ interface ChatRoomListApiResponse extends BaseApiResponse {
 
 //	GET	MessageList
 interface ChatMessageListApiRequest {
-    chatRoomId: string;
+    chatRoomId: number;
     pageSize?: number;
     startPage?: number;
+    lastTimeStamp?: string;
 }
 interface ChatMessageListApiResponse extends BaseApiResponse {
     data: {
         result: {
-            _id: string;
+            _id: number;
             messages: IChatMessage[];
             other: IChatUser;
             pageNumber: number;

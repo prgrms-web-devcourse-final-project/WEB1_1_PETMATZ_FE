@@ -44,7 +44,7 @@ export default function SelectBox({
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="absolute w-full bottom-0 rounded-t-2xl bg-white"
+                className="absolute w-full bottom-0 rounded-t-2xl bg-white opacity-100"
             >
                 <div className="rounded-t-2xl text-body-m text-gray-900 font-extrabold h-[52px] flex items-center justify-center">{`${label}(을/를) 선택해주세요.`}</div>
                 <ul className="overflow-y-auto max-h-[192px]">

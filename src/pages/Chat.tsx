@@ -1,42 +1,52 @@
-import { ChatRoom, ChatRoomSkeleton } from '@/components/chat';
-import useUserStore from '@/stores/useUserStore';
-import { IChatRoomInfo } from '@/types/chat';
+import { ChatRoom, NonChatRoom } from '@/components/chat';
+import { useChatStore, useTitleStore } from '@/stores';
 import { useEffect, useState } from 'react';
 
 export default function Chat() {
-    const { user, setUser } = useUserStore();
-    const [dummy, setDummy] = useState<IChatRoomInfo[] | null>(null);
+    const [swipedRoom, setSwipedRoom] = useState<number | null>(null);
+    const { setTitle } = useTitleStore();
+
+    const {
+        fetchChatRoomList,
+        subToChatRoomList,
+        unSubFromChatRoomList,
+        chatRoomList,
+    } = useChatStore();
+
+    // 채팅방 리스트 가져오기 및 소켓 연결
+    useEffect(() => {
+        // 채팅방 리스트 가져오기
+        fetchChatRoomList();
+
+        // 모든 채팅방 소켓 연결
+        subToChatRoomList();
+
+        return () => {
+            // 페이지 언마운트 시 소켓 연결&구독 해제
+            unSubFromChatRoomList();
+        };
+    }, []);
 
     useEffect(() => {
-        setUser({
-            id: 'my_unique_user_id',
-            nickname: '내닉네임',
-            profileImgUrl: 'https://www.lorempixel.com/955/874',
-        });
-
-        fetch('/data/chatRoom.json')
-            .then((res) => res.json())
-            .then((res) => setDummy(res));
+        setTitle('채팅');
     }, []);
 
     return (
-        <div className="flex flex-col h-full overflow-hidden">
-            <h2>채팅</h2>
-            {user && dummy && (
-                <div className="flex flex-col overflow-y-auto">
-                    {dummy.map((chatRoom, idx) => (
-                        <ChatRoom key={idx} data={chatRoom} user={user} />
-                    ))}
-                    <ChatRoomSkeleton />
-                    <ChatRoomSkeleton />
-                    <ChatRoomSkeleton />
-                    <ChatRoomSkeleton />
-                    <ChatRoomSkeleton />
-                    <ChatRoomSkeleton />
-                    <ChatRoomSkeleton />
-                    <ChatRoomSkeleton />
-                </div>
-            )}
-        </div>
+        <main className="flex flex-col h-full overflow-hidden bg-gray-100">
+            <div className="flex flex-col h-full overflow-y-auto">
+                {chatRoomList.length > 0 ? (
+                    chatRoomList.map((chatRoom) => (
+                        <ChatRoom
+                            key={chatRoom._id}
+                            chatRoom={chatRoom}
+                            swipedRoom={swipedRoom}
+                            setSwipedRoom={setSwipedRoom}
+                        />
+                    ))
+                ) : (
+                    <NonChatRoom />
+                )}
+            </div>
+        </main>
     );
 }

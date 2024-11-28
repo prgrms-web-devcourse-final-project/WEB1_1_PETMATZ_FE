@@ -1,27 +1,4 @@
-/**
- *
- * 이 함수는 주어진 UTC 시간을 로컬 시간대로 변환한 후, 현재 시간과의 차이를 계산하여
- * 조건에 따라 적합한 형식의 문자열을 반환합니다.
- *
- * - 1시간 미만: "N분 전" (N분 전)
- * - 오늘: "오전/오후 HH:mm" (12시간제 형식)
- * - 어제: "어제"
- * - 그 외: "MM-DD(요일)" (월-일(요일) 형식)
- *
- * @param {string} utcTime - 변환할 UTC 시간 문자열.
- * @returns {string} 현재 시간과의 차이를 나타내는 포맷된 문자열.
- *
- * @example
- * // 5분 전일 경우 "5분 전" 반환
- * transDateFormatForChat("2024-11-14T10:30:00Z");
- *
- * // 어제일 경우 "어제" 반환
- * transDateFormatForChat("2024-11-13T18:00:00Z");
- *
- * // 며칠 전일 경우 "11-12(화)" 반환
- * transDateFormatForChat("2024-11-12T15:00:00Z");
- */
-const transDateForChatRoom = (utcTime: string): string => {
+const utcToCustomDateTime = (utcTime: string): string => {
     // 1. 주어진 UTC 시간을 Date 객체로 변환
     const utcDate = new Date(utcTime);
 
@@ -64,4 +41,4 @@ const transDateForChatRoom = (utcTime: string): string => {
     }
 };
 
-export default transDateForChatRoom;
+export default utcToCustomDateTime;
