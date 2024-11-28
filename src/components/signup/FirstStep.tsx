@@ -6,6 +6,7 @@ import {
 import { CustomInput } from '../common';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { postEmailVerificationCode } from '@/hooks/api/signup';
 
 interface FirstStepPropsType {
     pageNumber: number;
@@ -39,11 +40,23 @@ export default function FirstStep({
         emailTyped.current = true;
     });
 
-    const handleVerificateEmailBtn = useCallback(() => {
+    const handleVerificateEmailBtn = useCallback(async () => {
         setFirstVisit(false);
         // api 요청
-        setSentNumber(true);
-    }, []);
+        const accountId = email;
+        await postEmailVerificationCode({ accountId }).then((response) => {
+            if (response.ok) {
+                setSentNumber(true);
+                // 토스트
+            } else {
+                if (response.error?.status === 400) {
+                    // 토스트
+                } else {
+                    // 토스트
+                }
+            }
+        });
+    }, [email]);
 
     const handleNextBtn = useCallback(() => {
         // api 요청
