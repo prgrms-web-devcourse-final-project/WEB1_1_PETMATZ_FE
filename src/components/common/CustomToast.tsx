@@ -12,7 +12,7 @@ export function CustomToast({ message, type }: CustomToastProps) {
     const Icon = type === 'success' ? Success : Warning;
 
     return (
-        <div className="flex items-center gap-3 rounded-lg bg-[rgba(36,38,41,0.90)] px-6 py-3">
+        <div className="z-50 flex items-center gap-3 rounded-lg bg-[rgba(36,38,41,0.90)] px-6 py-3">
             <Icon className="h-5 w-5 flex-shrink-0" />
             <span className="text-white text-label-l font-semibold">
                 {message}

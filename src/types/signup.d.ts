@@ -23,9 +23,33 @@ interface CheckVerificationCodeApiResponse extends BaseApiResponse {
     };
 }
 
+// //	POST Signup
+interface SignupApiRequest {
+    accountId: string;
+    password: string;
+    certificationNumber: string;
+    nickname: string;
+    gender: string;
+    preferredSizes: string[];
+    introduction: string;
+    isCareAvailable: boolean;
+    mbti: string;
+    latitude: string;
+    longitude: string;
+    profileImg: string;
+}
+interface SignupApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+    };
+}
+
 export type {
     EmailVerificationCodeApiRequest,
     EmailVerificationCodeApiResponse,
     CheckVerificationCodeApiRequest,
     CheckVerificationCodeApiResponse,
+    SignupApiRequest,
+    SignupApiResponse,
 };
