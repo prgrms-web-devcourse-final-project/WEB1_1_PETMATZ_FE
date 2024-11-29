@@ -68,8 +68,6 @@ export default function FourthStep({
     const [showModal, setShowModal] = useState(false);
 
     const handleNextBtn = useCallback(() => {
-        // api 요청
-        console.log('4번 페이지 성공');
         setShowModal(true);
     }, []);
 
