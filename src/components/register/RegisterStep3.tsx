@@ -28,6 +28,15 @@ export default function RegisterStep3({
             value: /^[0-9]+$/,
             message: '숫자만 입력 가능합니다',
         },
+        validate: (value: string) => {
+            // 숫자로 변환 가능한지 확인
+            const parsedAge = parseInt(value, 10);
+            // NaN이 아니고 0보다 큰 정수인지, 30살이 넘는지 확인
+            return (
+                (!isNaN(parsedAge) && parsedAge > 0 && parsedAge <= 30) ||
+                '유효한 나이를 입력해주세요.'
+            );
+        },
     };
 
     const commentValidation = {
@@ -94,7 +103,11 @@ export default function RegisterStep3({
                                 placeholder="나이를 연 단위로 입력해주세요 (예: 3)"
                                 register={register}
                                 watch={watch}
-                                validation={ageValidation}
+                                validation={{
+                                    required: ageValidation.required,
+                                    validate: ageValidation.validate,
+                                    valueAsNumber: true,
+                                }}
                                 error={errors.age?.message?.toString()}
                                 design="outline"
                                 successMsg=""

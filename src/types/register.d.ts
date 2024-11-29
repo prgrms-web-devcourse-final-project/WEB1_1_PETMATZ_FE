@@ -5,8 +5,8 @@ export interface RegisterFormData {
     dogRegNo: string;
     dogName: string;
     breed: string;
-    age: string;
-    favoritePlace: string;
+    age: number;
+    comment: string;
     gender: string;
     neutered: string | boolean; //open api: string, post api: boolean
     size: string;

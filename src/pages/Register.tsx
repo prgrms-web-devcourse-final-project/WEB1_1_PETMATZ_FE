@@ -30,17 +30,17 @@ export default function Register() {
     } = useForm<RegisterFormData>({
         mode: 'onChange',
         defaultValues: {
-            ownerName: '',
-            dogRegNo: '',
-            dogName: '',
-            breed: '', // 품종
-            age: '',
-            favoritePlace: '',
-            gender: '',
-            neutered: false,
-            size: '',
-            dmbti: '',
-            dogImg: 'profile1', // 기본 이미지
+            ownerName: '', // api 요청시에는 필요없을듯
+            dogRegNo: '', // O
+            dogName: '', // O
+            breed: '', // 품종 // O
+            age: 1, // O
+            comment: '', // O-> 멍멍이 소개로 변경(더 포괄적)
+            gender: '', // 암컷 수컷에서 female male로 변경 필요
+            neutered: false, // O -> string에서 boolean으로 가능한지?
+            size: '', // O
+            dmbti: '', // O
+            dogImg: 'profile1', // 기본 이미지 // O
         },
     });
 
