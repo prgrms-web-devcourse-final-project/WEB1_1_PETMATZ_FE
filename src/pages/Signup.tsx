@@ -1,4 +1,5 @@
 import Back from '@/assets/images/header/back.svg?react';
+import { Loading } from '@/components/common';
 import {
     FirstStep,
     FourthStep,
@@ -29,8 +30,8 @@ export default function Signup() {
         control,
         success,
     } = useSignupForm();
-
     const [imgName, setImgName] = useState('profile1');
+    const [loading, setLoading] = useState(false);
 
     const handleBackBtn = useCallback(() => {
         if (pageNumber === 1) {
@@ -43,60 +44,66 @@ export default function Signup() {
     if (success) return <Success />;
 
     return (
-        <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
-            <header className="bg-white h-14 w-full flex items-center justify-center">
-                <Back
-                    onClick={handleBackBtn}
-                    className="absolute left-[26px] cursor-pointer"
-                />
-                <h1 className="text-point-900 text-body-l font-extrabold">
-                    회원가입
-                </h1>
-            </header>
-            <form
-                id="signup-form"
-                onSubmit={handleSubmit(onSubmit)}
-                className="h-full flex-1 flex flex-col justify-between"
+        <>
+            {loading && <Loading />}
+            <div
+                className={`${loading && 'hidden'} h-screen bg-gray-100 flex flex-col overflow-hidden`}
             >
-                <FirstStep
-                    pageNumber={pageNumber}
-                    register={register}
-                    watch={watch}
-                    emailValidation={emailValidation}
-                    verificationCodeValidation={verificationCodeValidation}
-                    errors={errors}
-                    isValid={isValid}
-                    setPageNumber={setPageNumber}
-                />
-                <SecondStep
-                    pageNumber={pageNumber}
-                    register={register}
-                    watch={watch}
-                    passwordValidation={passwordValidation}
-                    confirmPasswordValidation={confirmPasswordValidation}
-                    errors={errors}
-                    setPageNumber={setPageNumber}
-                />
-                <ThirdStep
-                    pageNumber={pageNumber}
-                    register={register}
-                    watch={watch}
-                    nicknameValidation={nicknameValidation}
-                    introduceValidation={introduceValidation}
-                    errors={errors}
-                    setPageNumber={setPageNumber}
-                    imgName={imgName}
-                    setImgName={setImgName}
-                />
-                <FourthStep
-                    pageNumber={pageNumber}
-                    register={register}
-                    watch={watch}
-                    errors={errors}
-                    control={control}
-                    isValid={isValid}
-                />
-            </form>
-        </div>
+                <header className="bg-white h-14 w-full flex items-center justify-center">
+                    <Back
+                        onClick={handleBackBtn}
+                        className="absolute left-[26px] cursor-pointer"
+                    />
+                    <h1 className="text-point-900 text-body-l font-extrabold">
+                        회원가입
+                    </h1>
+                </header>
+                <form
+                    id="signup-form"
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="h-full flex-1 flex flex-col justify-between"
+                >
+                    <FirstStep
+                        pageNumber={pageNumber}
+                        register={register}
+                        watch={watch}
+                        emailValidation={emailValidation}
+                        verificationCodeValidation={verificationCodeValidation}
+                        errors={errors}
+                        isValid={isValid}
+                        setPageNumber={setPageNumber}
+                        setLoading={setLoading}
+                    />
+                    <SecondStep
+                        pageNumber={pageNumber}
+                        register={register}
+                        watch={watch}
+                        passwordValidation={passwordValidation}
+                        confirmPasswordValidation={confirmPasswordValidation}
+                        errors={errors}
+                        setPageNumber={setPageNumber}
+                    />
+                    <ThirdStep
+                        pageNumber={pageNumber}
+                        register={register}
+                        watch={watch}
+                        nicknameValidation={nicknameValidation}
+                        introduceValidation={introduceValidation}
+                        errors={errors}
+                        setPageNumber={setPageNumber}
+                        imgName={imgName}
+                        setImgName={setImgName}
+                    />
+                    <FourthStep
+                        pageNumber={pageNumber}
+                        register={register}
+                        watch={watch}
+                        errors={errors}
+                        control={control}
+                        isValid={isValid}
+                    />
+                </form>
+            </div>
+        </>
     );
 }

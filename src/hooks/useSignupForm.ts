@@ -9,7 +9,7 @@ export interface SignUpInputs {
     /** User's email address */
     email: string;
     /** User's verification code */
-    verificationCode: number;
+    verificationCode: string;
     /** User's password */
     password: string;
     /** User's confirm password */
