@@ -31,7 +31,7 @@ export const postCheckVerificationCode = async ({
     await http.post<
         CheckVerificationCodeApiResponse,
         CheckVerificationCodeApiRequest
-    >('/api/auth/email-certification', {
+    >('/api/auth/check-certification', {
         accountId,
         certificationNumber,
     });
