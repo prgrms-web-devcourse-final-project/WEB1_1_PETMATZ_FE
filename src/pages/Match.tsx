@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import { useMatchStore, useUserStore } from '@/stores';
+import { useMatchStore, useTitleStore, useUserStore } from '@/stores';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { IntroMatch, MatchCard, NoMoreCard } from '@/components/match';
@@ -9,6 +9,7 @@ export default function Match() {
     const { matchList, removeMatch, fetchMatchList, setShowStamp, isLastPage } =
         useMatchStore();
     const { user } = useUserStore();
+    const { setTitle } = useTitleStore();
     const [isModalOpen, setIsModalOpen] = useState(true);
 
     // 카드 관련 이벤트 핸들러
@@ -38,6 +39,8 @@ export default function Match() {
         if (skip === 'true') {
             setIsModalOpen(false);
         }
+
+        setTitle('돌봄 매칭');
 
         return () => {
             useMatchStore.setState({ isLastPage: false });
