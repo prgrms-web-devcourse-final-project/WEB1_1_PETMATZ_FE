@@ -37,7 +37,7 @@ export default function AppRoutes() {
             <Routes>
                 <Route element={<RootLayout layout={true} />}>
                     <Route path="/home" element={<Home />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/profile/:id" element={<Profile />} />
                     <Route path="/sos" element={<SOS />} />
                     <Route path="/chat" element={<Chat />} />
                     <Route path="/please" element={<Please />} />
