@@ -17,7 +17,7 @@ interface IUser {
 }
 
 //	GET profile informations
-interface ProfileApiParams {
+interface ProfileApiQueryString {
     userId: string;
 }
 interface ProfileApiResponse extends BaseApiResponse {
@@ -41,4 +41,4 @@ interface ProfileApiResponse extends BaseApiResponse {
     };
 }
 
-export type { IUser, ProfileApiParams, ProfileApiResponse };
+export type { IUser, ProfileApiQueryString, ProfileApiResponse };

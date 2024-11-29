@@ -2,13 +2,13 @@ import { Loading } from '@/components/common';
 import { getProfileInfo } from '@/hooks/api/profile';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Profile() {
-    const { id } = useParams<{ id: string }>();
-    const userId = id || '';
+    let [query] = useSearchParams();
+    const userId = query.get('userId') || '';
     const { data, isLoading } = useQuery<ProfileApiResponse, Error>({
-        queryKey: ['user', id],
+        queryKey: ['user', userId],
         queryFn: () => getProfileInfo({ userId }),
     });
 

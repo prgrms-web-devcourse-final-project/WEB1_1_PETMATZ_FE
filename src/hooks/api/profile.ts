@@ -1,4 +1,4 @@
-import { ProfileApiParams, ProfileApiResponse } from '@/types/user';
+import { ProfileApiQueryString, ProfileApiResponse } from '@/types/user';
 import { http } from './base';
 
 /**
@@ -7,8 +7,7 @@ import { http } from './base';
  */
 export const getProfileInfo = async ({
     userId,
-}: ProfileApiParams): Promise<ProfileApiResponse> =>
-    await http.get<ProfileApiResponse, ProfileApiParams>(
-        '/api/auth/get-profile',
-        { userId },
+}: ProfileApiQueryString): Promise<ProfileApiResponse> =>
+    await http.get<ProfileApiResponse>(
+        `/api/auth/get-profile?userId=${userId}`,
     );
