@@ -20,6 +20,7 @@ interface FirstStepPropsType {
     errors: FieldErrors<SignUpInputs>;
     isValid: boolean;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function FirstStep({
@@ -31,11 +32,12 @@ export default function FirstStep({
     errors,
     isValid,
     setPageNumber,
+    setLoading,
 }: FirstStepPropsType) {
     const emailTyped = useRef(false);
     const [sentNumber, setSentNumber] = useState(false);
     const [firstVisit, setFirstVisit] = useState(true);
-    const [loading, setLoading] = useState(false);
+    const [sending, setSending] = useState(false);
     const { showToast } = useCustomToast();
 
     const email = watch('email');
@@ -46,8 +48,8 @@ export default function FirstStep({
     });
 
     const handleVerificateEmailBtn = useCallback(async () => {
-        if (loading) return;
-        setLoading(true);
+        if (sending) return;
+        setSending(true);
         setFirstVisit(false);
         // api 요청
         const accountId = email;
@@ -63,10 +65,11 @@ export default function FirstStep({
                 }
             }
         });
-        setLoading(false);
-    }, [email, loading]);
+        setSending(false);
+    }, [email, sending]);
 
     const handleNextBtn = useCallback(async () => {
+        setLoading(true);
         // api 요청
         const accountId = email;
         const certificationNumber = verificationCode;
@@ -76,7 +79,7 @@ export default function FirstStep({
         }).then((response) => {
             if (response.ok) {
                 // showToast('인증이 완료되었습니다!', 'success');
-                setSentNumber(false);
+                // setSentNumber(false);
                 setPageNumber((prev) => prev + 1);
             } else {
                 if (
@@ -89,6 +92,7 @@ export default function FirstStep({
                 }
             }
         });
+        setLoading(false);
         setSentNumber(false);
     }, [email, verificationCode]);
 
@@ -121,20 +125,18 @@ export default function FirstStep({
                                         successMsg="좋아요!"
                                     />
                                 </div>
-                                <ToastAnchor>
-                                    <button
-                                        form="none"
-                                        className="btn-solid btn-md"
-                                        disabled={
-                                            (!emailTyped.current && !isValid) ||
-                                            !!errors.email ||
-                                            email === ''
-                                        }
-                                        onClick={handleVerificateEmailBtn}
-                                    >
-                                        {firstVisit ? '인증번호' : '재요청'}
-                                    </button>
-                                </ToastAnchor>
+                                <button
+                                    form="verificateEmail"
+                                    className="btn-solid btn-md"
+                                    disabled={
+                                        (!emailTyped.current && !isValid) ||
+                                        !!errors.email ||
+                                        email === ''
+                                    }
+                                    onClick={handleVerificateEmailBtn}
+                                >
+                                    {firstVisit ? '인증번호' : '재요청'}
+                                </button>
                             </div>
                             <div className="flex gap-2 items-center">
                                 <div className="flex-1">
@@ -159,15 +161,18 @@ export default function FirstStep({
             <footer
                 className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 1 && 'hidden'}`}
             >
-                <button
-                    className="btn-solid"
-                    disabled={
-                        !sentNumber || !!errors.email || !verificationCode
-                    }
-                    onClick={handleNextBtn}
-                >
-                    인증번호 검사
-                </button>
+                <ToastAnchor>
+                    <button
+                        form="next"
+                        className="btn-solid"
+                        disabled={
+                            !sentNumber || !!errors.email || !verificationCode
+                        }
+                        onClick={handleNextBtn}
+                    >
+                        인증번호 검사
+                    </button>
+                </ToastAnchor>
             </footer>
         </>
     );
