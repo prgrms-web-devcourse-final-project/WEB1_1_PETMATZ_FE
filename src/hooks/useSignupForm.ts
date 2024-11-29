@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
 import { postSignup } from './api/signup';
+import useCustomToast from './useCustomToast';
 
 /**
  * Signup form types
@@ -119,12 +120,14 @@ export default function useSignupForm() {
     const [pageNumber, setPageNumber] = useState(1);
     const [success, setSuccess] = useState(false);
     const [imgName, setImgName] = useState('profile1');
+    const [loading, setLoading] = useState(false);
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
     const onSubmit = async (data: SignUpInputs) => {
+        setLoading(true);
         console.log(data);
         // 여기에 로그인 로직을 구현하세요
         const {
@@ -162,11 +165,14 @@ export default function useSignupForm() {
             profileImg,
         }).then((response) => {
             console.log(response);
+            if (response.ok) {
+                setSuccess(true);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
+            }
         });
-        setSuccess(true);
-        setTimeout(() => {
-            navigate('/login');
-        }, 3000);
+        setLoading(false);
     };
 
     /**
@@ -259,5 +265,7 @@ export default function useSignupForm() {
         success,
         imgName,
         setImgName,
+        loading,
+        setLoading,
     };
 }
