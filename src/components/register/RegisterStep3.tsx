@@ -19,6 +19,7 @@ export default function RegisterStep3({
     const neutered = watch('neutered');
     const size = watch('size');
     const age = watch('age');
+    const comment = watch('comment');
 
     // 나이 validation
     const ageValidation = {
@@ -29,8 +30,15 @@ export default function RegisterStep3({
         },
     };
 
+    const commentValidation = {
+        maxLength: {
+            value: 50,
+            message: '멍멍이 소개는 최대 50자 이하이어야 합니다!',
+        },
+    };
+
     const isNextButtonDisabled =
-        !age || !size?.length || neutered === undefined;
+        !age || !size?.length || neutered === undefined || !!errors.comment;
 
     const handleNext = () => {
         if (getValue) {
@@ -92,16 +100,24 @@ export default function RegisterStep3({
                                 successMsg=""
                             />
 
-                            {/* 선호 산책 장소 입력 */}
+                            {/* 멍멍이 소개 입력 */}
                             <CustomInput
-                                id="favoritePlace"
-                                label="선호 산책 장소"
-                                placeholder="(선택)선호 산책 장소를 입력해주세요"
+                                id="comment"
+                                label="멍멍이 소개 (최대 50글자)"
+                                type="textarea"
+                                placeholder="멍멍이 소개를 작성해주세요!"
                                 register={register}
                                 watch={watch}
+                                validation={commentValidation}
+                                error={errors.comment?.message}
                                 design="outline"
                                 successMsg=""
                             />
+                            <div className="flex justify-end">
+                                <span className="text-label-m text-gray-500">
+                                    {comment?.length || '0'}/50
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
