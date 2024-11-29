@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import useMatchStore, { MatchWidthColor } from '@/stores/useMatchStore';
 import { useFadeNavigate } from '@/hooks';
-import { useState } from 'react';
 
 // SVG
 import ArrowRightIcon from '@/assets/images/arrow/arrowRight.svg?react';
@@ -14,7 +13,7 @@ interface MatchCardProps {
     card: MatchWidthColor;
     index: number;
     zIndex: number;
-    onDragEnd: (id: string) => void;
+    onDragEnd: (id: number) => void;
 }
 
 export default function MatchCard({
