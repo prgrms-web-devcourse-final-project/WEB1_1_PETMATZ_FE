@@ -88,6 +88,7 @@ export default function RegisterStep3({
                                 name="size"
                                 options={dogSizeOptions}
                                 control={control}
+                                singleSelect={true} // 단일 선택 모드
                                 rules={{
                                     required: '크기를 선택해주세요!',
                                     validate: (value: string[]) =>

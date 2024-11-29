@@ -17,9 +17,9 @@ export default function RegisterComplete({ getValue }: RegisterCompleteProps) {
             {/* 상단 영역 */}
             <div className="flex flex-1 flex-col justify-center text-center px-4">
                 <div className="flex justify-center">
-                    {getValue().size[0] === 'LARGE' && <LargeDog />}
-                    {getValue().size[0] === 'MEDIUM' && <MiddleDog />}
-                    {getValue().size[0] === 'SMALL' && <SmallDog />}
+                    {getValue().size === 'LARGE' && <LargeDog />}
+                    {getValue().size === 'MEDIUM' && <MiddleDog />}
+                    {getValue().size === 'SMALL' && <SmallDog />}
                 </div>
                 <p className="text-body-s font-semibold text-gray-400 mt-8 mb-2">
                     등록 완료
