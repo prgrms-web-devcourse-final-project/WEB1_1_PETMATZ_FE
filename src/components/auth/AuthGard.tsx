@@ -5,10 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 interface AuthenticationProps {
     element: React.ReactNode;
-    redirectTo: string;
+    redirectTo?: string;
 }
 
-export default function AuthGuard({ element }: AuthenticationProps) {
+export default function AuthGuard({
+    element,
+    redirectTo,
+}: AuthenticationProps) {
     const { user, setUser } = useUserStore();
     const navigate = useNavigate();
 
@@ -16,7 +19,7 @@ export default function AuthGuard({ element }: AuthenticationProps) {
         const { ok, data } = await getMyProfileInfo();
 
         if (!ok) {
-            navigate('/login');
+            navigate(redirectTo || '/login');
         } else {
             const { id, accountId, nickname, isRegistered, region } = data;
             setUser({ id, accountId, nickname, isRegistered, region });
