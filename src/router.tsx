@@ -16,6 +16,7 @@ import {
     Signup,
     SOS,
     SOSWrite,
+    Ranking,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -58,6 +59,7 @@ export default function AppRoutes() {
                     />
                     <Route path="/delete-account" element={<DeleteAccount />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/ranking" element={<Ranking />} />
                 </Route>
             </Routes>
         </BrowserRouter>
