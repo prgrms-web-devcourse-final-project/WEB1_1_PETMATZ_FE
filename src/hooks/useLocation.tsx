@@ -1,44 +1,57 @@
 import { useState, useEffect } from 'react';
+import type { LocationResponse } from '@/types/location';
 
-interface Location {
-    latitude: number | null;
-    longitude: number | null;
-    error?: string | null;
-}
-
-export function useLocation(): Location {
-    const [location, setLocation] = useState<Location>({
-        latitude: null,
-        longitude: null,
-        error: null,
+export function useLocation(): LocationResponse {
+    const [response, setResponse] = useState<LocationResponse>({
+        ok: false,
+        error: undefined,
+        data: {
+            latitude: null,
+            longitude: null,
+        },
     });
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    setLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        error: null,
+                    setResponse({
+                        ok: true,
+                        data: {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                        },
+                        error: undefined,
                     });
                 },
                 (err) => {
-                    setLocation({
-                        latitude: null,
-                        longitude: null,
-                        error: `Error: ${err.message}`,
+                    setResponse({
+                        ok: false,
+                        data: {
+                            latitude: null,
+                            longitude: null,
+                        },
+                        error: {
+                            status: err.code,
+                            msg: err.message,
+                        },
                     });
                 },
             );
         } else {
-            setLocation({
-                latitude: null,
-                longitude: null,
-                error: 'Geolocation is not supported by your browser.',
+            setResponse({
+                ok: false,
+                data: {
+                    latitude: null,
+                    longitude: null,
+                },
+                error: {
+                    status: 0,
+                    msg: 'Geolocation is not supported by your browser.',
+                },
             });
         }
     }, []);
 
-    return location;
+    return response;
 }
