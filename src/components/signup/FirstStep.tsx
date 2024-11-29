@@ -47,6 +47,10 @@ export default function FirstStep({
         emailTyped.current = true;
     });
 
+    useEffect(() => {
+        setSentNumber(false);
+    }, [email]);
+
     const handleVerificateEmailBtn = useCallback(async () => {
         if (sending) return;
         setSending(true);
