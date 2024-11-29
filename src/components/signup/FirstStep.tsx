@@ -38,13 +38,21 @@ export default function FirstStep({
     const [sentNumber, setSentNumber] = useState(false);
     const [firstVisit, setFirstVisit] = useState(true);
     const [sending, setSending] = useState(false);
-    const { showToast } = useCustomToast();
+    const [readying, setReadying] = useState(false);
+    const { showToast, isToastActive } = useCustomToast();
 
     const email = watch('email');
     const verificationCode = watch('verificationCode');
 
     useEffect(() => {
         emailTyped.current = true;
+        setInterval(() => {
+            if (isToastActive()) {
+                setReadying(true);
+            } else {
+                setReadying(false);
+            }
+        }, 100);
     });
 
     useEffect(() => {
@@ -60,7 +68,7 @@ export default function FirstStep({
         await postEmailVerificationCode({ accountId }).then((response) => {
             if (response.ok) {
                 setSentNumber(true);
-                showToast('인증코드를 전송하였습니다!', 'success');
+                setReadying(showToast('인증코드를 전송하였습니다!', 'success'));
             } else {
                 if (response.error?.status === 400) {
                     showToast('이미 사용하고 있는 이메일입니다!', 'warning');
@@ -82,8 +90,6 @@ export default function FirstStep({
             certificationNumber,
         }).then((response) => {
             if (response.ok) {
-                // showToast('인증이 완료되었습니다!', 'success');
-                // setSentNumber(false);
                 setPageNumber((prev) => prev + 1);
             } else {
                 if (
@@ -133,13 +139,21 @@ export default function FirstStep({
                                     form="verificateEmail"
                                     className="btn-solid btn-md"
                                     disabled={
+                                        readying ||
+                                        sending ||
                                         (!emailTyped.current && !isValid) ||
                                         !!errors.email ||
                                         email === ''
                                     }
                                     onClick={handleVerificateEmailBtn}
                                 >
-                                    {firstVisit ? '인증번호' : '재요청'}
+                                    {firstVisit
+                                        ? '인증번호'
+                                        : sending
+                                          ? '잠시만요'
+                                          : readying
+                                            ? '준비중'
+                                            : '재요청'}
                                 </button>
                             </div>
                             <div className="flex gap-2 items-center">
@@ -170,11 +184,15 @@ export default function FirstStep({
                         form="next"
                         className="btn-solid"
                         disabled={
-                            !sentNumber || !!errors.email || !verificationCode
+                            readying ||
+                            sending ||
+                            !sentNumber ||
+                            !!errors.email ||
+                            !verificationCode
                         }
                         onClick={handleNextBtn}
                     >
-                        인증번호 검사
+                        {readying ? '준비중' : '인증번호 검사'}
                     </button>
                 </ToastAnchor>
             </footer>
