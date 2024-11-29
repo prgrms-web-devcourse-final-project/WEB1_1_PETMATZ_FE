@@ -9,7 +9,7 @@ import {
 import { http } from './base';
 
 /**
- * POSTT	Send VerificationCode to Email
+ * POST	Send VerificationCode to Email
  * 해당 이메일로 인증코드를 보냅니다.
  */
 export const postEmailVerificationCode = async ({
@@ -23,7 +23,7 @@ export const postEmailVerificationCode = async ({
     });
 
 /**
- * POSTT	Check VerificationCode
+ * POST	Check VerificationCode
  * 인증코드를 검증합니다.
  */
 export const postCheckVerificationCode = async ({
@@ -39,7 +39,7 @@ export const postCheckVerificationCode = async ({
     });
 
 /**
- * POSTT	Signup
+ * POST	Signup
  * 회원가입을 요청합니다.
  */
 export const postSignup = async ({
