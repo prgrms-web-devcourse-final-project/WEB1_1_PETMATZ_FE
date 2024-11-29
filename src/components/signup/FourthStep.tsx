@@ -133,7 +133,7 @@ export default function FourthStep({
                             <div className="flex flex-col gap-1">
                                 <div className="flex flex-col gap-7">
                                     <CustomToggle
-                                        name="gender"
+                                        name="genderBool"
                                         label="성별"
                                         leftText="여성"
                                         rightText="남성"

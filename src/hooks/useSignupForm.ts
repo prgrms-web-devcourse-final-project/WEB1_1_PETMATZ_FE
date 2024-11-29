@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
+import { postSignup } from './api/signup';
 
 /**
  * Signup form types
@@ -19,7 +20,7 @@ export interface SignUpInputs {
     /** User's introduce */
     introduce: string;
     /** User's gender */
-    gender: boolean;
+    genderBool: boolean;
     /** User's possibility of caring dogs */
     possible: boolean;
     /** User's preference of dog sizes */
@@ -80,6 +81,25 @@ export interface introduceValidationType {
     };
 }
 
+// 위치 정보를 가져오는 함수
+const getLocation = () => {
+    return new Promise<{ latitude: string; longitude: string }>(
+        (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    resolve({
+                        latitude: position.coords.latitude.toString(),
+                        longitude: position.coords.longitude.toString(),
+                    });
+                },
+                (error) => {
+                    reject(error);
+                },
+            );
+        },
+    );
+};
+
 /**
  * Custom hook for handling signup form logic
  * @returns {Object} Form methods and handlers
@@ -98,14 +118,49 @@ export default function useSignupForm() {
 
     const [pageNumber, setPageNumber] = useState(1);
     const [success, setSuccess] = useState(false);
+    const [imgName, setImgName] = useState('profile1');
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
-    const onSubmit = (data: SignUpInputs) => {
+    const onSubmit = async (data: SignUpInputs) => {
         console.log(data);
         // 여기에 로그인 로직을 구현하세요
+        const {
+            email,
+            verificationCode,
+            password,
+            nickname,
+            introduce,
+            genderBool,
+            possible,
+            dogSizes,
+            mbti,
+        } = data;
+        const accountId = email;
+        const certificationNumber = verificationCode;
+        const introduction = introduce;
+        const isCareAvailable = possible;
+        const preferredSizes = dogSizes;
+        const gender = genderBool ? 'FEMALE' : 'MALE';
+        // 위치 정보 가져오기
+        const { latitude, longitude } = await getLocation();
+        await postSignup({
+            accountId,
+            password,
+            certificationNumber,
+            nickname,
+            gender,
+            preferredSizes,
+            introduction,
+            isCareAvailable,
+            mbti,
+            latitude,
+            longitude,
+        }).then((response) => {
+            console.log(response);
+        });
         setSuccess(true);
         setTimeout(() => {
             navigate('/login');
@@ -200,5 +255,7 @@ export default function useSignupForm() {
         isValid,
         control,
         success,
+        imgName,
+        setImgName,
     };
 }

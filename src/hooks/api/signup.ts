@@ -3,6 +3,8 @@ import {
     CheckVerificationCodeApiResponse,
     EmailVerificationCodeApiRequest,
     EmailVerificationCodeApiResponse,
+    SignupApiRequest,
+    SignupApiResponse,
 } from '@/types/signup';
 import { http } from './base';
 
@@ -34,4 +36,35 @@ export const postCheckVerificationCode = async ({
     >('/api/auth/check-certification', {
         accountId,
         certificationNumber,
+    });
+
+/**
+ * POSTT	Signup
+ * 회원가입을 요청합니다.
+ */
+export const postSignup = async ({
+    accountId,
+    password,
+    certificationNumber,
+    nickname,
+    gender,
+    preferredSizes,
+    introduction,
+    isCareAvailable,
+    mbti,
+    latitude,
+    longitude,
+}: SignupApiRequest): Promise<SignupApiResponse> =>
+    await http.post<SignupApiResponse, SignupApiRequest>('/api/auth/sign-up', {
+        accountId,
+        password,
+        certificationNumber,
+        nickname,
+        gender,
+        preferredSizes,
+        introduction,
+        isCareAvailable,
+        mbti,
+        latitude,
+        longitude,
     });
