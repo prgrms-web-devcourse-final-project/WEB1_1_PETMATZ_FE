@@ -36,6 +36,7 @@ interface SignupApiRequest {
     mbti: string;
     latitude: string;
     longitude: string;
+    profileImg: string;
 }
 interface SignupApiResponse extends BaseApiResponse {
     data: {

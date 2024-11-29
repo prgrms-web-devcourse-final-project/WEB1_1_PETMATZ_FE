@@ -54,6 +54,7 @@ export const postSignup = async ({
     mbti,
     latitude,
     longitude,
+    profileImg,
 }: SignupApiRequest): Promise<SignupApiResponse> =>
     await http.post<SignupApiResponse, SignupApiRequest>('/api/auth/sign-up', {
         accountId,
@@ -67,4 +68,5 @@ export const postSignup = async ({
         mbti,
         latitude,
         longitude,
+        profileImg,
     });
