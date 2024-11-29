@@ -10,7 +10,7 @@ export interface RegisterFormData {
     gender: string;
     neutered: string | boolean; //open api: string, post api: boolean
     size: string;
-    dmbti: string;
+    temperament: string;
     dogImg: string;
 }
 
