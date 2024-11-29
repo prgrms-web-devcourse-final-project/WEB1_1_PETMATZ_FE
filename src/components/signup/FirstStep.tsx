@@ -6,7 +6,10 @@ import {
 import { CustomInput, ToastAnchor, useCustomToast } from '../common';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { postEmailVerificationCode } from '@/hooks/api/signup';
+import {
+    postCheckVerificationCode,
+    postEmailVerificationCode,
+} from '@/hooks/api/signup';
 
 interface FirstStepPropsType {
     pageNumber: number;
@@ -63,12 +66,31 @@ export default function FirstStep({
         setLoading(false);
     }, [email, loading]);
 
-    const handleNextBtn = useCallback(() => {
+    const handleNextBtn = useCallback(async () => {
         // api 요청
-        console.log('1번 페이지 성공');
+        const accountId = email;
+        const certificationNumber = verificationCode;
+        await postCheckVerificationCode({
+            accountId,
+            certificationNumber,
+        }).then((response) => {
+            if (response.ok) {
+                // showToast('인증이 완료되었습니다!', 'success');
+                setSentNumber(false);
+                setPageNumber((prev) => prev + 1);
+            } else {
+                if (
+                    response.error?.status === 400 ||
+                    response.error?.status === 401
+                ) {
+                    showToast('인증에 실패했습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
+            }
+        });
         setSentNumber(false);
-        setPageNumber((prev) => prev + 1);
-    }, []);
+    }, [email, verificationCode]);
 
     return (
         <>
@@ -119,7 +141,7 @@ export default function FirstStep({
                                     <CustomInput
                                         id="verificationCode"
                                         label="인증번호"
-                                        type="number"
+                                        type="text"
                                         placeholder="인증번호를 입력해주세요."
                                         register={register}
                                         watch={watch}
@@ -144,7 +166,7 @@ export default function FirstStep({
                     }
                     onClick={handleNextBtn}
                 >
-                    다음
+                    인증번호 검사
                 </button>
             </footer>
         </>

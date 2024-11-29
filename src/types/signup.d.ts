@@ -11,7 +11,21 @@ interface EmailVerificationCodeApiResponse extends BaseApiResponse {
     };
 }
 
+//	POST Check VerificationCode
+interface CheckVerificationCodeApiRequest {
+    accountId: string;
+    certificationNumber: string;
+}
+interface CheckVerificationCodeApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+    };
+}
+
 export type {
     EmailVerificationCodeApiRequest,
     EmailVerificationCodeApiResponse,
+    CheckVerificationCodeApiRequest,
+    CheckVerificationCodeApiResponse,
 };

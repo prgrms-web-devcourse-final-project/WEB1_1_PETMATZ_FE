@@ -1,4 +1,6 @@
 import {
+    CheckVerificationCodeApiRequest,
+    CheckVerificationCodeApiResponse,
     EmailVerificationCodeApiRequest,
     EmailVerificationCodeApiResponse,
 } from '@/types/signup';
@@ -16,4 +18,20 @@ export const postEmailVerificationCode = async ({
         EmailVerificationCodeApiRequest
     >('/api/auth/email-certification', {
         accountId,
+    });
+
+/**
+ * POSTT	Check VerificationCode
+ * 인증코드를 검증합니다.
+ */
+export const postCheckVerificationCode = async ({
+    accountId,
+    certificationNumber,
+}: CheckVerificationCodeApiRequest): Promise<CheckVerificationCodeApiResponse> =>
+    await http.post<
+        CheckVerificationCodeApiResponse,
+        CheckVerificationCodeApiRequest
+    >('/api/auth/email-certification', {
+        accountId,
+        certificationNumber,
     });

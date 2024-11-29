@@ -32,9 +32,9 @@ export default function FourthStep({
 }: FourthStepPropsType) {
     // 강아지 크기 옵션 정의
     const dogSizeOptions = [
-        { value: 'small', label: '소형견' },
-        { value: 'medium', label: '중형견' },
-        { value: 'large', label: '대형견' },
+        { value: 'SMALL', label: '소형견' },
+        { value: 'MEDIUM', label: '중형견' },
+        { value: 'LARGE', label: '대형견' },
     ];
 
     const options: Option[] = [
