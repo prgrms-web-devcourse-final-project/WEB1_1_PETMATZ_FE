@@ -29,9 +29,11 @@ export default function Signup() {
         isValid,
         control,
         success,
+        imgName,
+        setImgName,
+        loading,
+        setLoading,
     } = useSignupForm();
-    const [imgName, setImgName] = useState('profile1');
-    const [loading, setLoading] = useState(false);
 
     const handleBackBtn = useCallback(() => {
         if (pageNumber === 1) {

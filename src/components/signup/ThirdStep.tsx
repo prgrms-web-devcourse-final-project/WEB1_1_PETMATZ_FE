@@ -34,8 +34,6 @@ export default function ThirdStep({
     const introduce = watch('introduce');
 
     const handleNextBtn = useCallback(() => {
-        // api 요청
-        console.log('3번 페이지 성공');
         setPageNumber((prev) => prev + 1);
     }, []);
 

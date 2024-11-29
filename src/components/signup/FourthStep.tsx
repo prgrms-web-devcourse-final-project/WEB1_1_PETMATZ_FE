@@ -68,8 +68,6 @@ export default function FourthStep({
     const [showModal, setShowModal] = useState(false);
 
     const handleNextBtn = useCallback(() => {
-        // api 요청
-        console.log('4번 페이지 성공');
         setShowModal(true);
     }, []);
 
@@ -135,7 +133,7 @@ export default function FourthStep({
                             <div className="flex flex-col gap-1">
                                 <div className="flex flex-col gap-7">
                                     <CustomToggle
-                                        name="gender"
+                                        name="genderBool"
                                         label="성별"
                                         leftText="여성"
                                         rightText="남성"

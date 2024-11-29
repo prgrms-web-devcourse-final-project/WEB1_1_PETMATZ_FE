@@ -68,7 +68,7 @@ export default function FirstStep({
         await postEmailVerificationCode({ accountId }).then((response) => {
             if (response.ok) {
                 setSentNumber(true);
-                setReadying(showToast('인증코드를 전송하였습니다!', 'success'));
+                showToast('인증코드를 전송하였습니다!', 'success');
             } else {
                 if (response.error?.status === 400) {
                     showToast('이미 사용하고 있는 이메일입니다!', 'warning');

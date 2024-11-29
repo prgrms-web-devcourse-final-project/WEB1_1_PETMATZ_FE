@@ -37,8 +37,6 @@ export default function SecondStep({
     }, []);
 
     const handleNextBtn = useCallback(() => {
-        // api 요청
-        console.log('2번 페이지 성공');
         // react-hook-form의 submit 함수와의 충돌 방지
         setPageNumber((prev) => prev + 1);
     }, []);
