@@ -3,7 +3,7 @@ import {
     createChatRoom,
     getChatMessageList,
     getChatRoomList,
-} from '@/hooks/api/Chat';
+} from '@/hooks/api/chat';
 import { IChatMessage, IChatRoom } from '@/types/chat';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';

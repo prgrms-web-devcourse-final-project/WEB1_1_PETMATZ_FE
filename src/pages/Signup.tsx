@@ -8,7 +8,7 @@ import {
     ThirdStep,
 } from '@/components/signup';
 import { useFadeNavigate, useSignupForm } from '@/hooks';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 export default function Signup() {
     const navigate = useFadeNavigate();
