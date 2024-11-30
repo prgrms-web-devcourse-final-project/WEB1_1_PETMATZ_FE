@@ -1,11 +1,12 @@
 import { getMyProfileInfo } from '@/hooks/api/profile';
 import { useUserStore } from '@/stores';
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 interface AuthenticationProps {
-    element: React.ReactNode;
+    element?: React.ReactNode;
     redirectTo?: string;
+    children?: React.ReactNode;
 }
 
 export default function AuthGuard({
@@ -32,5 +33,5 @@ export default function AuthGuard({
         }
     }, [user]);
 
-    return element;
+    return element || <Outlet />;
 }
