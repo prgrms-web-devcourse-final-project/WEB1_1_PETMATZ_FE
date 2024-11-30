@@ -30,7 +30,7 @@ export default function useLoginForm() {
     });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
-    const { user, setUser } = useUserStore();
+    const { setUser } = useUserStore();
     const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
 
@@ -47,35 +47,14 @@ export default function useLoginForm() {
         await postLogin(data).then((response) => {
             console.log(response);
             if (response.ok) {
-                const {
-                    id,
-                    accountId,
-                    nickname,
-                    loginRole,
-                    loginType,
-                    role,
-                    preferredSize,
-                    gender,
-                    isRegistered,
-                    recommendationCount,
-                    careCompletionCount,
-                    isCareAvailable,
-                    mbti,
-                } = response.data;
+                const { id, accountId, nickname, isRegistered, region } =
+                    response.data;
                 setUser({
                     id,
                     accountId,
                     nickname,
-                    loginRole,
-                    loginType,
-                    role,
-                    preferredSize,
-                    gender,
                     isRegistered,
-                    recommendationCount,
-                    careCompletionCount,
-                    isCareAvailable,
-                    mbti,
+                    region,
                 });
                 setSuccess(true);
                 setTimeout(() => {

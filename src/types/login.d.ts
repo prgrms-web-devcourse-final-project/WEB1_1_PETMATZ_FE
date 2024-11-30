@@ -15,13 +15,14 @@ interface LoginApiResponse extends BaseApiResponse {
         loginRole: string;
         loginType: string;
         role: string;
-        preferredSize: string;
+        preferredSize: ('SMALL' | 'MEDIUM' | 'LARGE')[];
         gender: string;
         isRegistered: boolean;
         recommendationCount: number;
         careCompletionCount: number;
         isCareAvailable: boolean;
         mbti: string;
+        region: string;
     };
 }
 

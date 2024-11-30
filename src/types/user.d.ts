@@ -4,16 +4,8 @@ interface IUser {
     id: number;
     accountId: string;
     nickname: string;
-    loginRole: string;
-    loginType: string;
-    role: string;
-    preferredSize: string;
-    gender: string;
     isRegistered: boolean;
-    recommendationCount: number;
-    careCompletionCount: number;
-    isCareAvailable: boolean;
-    mbti: string;
+    region: string;
 }
 
 //	GET profile informations
@@ -29,7 +21,7 @@ interface ProfileApiResponse extends BaseApiResponse {
         nickname: string;
         profileImg: string;
         role: string;
-        preferredSizes: string[];
+        preferredSize: ('SMALL' | 'MEDIUM' | 'LARGE')[];
         gender: string;
         introduction: string;
         isRegistered: boolean;
