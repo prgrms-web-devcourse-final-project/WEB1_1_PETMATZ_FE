@@ -1,18 +1,37 @@
 import { BaseApiResponse } from './baseResponse';
 
-interface Match {
-    id: string;
+interface IMatch {
+    id: number;
     nickname: string;
-    introduction: string;
     recommendationCount: number;
     careCompletionCount: number;
-    profileImg?: string;
-    latitude: number;
-    longitude: number;
+    profileImg: string;
 }
 
+// GET MatchList
+interface MatchListApiRequest {
+    userId: number;
+    page?: number;
+    size?: number;
+}
 interface MatchListApiResponse extends BaseApiResponse {
-    data: Match[];
+    data: {
+        result: {
+            matchResults: IMatch[];
+            totalPages: number;
+        };
+    };
 }
 
-export type { Match, MatchListApiResponse };
+// POST	MatchFail
+interface MatchFailApiRequest {
+    userId: number;
+    targetUserId: number;
+}
+
+export type {
+    IMatch,
+    MatchListApiRequest,
+    MatchListApiResponse,
+    MatchFailApiRequest,
+};

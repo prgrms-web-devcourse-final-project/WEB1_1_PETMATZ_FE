@@ -19,7 +19,7 @@ interface IChatMessage {
     senderId: string;
     receiverId: string;
     msg: string;
-    msg_type: 'msg' | 'plz' | 'end';
+    msg_type: 'MSG' | 'PLZ' | 'END';
     msgTimestamp: string;
     readStatus: boolean;
 }
@@ -30,7 +30,7 @@ interface ChatRoomCreateApiRequest {
 }
 interface ChatRoomCreateApiResponse extends BaseApiResponse {
     data: {
-        result: string;
+        result: number;
     };
 }
 

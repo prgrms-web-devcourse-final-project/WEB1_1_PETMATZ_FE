@@ -22,7 +22,11 @@ export const http = {
     ): Promise<T> {
         try {
             const response = await service.get<T>(url, { params });
-            return { ok: true, data: response.data } as T;
+            return {
+                ok: true,
+                status: response.status,
+                data: response.data,
+            } as T;
         } catch (error: any) {
             return {
                 ok: false,
@@ -42,7 +46,11 @@ export const http = {
     ): Promise<T> {
         try {
             const response = await service.post<T>(url, data);
-            return { ok: true, data: response.data } as T;
+            return {
+                ok: true,
+                status: response.status,
+                data: response.data,
+            } as T;
         } catch (error: any) {
             return {
                 ok: false,
@@ -59,7 +67,11 @@ export const http = {
     delete: async function remove<T>(url: string): Promise<T> {
         try {
             const response = await service.delete<T>(url);
-            return { ok: true, data: response.data } as T;
+            return {
+                ok: true,
+                status: response.status,
+                data: response.data,
+            } as T;
         } catch (error: any) {
             return {
                 ok: false,
@@ -79,7 +91,11 @@ export const http = {
     ): Promise<T> {
         try {
             const response = await service.put<T>(url, data);
-            return { ok: true, data: response.data } as T;
+            return {
+                ok: true,
+                status: response.status,
+                data: response.data,
+            } as T;
         } catch (error: any) {
             return {
                 ok: false,
@@ -99,7 +115,11 @@ export const http = {
     ): Promise<T> {
         try {
             const response = await service.patch<T>(url, data);
-            return { ok: true, data: response.data } as T;
+            return {
+                ok: true,
+                status: response.status,
+                data: response.data,
+            } as T;
         } catch (error: any) {
             return {
                 ok: false,
