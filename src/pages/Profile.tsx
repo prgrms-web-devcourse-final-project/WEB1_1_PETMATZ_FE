@@ -31,7 +31,6 @@ export default function Profile() {
     }
 
     const profileData = data.data;
-    const preferredSizes = profileData.preferredSize || [];
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
@@ -92,7 +91,7 @@ export default function Profile() {
                     <article className="flex flex-col gap-2">
                         <Label text="선호 애견 크기" />
                         <div className="flex gap-[10px]">
-                            {preferredSizes.map((size, index) => (
+                            {profileData.preferredSizes.map((size, index) => (
                                 <Tag
                                     text={
                                         size === 'SMALL'
@@ -101,7 +100,7 @@ export default function Profile() {
                                               ? '중형견'
                                               : '대형견'
                                     }
-                                    index={index}
+                                    key={index}
                                 />
                             ))}
                         </div>
