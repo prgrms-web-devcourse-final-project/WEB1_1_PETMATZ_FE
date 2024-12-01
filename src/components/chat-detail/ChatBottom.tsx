@@ -15,12 +15,13 @@ export default function ChatBottom() {
 
         if (curRoomInfo && user) {
             sendMsg(
-                curRoomInfo._id,
+                curRoomInfo.chatRoomId,
                 message,
-                'msg',
+                'MSG',
                 user.accountId,
-                curRoomInfo.other.email,
+                curRoomInfo.other.userEmail,
             );
+
             setMessage('');
         }
     };
@@ -37,7 +38,9 @@ export default function ChatBottom() {
             {curRoomInfo ? (
                 <img
                     className="w-[32px] h-[32px] rounded-full border-[0.5px] border-gray-200"
-                    src={getDefaultProfileImg(curRoomInfo.other.profileImgUrl)}
+                    src={getDefaultProfileImg(
+                        curRoomInfo.other.profileURL || 'profile1',
+                    )}
                 />
             ) : (
                 <div className="w-[32px] h-[32px] bg-gray-300 rounded-full animate-pulse border-[0.5px] border-gray-200" />
@@ -51,6 +54,7 @@ export default function ChatBottom() {
                     placeholder="메세지를 입력해주세요."
                 />
                 <SendIcon
+                    onClick={handleOnSend}
                     className={`w-[18px] h-[18px] absolute right-[16px] transition-all duration-200 ease-in-out cursor-pointer active:scale-95  ${message.trim() ? 'text-point-500 active:text-point-600 hover:text-point-600' : 'text-gray-300 cursor-not-allowed'} placeholder:text-label-l placeholder:text-gray-300`}
                 />
             </div>

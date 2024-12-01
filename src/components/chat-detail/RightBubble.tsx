@@ -14,22 +14,18 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
     const navigate = useFadeNavigate();
     return (
         <>
-            {message.msg_type === 'msg' && (
-                <div className="flex flex-col items-end gap-[4px]">
-                    <div className="flex items-end gap-[8px]">
-                        <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl">
-                            {message.msg}
-                        </div>
-                    </div>
-                    <div className="flex items-center text-gray-500 text-label-s gap-[4px]">
-                        <span>{utcToLocalDateTime(message.msgTimestamp)}</span>
-                        <span>
-                            {message.readStatus ? '(읽음)' : '(안읽음)'}
-                        </span>
+            <div className="flex flex-col items-end gap-[4px]">
+                <div className="flex items-end gap-[8px]">
+                    <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl">
+                        {message.msg}
                     </div>
                 </div>
-            )}
-            {message.msg_type === 'plz' && (
+                <div className="flex items-center text-gray-500 text-label-s gap-[4px]">
+                    <span>{utcToLocalDateTime(message.msgTimestamp)}</span>
+                    <span>{message.readStatus ? '(읽음)' : '(안읽음)'}</span>
+                </div>
+            </div>
+            {/* {message.msg_type === 'PLG' && (
                 <div className="flex flex-col items-end gap-[4px]">
                     <div className="flex items-end gap-[8px]">
                         <div className="max-w-[238px] p-[16px] bg-violet-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl flex items-center gap-[10px]">
@@ -43,8 +39,10 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(other.profileImgUrl)}
-                                alt={`${other.nickname}님의 프로필 사진`}
+                                src={getDefaultProfileImg(
+                                    other.profileURL || 'profile1',
+                                )}
+                                alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div className="flex flex-col justify-center gap-[2px]">
                                 <span className="text-gray-100 text-label-m font-extrabold">
@@ -64,7 +62,7 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                     </div>
                 </div>
             )}
-            {message.msg_type === 'end' && (
+            {message.msg_type === 'END' && (
                 <div className="flex flex-col items-end gap-[4px]">
                     <div className="flex items-end gap-[8px]">
                         <div className="max-w-[238px] p-[16px] bg-violet-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl flex items-center gap-[10px]">
@@ -78,8 +76,10 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(other.profileImgUrl)}
-                                alt={`${other.nickname}님의 프로필 사진`}
+                                src={getDefaultProfileImg(
+                                    other.profileURL || 'profile1',
+                                )}
+                                alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div className="flex flex-col justify-center gap-[2px]">
                                 <span className="text-gray-100 text-label-m font-extrabold">
@@ -98,7 +98,7 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                         </span>
                     </div>
                 </div>
-            )}
+            )} */}
         </>
     );
 }
