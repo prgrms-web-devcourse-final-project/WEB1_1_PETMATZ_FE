@@ -3,11 +3,7 @@ import { ToastAnchor } from '@/components/common';
 import { RegisterStep4Props } from '@/types/register';
 import { RadioOption } from '@/components/register';
 
-export default function RegisterStep4({
-    onNext,
-    setValue,
-    getValue,
-}: RegisterStep4Props) {
+export default function RegisterStep4({ setValue }: RegisterStep4Props) {
     const [firstAnswer, setFirstAnswer] = useState(''); // E or I
     const [secondAnswer, setSecondAnswer] = useState(''); // S or N
     const [thirdAnswer, setThirdAnswer] = useState(''); // F or T
@@ -62,7 +58,6 @@ export default function RegisterStep4({
     const handleNext = () => {
         const dmbti = `${firstAnswer}${secondAnswer}${thirdAnswer}${fourthAnswer}`;
         setValue('temperament', dmbti);
-        // console.log('Selected DMBTI:', dmbti);
     };
 
     const isNextButtonDisabled =

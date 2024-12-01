@@ -71,9 +71,7 @@ export interface RegisterStep3Props {
 }
 
 export interface RegisterStep4Props {
-    onNext: () => void;
     setValue: UseFormSetValue<RegisterFormData>;
-    getValue?: UseFormWatch<RegisterFormData>;
 }
 
 // 반려견 등록 요청 타입
