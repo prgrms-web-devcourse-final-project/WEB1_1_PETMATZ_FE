@@ -16,7 +16,7 @@ export default function RegisterStep3({
         { value: 'LARGE', label: '대형견' },
     ];
 
-    const neutered = watch('neutered');
+    const neuterYn = watch('neuterYn');
     const size = watch('size');
     const age = watch('age');
     const comment = watch('comment');
@@ -47,7 +47,7 @@ export default function RegisterStep3({
     };
 
     const isNextButtonDisabled =
-        !age || !size?.length || neutered === undefined || !!errors.comment;
+        !age || !size?.length || neuterYn === undefined || !!errors.comment;
 
     const handleNext = () => {
         if (getValue) {
@@ -74,7 +74,7 @@ export default function RegisterStep3({
                         {/* 중성화 여부 */}
                         <div className="flex flex-col gap-7 mb-4">
                             <CustomToggle
-                                name="neutered"
+                                name="neuterYn"
                                 label="중성화 여부"
                                 leftText="Yes"
                                 rightText="No"

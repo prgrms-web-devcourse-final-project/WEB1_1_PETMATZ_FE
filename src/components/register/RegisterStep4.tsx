@@ -61,12 +61,8 @@ export default function RegisterStep4({
 
     const handleNext = () => {
         const dmbti = `${firstAnswer}${secondAnswer}${thirdAnswer}${fourthAnswer}`;
-        setValue('dmbti', dmbti);
-        console.log('Selected DMBTI:', dmbti);
-        if (getValue()) {
-            console.log(getValue());
-        }
-        // onNext();
+        setValue('temperament', dmbti);
+        // console.log('Selected DMBTI:', dmbti);
     };
 
     const isNextButtonDisabled =
@@ -119,7 +115,7 @@ export default function RegisterStep4({
             <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
                 <ToastAnchor>
                     <button
-                        type="button"
+                        type="submit"
                         className="btn-solid w-full"
                         onClick={handleNext}
                         disabled={isNextButtonDisabled}

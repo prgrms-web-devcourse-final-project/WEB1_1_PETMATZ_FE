@@ -3,15 +3,15 @@ import { BaseApiResponse } from './baseResponse';
 export interface RegisterFormData {
     ownerName: string;
     dogRegNo: string;
-    dogName: string;
+    petName: string;
     breed: string;
     age: number;
     comment: string;
-    gender: string;
-    neutered: string | boolean; //open api: string, post api: boolean
+    gender: 'MALE' | 'FEMALE';
+    neuterYn: '미중성' | '중성' | boolean; //open api: string, post api: boolean
     size: string;
     temperament: string;
-    dogImg: string;
+    profileImg: string;
 }
 
 export interface RegisterStep1Props {
@@ -74,4 +74,32 @@ export interface RegisterStep4Props {
     onNext: () => void;
     setValue: UseFormSetValue<RegisterFormData>;
     getValue?: UseFormWatch<RegisterFormData>;
+}
+
+// 반려견 등록 요청 타입
+export interface DogRegistrationRequest {
+    dogRegNo: string;
+    petName: string;
+    breed: string;
+    age: number;
+    comment: string;
+    gender: 'MALE' | 'FEMALE';
+    neuterYn: '중성' | '미중성';
+    size: string;
+    temperament: string;
+    profileImg: string;
+}
+
+// 반려견 등록 응답 타입
+export interface DogRegistrationResponse extends BaseApiResponse {
+    result?: {
+        path?: string;
+        responseCode?: string;
+        message?: string;
+        timeStamp?: string;
+    };
+}
+
+export interface RegisterCompleteProps {
+    getValue: UseFormWatch<RegisterFormData>;
 }

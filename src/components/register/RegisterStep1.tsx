@@ -1,4 +1,4 @@
-import { useAnimalRegistration } from '@/hooks';
+import { useAnimalRegistration } from '@/hooks/api/register';
 import { CustomInput } from '@/components/common';
 import { RegisterStep1Props } from '@/types/register';
 import { ToastAnchor } from '@/components/common';
@@ -41,10 +41,10 @@ export default function RegisterStep1({
 
         if (response?.response.body.item) {
             const item = response.response.body.item;
-            setValue('dogName', item.dogNm);
+            setValue('petName', item.dogNm);
             setValue('dogRegNo', item.dogRegNo);
             setValue('breed', item.kindNm);
-            setValue('neutered', item.neuterYn);
+            setValue('neuterYn', item.neuterYn);
             setValue('gender', item.sexNm);
             setTimeout(() => {
                 onNext();

@@ -25,7 +25,7 @@ export default function RegisterComplete({ getValue }: RegisterCompleteProps) {
                     등록 완료
                 </p>
                 <h2 className="text-body-xl font-extrabold mb-4">
-                    <span className="text-point-500">{getValue().dogName}</span>
+                    <span className="text-point-500">{getValue().petName}</span>
                     는{' '}
                     <span className="text-point-500">
                         {getValue().temperament}

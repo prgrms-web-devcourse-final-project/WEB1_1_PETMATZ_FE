@@ -1,7 +1,7 @@
 interface DogSelectorProps {
     selectedDogs: string[];
-    onDogSelect: (dogName: string) => void;
-    onDogRemove: (dogName: string) => void;
+    onDogSelect: (petName: string) => void;
+    onDogRemove: (petName: string) => void;
 }
 
 const MY_DOGS = [
