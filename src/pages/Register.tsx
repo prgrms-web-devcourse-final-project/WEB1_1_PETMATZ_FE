@@ -10,14 +10,15 @@ import { RegisterStep3 } from '@/components/register';
 import { RegisterStep4 } from '@/components/register';
 import { RegisterComplete } from '@/components/register';
 import { RegisterFormData } from '@/types/register';
+import { useDogRegistration } from '@/hooks/api/register';
 
 // 폼 데이터 타입 정의
 export default function Register() {
     const navigate = useFadeNavigate();
     const [step, setStep] = useState(1);
     const [imgName, setImgName] = useState('profile1');
+    const { registerDog } = useDogRegistration();
 
-    // react-hook-form 사용
     const {
         register,
         handleSubmit,
@@ -30,28 +31,28 @@ export default function Register() {
     } = useForm<RegisterFormData>({
         mode: 'onChange',
         defaultValues: {
-            ownerName: '', // api 요청시에는 필요없을듯
-            dogRegNo: '', // O
-            dogName: '', // O
-            breed: '', // 품종 // O
-            age: 1, // O
-            comment: '', // O-> 멍멍이 소개로 변경(더 포괄적)
-            gender: '', // 암컷 수컷에서 female male로 변경 필요
-            neutered: false, // O -> string에서 boolean으로 가능한지?
-            size: '', // O
-            dmbti: '', // O
-            dogImg: 'profile1', // 기본 이미지 // O
+            ownerName: '',
+            dogRegNo: '',
+            petName: '',
+            breed: '',
+            age: 1,
+            comment: '',
+            gender: undefined, //암컷, 수컷
+            neuterYn: false, // 미중성, 중성
+            size: '',
+            temperament: '', // 견BTI
+            profileImg: 'profile1', // 기본 이미지
         },
     });
 
-    // Step3에서 neutered 값이 "미중성"으로 설정될 때를 처리하는 로직
+    // Step3에서 neuterYn 값이 "미중성"으로 설정될 때를 처리하는 로직
     useEffect(() => {
         if (step === 3) {
-            const currentNeutered = getValues('neutered');
-            if (currentNeutered === '미중성') {
-                setValue('neutered', false);
-            } else if (currentNeutered === '중성') {
-                setValue('neutered', true);
+            const currentneuterYn = getValues('neuterYn');
+            if (currentneuterYn === '미중성') {
+                setValue('neuterYn', false);
+            } else if (currentneuterYn === '중성') {
+                setValue('neuterYn', true);
             }
         }
     }, [step]);
@@ -71,9 +72,25 @@ export default function Register() {
         }
     };
 
-    const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
-        console.log('전체 폼 데이터:', data);
-        // 최종 제출 로직
+    const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+        // neuterYn 변환 (true -> 중성, false -> 미중성)
+        const transformneuterYn = (neuterYn: boolean): '중성' | '미중성' => {
+            return neuterYn ? '중성' : '미중성';
+        };
+
+        // ownerName을 분리하고 나머지 데이터 변환
+        const { ownerName, ...restData } = data;
+        const transformedData = {
+            ...restData,
+            neuterYn: transformneuterYn(data.neuterYn as boolean),
+        };
+
+        const response = await registerDog(transformedData);
+        if (response) {
+            setTimeout(() => {
+                setStep(5); // 성공 시 1초 후 완료 단계로 이동
+            }, 1000);
+        }
     };
 
     // 애니메이션 설정
@@ -176,11 +193,7 @@ export default function Register() {
                             variants={pageVariants}
                             transition={{ duration: 0.5 }}
                         >
-                            <RegisterStep4
-                                onNext={handleNextStep}
-                                setValue={setValue}
-                                getValue={getValues}
-                            />
+                            <RegisterStep4 setValue={setValue} />
                         </motion.div>
                     )}
                     {step === 5 && (
@@ -193,7 +206,7 @@ export default function Register() {
                             variants={pageVariants}
                             transition={{ duration: 0.5 }}
                         >
-                            <RegisterComplete formData={getValues()} />
+                            <RegisterComplete getValue={getValues} />
                         </motion.div>
                     )}
                 </AnimatePresence>
