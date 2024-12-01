@@ -1,14 +1,14 @@
 import { BaseApiResponse } from './baseResponse';
 
 interface IChatUser {
-    _id: number;
-    email: string;
-    nickname: string;
-    profileImgUrl: string;
+    userId: number;
+    userEmail: string;
+    userName: string;
+    profileURL: string | null;
 }
 
 interface IChatRoom {
-    _id: number;
+    chatRoomId: number;
     lastMessage: string | 'first';
     unreadCount: number;
     lastMessageTimestamp: string;
@@ -19,14 +19,24 @@ interface IChatMessage {
     senderId: string;
     receiverId: string;
     msg: string;
-    msg_type: 'MSG' | 'PLZ' | 'END';
+    msg_type: 'MSG' | 'PLG' | 'END';
     msgTimestamp: string;
     readStatus: boolean;
+}
+
+interface IPub {
+    msg: string;
+    msg_type: 'MSG' | 'PLG' | 'END';
+    readStatus: boolean;
+    receiverEmail: string;
+    senderEmail: string;
+    msgTimestamp: string;
 }
 
 //	POST create ChatRoom
 interface ChatRoomCreateApiRequest {
     entrustedEmail: string;
+    caregiverEmail: string;
 }
 interface ChatRoomCreateApiResponse extends BaseApiResponse {
     data: {
@@ -43,6 +53,7 @@ interface ChatRoomListApiResponse extends BaseApiResponse {
 
 //	GET	MessageList
 interface ChatMessageListApiRequest {
+    receiverEmail: string;
     chatRoomId: number;
     pageSize?: number;
     startPage?: number;
@@ -52,7 +63,7 @@ interface ChatMessageListApiResponse extends BaseApiResponse {
     data: {
         result: {
             _id: number;
-            messages: IChatMessage[];
+            chatMessage: IChatMessage[];
             other: IChatUser;
             pageNumber: number;
             totalPages: number;
@@ -62,6 +73,7 @@ interface ChatMessageListApiResponse extends BaseApiResponse {
 }
 
 export type {
+    IPub,
     IChatUser,
     IChatRoom,
     IChatMessage,
