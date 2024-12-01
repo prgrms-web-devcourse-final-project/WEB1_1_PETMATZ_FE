@@ -2,16 +2,16 @@ import { BaseApiResponse } from './baseResponse';
 
 export interface RegisterFormData {
     ownerName: string;
-    registrationNumber: string;
-    dogName: string;
+    dogRegNo: string;
+    petName: string;
     breed: string;
-    age: string;
-    favoritePlace: string;
-    gender: string;
-    neutered: string | boolean; //open api: string, post api: boolean
+    age: number;
+    comment: string;
+    gender: 'MALE' | 'FEMALE';
+    neuterYn: '미중성' | '중성' | boolean; //open api: string, post api: boolean
     size: string;
-    dmbti: string;
-    dogImg: string;
+    temperament: string;
+    profileImg: string;
 }
 
 export interface RegisterStep1Props {
@@ -68,4 +68,36 @@ export interface RegisterStep3Props {
     errors: FieldErrors<RegisterFormData>;
     control: Control<RegisterFormData, any>;
     getValue?: UseFormWatch<RegisterFormData>;
+}
+
+export interface RegisterStep4Props {
+    setValue: UseFormSetValue<RegisterFormData>;
+}
+
+// 반려견 등록 요청 타입
+export interface DogRegistrationRequest {
+    dogRegNo: string;
+    petName: string;
+    breed: string;
+    age: number;
+    comment: string;
+    gender: 'MALE' | 'FEMALE';
+    neuterYn: '중성' | '미중성';
+    size: string;
+    temperament: string;
+    profileImg: string;
+}
+
+// 반려견 등록 응답 타입
+export interface DogRegistrationResponse extends BaseApiResponse {
+    result?: {
+        path?: string;
+        responseCode?: string;
+        message?: string;
+        timeStamp?: string;
+    };
+}
+
+export interface RegisterCompleteProps {
+    getValue: UseFormWatch<RegisterFormData>;
 }

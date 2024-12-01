@@ -13,7 +13,7 @@ export interface DogInfo {
     name: string; // 멍멍이 이름
     gender: 'male' | 'female'; // 멍멍이 성별
     size: '소형' | '중형' | '대형'; // 멍멍이 크기
-    neutered: boolean; // 중성화 여부
+    neuterYn: boolean; // 중성화 여부
     breed: string; // 품종
     age: number; // 나이 (년 기준)
     img: string; // 멍멍이 사진
@@ -71,7 +71,7 @@ export interface SOSCreateRequest {
         name: string;
         gender: 'male' | 'female';
         size: '소형' | '중형' | '대형';
-        neutered: boolean;
+        neuterYn: boolean;
         breed: string;
         age: number;
         img?: string;

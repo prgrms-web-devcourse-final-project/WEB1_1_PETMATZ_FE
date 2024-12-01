@@ -1,4 +1,4 @@
-import { useAnimalRegistration } from '@/hooks';
+import { useAnimalRegistration } from '@/hooks/api/register';
 import { CustomInput } from '@/components/common';
 import { RegisterStep1Props } from '@/types/register';
 import { ToastAnchor } from '@/components/common';
@@ -12,14 +12,14 @@ export default function RegisterStep1({
     setValue,
 }: RegisterStep1Props) {
     const { fetchAnimalRegistration } = useAnimalRegistration();
-    const registrationNumber = watch('registrationNumber');
+    const dogRegNo = watch('dogRegNo');
     const ownerName = watch('ownerName');
 
     const ownerNameValidation = {
         required: '소유자 성명은 필수 입력 항목입니다.',
     };
 
-    const registrationNumberValidation = {
+    const dogRegNoValidation = {
         required: '등록번호는 필수 입력 항목입니다.',
         validate: (value: string) =>
             (value.length === 15 && /^\d+$/.test(value)) ||
@@ -28,23 +28,23 @@ export default function RegisterStep1({
 
     const isButtonDisabled =
         !ownerName ||
-        !registrationNumber ||
-        registrationNumber.length !== 15 ||
-        !!errors.registrationNumber ||
+        !dogRegNo ||
+        dogRegNo.length !== 15 ||
+        !!errors.dogRegNo ||
         !!errors.ownerName;
 
     const handleSearch = async () => {
         const response = await fetchAnimalRegistration({
-            dog_reg_no: registrationNumber,
+            dog_reg_no: dogRegNo,
             owner_nm: ownerName,
         });
 
         if (response?.response.body.item) {
             const item = response.response.body.item;
-            setValue('dogName', item.dogNm);
-            setValue('registrationNumber', item.dogRegNo);
+            setValue('petName', item.dogNm);
+            setValue('dogRegNo', item.dogRegNo);
             setValue('breed', item.kindNm);
-            setValue('neutered', item.neuterYn);
+            setValue('neuterYn', item.neuterYn);
             setValue('gender', item.sexNm);
             setTimeout(() => {
                 onNext();
@@ -79,13 +79,13 @@ export default function RegisterStep1({
                         />
                         <div className="mt-4">
                             <CustomInput
-                                id="registrationNumber"
+                                id="dogRegNo"
                                 label="멍멍이 등록 번호(숫자 15자리)"
                                 placeholder="등록번호를 입력해주세요."
                                 register={register}
                                 watch={watch}
-                                validation={registrationNumberValidation}
-                                error={errors.registrationNumber?.message?.toString()}
+                                validation={dogRegNoValidation}
+                                error={errors.dogRegNo?.message?.toString()}
                                 design="outline"
                                 successMsg="올바른 등록번호입니다."
                             />

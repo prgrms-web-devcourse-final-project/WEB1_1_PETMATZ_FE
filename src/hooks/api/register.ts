@@ -1,11 +1,15 @@
 import axios from 'axios';
+import { http } from './base';
 import {
     AnimalRegistrationParams,
     AnimalRegistrationResponse,
+    DogRegistrationRequest,
+    DogRegistrationResponse,
 } from '@/types/register';
 import { useCustomToast } from '@/hooks';
 
-export default function useAnimalRegistration() {
+// 동물 등록번호 조회 api 호출
+export function useAnimalRegistration() {
     const { showToast } = useCustomToast();
     const apiKey = import.meta.env.VITE_REG_API_KEY;
 
@@ -40,4 +44,28 @@ export default function useAnimalRegistration() {
     };
 
     return { fetchAnimalRegistration };
+}
+
+// 동물 등록 api 호출
+export function useDogRegistration() {
+    const { showToast } = useCustomToast();
+
+    const registerDog = async (
+        formData: DogRegistrationRequest,
+    ): Promise<DogRegistrationResponse | null> => {
+        const response = await http.post<
+            DogRegistrationResponse,
+            DogRegistrationRequest
+        >('/api/pets/register', formData);
+
+        if (response.ok) {
+            showToast('반려견 등록이 완료되었습니다.', 'success');
+            return response;
+        } else {
+            showToast(response.error?.msg || '등록에 실패했습니다.', 'warning');
+            return null;
+        }
+    };
+
+    return { registerDog };
 }
