@@ -9,46 +9,29 @@ import Lv5 from '@/assets/images/profile/lv-5.svg?react';
 import { Label, Tag } from '@/components/profile';
 
 export default function Profile() {
-    // const { id } = useParams<{ id: string }>();
-    // const { user } = useUserStore();
+    const { id } = useParams<{ id: string }>();
+    const { user } = useUserStore();
 
-    // const userId = id || '';
-    // const isMyProfile = id === user?.id;
-    const isMyProfile = true;
+    const userId = id || '';
+    const isMyProfile = id == user?.id;
 
-    // const { data, isLoading } = useQuery<ProfileApiResponse, Error>({
-    //     queryKey: ['user', userId],
-    //     queryFn: () => getProfileInfo({ userId }),
-    // });
+    const { data, isLoading } = useQuery<ProfileApiResponse, Error>({
+        queryKey: ['user', userId],
+        queryFn: () => getProfileInfo({ userId }),
+    });
 
-    // if (isLoading) {
-    //     return <Loading />;
-    // }
+    if (isLoading || !user) {
+        return <Loading />;
+    }
 
-    // if (!data || !data.data || data.error?.status === 500) {
-    //     return <div>서버 에러</div>;
-    // } else if (data.error?.status === 400) {
-    //     return <div>존재하지 않는 사용자입니다.</div>;
-    // }
+    if (!data || !data.data || data.error?.status === 500) {
+        return <div>서버 에러</div>;
+    } else if (data.error?.status === 400) {
+        return <div>존재하지 않는 데이터입니다.</div>;
+    }
 
-    // const profileData = data.data;
-
-    const profileData = {
-        accountId: 'tjrwns2715@naver.com',
-        nickname: '쭈니',
-        profileImg: 'src/assets/images/profile/profile3.svg',
-        role: '??',
-        preferredSize: ['MEDIUM', 'LARGE'],
-        gender: 'MALE',
-        introduction:
-            'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',
-        isRegistered: true,
-        recommendationCount: 166,
-        careCompletionCount: 30,
-        isCareAvailable: true,
-        mbti: 'ESTJ',
-        region: '부산광역시',
-    };
+    const profileData = data.data;
+    const preferredSizes = profileData.preferredSize || [];
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
@@ -109,7 +92,7 @@ export default function Profile() {
                     <article className="flex flex-col gap-2">
                         <Label text="선호 애견 크기" />
                         <div className="flex gap-[10px]">
-                            {profileData.preferredSize.map((size) => (
+                            {preferredSizes.map((size, index) => (
                                 <Tag
                                     text={
                                         size === 'SMALL'
@@ -118,6 +101,7 @@ export default function Profile() {
                                               ? '중형견'
                                               : '대형견'
                                     }
+                                    index={index}
                                 />
                             ))}
                         </div>

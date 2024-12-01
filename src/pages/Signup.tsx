@@ -33,6 +33,8 @@ export default function Signup() {
         setImgName,
         loading,
         setLoading,
+        showModal,
+        setShowModal,
     } = useSignupForm();
 
     const handleBackBtn = useCallback(() => {
@@ -103,6 +105,9 @@ export default function Signup() {
                         errors={errors}
                         control={control}
                         isValid={isValid}
+                        loading={loading}
+                        showModal={showModal}
+                        setShowModal={setShowModal}
                     />
                 </form>
             </div>
