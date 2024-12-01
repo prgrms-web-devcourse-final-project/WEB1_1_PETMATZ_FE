@@ -7,10 +7,14 @@ import { useParams } from 'react-router-dom';
 import Heart from '@/assets/images/profile/heart.svg?react';
 import Lv5 from '@/assets/images/profile/lv-5.svg?react';
 import { Label, Tag } from '@/components/profile';
+import { useEffect, useState } from 'react';
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
     const { user } = useUserStore();
+    const [image, setImage] = useState(
+        '/src/assets/images/profile/profile1.svg',
+    );
 
     const userId = id || '';
     const isMyProfile = id == user?.id;
@@ -19,6 +23,17 @@ export default function Profile() {
         queryKey: ['user', userId],
         queryFn: () => getProfileInfo({ userId }),
     });
+
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+        setImage(
+            data.data.profileImg?.startsWith('profile')
+                ? `/src/assets/images/profile/${data.data.profileImg}.svg`
+                : data.data.profileImg,
+        );
+    }, [data, setImage]);
 
     if (isLoading || !user) {
         return <Loading />;
@@ -42,7 +57,7 @@ export default function Profile() {
                     <section className="flex flex-col gap-2 items-center">
                         <div className="relative w-[100px] h-[100px]">
                             <img
-                                src={profileData.profileImg}
+                                src={image}
                                 alt="프로필 이미지"
                                 className="object-cover w-full h-full rounded-full border-[1px] border-gray-200"
                             />
