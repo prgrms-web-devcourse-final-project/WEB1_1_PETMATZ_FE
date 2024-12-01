@@ -10,14 +10,15 @@ import { RegisterStep3 } from '@/components/register';
 import { RegisterStep4 } from '@/components/register';
 import { RegisterComplete } from '@/components/register';
 import { RegisterFormData } from '@/types/register';
+import { useDogRegistration } from '@/hooks/api/register';
 
 // 폼 데이터 타입 정의
 export default function Register() {
     const navigate = useFadeNavigate();
     const [step, setStep] = useState(1);
     const [imgName, setImgName] = useState('profile1');
+    const { registerDog } = useDogRegistration();
 
-    // react-hook-form 사용
     const {
         register,
         handleSubmit,
@@ -31,27 +32,27 @@ export default function Register() {
         mode: 'onChange',
         defaultValues: {
             ownerName: '',
-            registrationNumber: '',
-            dogName: '',
-            breed: '', // 품종
-            age: '',
-            favoritePlace: '',
-            gender: '',
-            neutered: false,
+            dogRegNo: '',
+            petName: '',
+            breed: '',
+            age: 1,
+            comment: '',
+            gender: undefined, //암컷, 수컷
+            neuterYn: false, // 미중성, 중성
             size: '',
-            dmbti: '',
-            dogImg: 'profile1', // 기본 이미지
+            temperament: '', // 견BTI
+            profileImg: 'profile1', // 기본 이미지
         },
     });
 
-    // Step3에서 neutered 값이 "미중성"으로 설정될 때를 처리하는 로직
+    // Step3에서 neuterYn 값이 "미중성"으로 설정될 때를 처리하는 로직
     useEffect(() => {
         if (step === 3) {
-            const currentNeutered = getValues('neutered');
-            if (currentNeutered === '미중성') {
-                setValue('neutered', false);
-            } else if (currentNeutered === '중성') {
-                setValue('neutered', true);
+            const currentneuterYn = getValues('neuterYn');
+            if (currentneuterYn === '미중성') {
+                setValue('neuterYn', false);
+            } else if (currentneuterYn === '중성') {
+                setValue('neuterYn', true);
             }
         }
     }, [step]);
@@ -71,9 +72,25 @@ export default function Register() {
         }
     };
 
-    const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
-        console.log('전체 폼 데이터:', data);
-        // 최종 제출 로직
+    const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+        // neuterYn 변환 (true -> 중성, false -> 미중성)
+        const transformneuterYn = (neuterYn: boolean): '중성' | '미중성' => {
+            return neuterYn ? '중성' : '미중성';
+        };
+
+        // ownerName을 분리하고 나머지 데이터 변환
+        const { ownerName, ...restData } = data;
+        const transformedData = {
+            ...restData,
+            neuterYn: transformneuterYn(data.neuterYn as boolean),
+        };
+
+        const response = await registerDog(transformedData);
+        if (response) {
+            setTimeout(() => {
+                setStep(5); // 성공 시 1초 후 완료 단계로 이동
+            }, 1000);
+        }
     };
 
     // 애니메이션 설정
@@ -176,10 +193,7 @@ export default function Register() {
                             variants={pageVariants}
                             transition={{ duration: 0.5 }}
                         >
-                            <RegisterStep4
-                                onNext={handleNextStep}
-                                updateFormData={getValues}
-                            />
+                            <RegisterStep4 setValue={setValue} />
                         </motion.div>
                     )}
                     {step === 5 && (
@@ -192,7 +206,7 @@ export default function Register() {
                             variants={pageVariants}
                             transition={{ duration: 0.5 }}
                         >
-                            <RegisterComplete formData={getValues()} />
+                            <RegisterComplete getValue={getValues} />
                         </motion.div>
                     )}
                 </AnimatePresence>

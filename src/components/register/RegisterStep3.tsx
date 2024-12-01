@@ -11,14 +11,15 @@ export default function RegisterStep3({
     getValue,
 }: RegisterStep3Props) {
     const dogSizeOptions = [
-        { value: 'small', label: '소형견' },
-        { value: 'medium', label: '중형견' },
-        { value: 'large', label: '대형견' },
+        { value: 'SMALL', label: '소형견' },
+        { value: 'MEDIUM', label: '중형견' },
+        { value: 'LARGE', label: '대형견' },
     ];
 
-    const neutered = watch('neutered');
+    const neuterYn = watch('neuterYn');
     const size = watch('size');
     const age = watch('age');
+    const comment = watch('comment');
 
     // 나이 validation
     const ageValidation = {
@@ -27,10 +28,26 @@ export default function RegisterStep3({
             value: /^[0-9]+$/,
             message: '숫자만 입력 가능합니다',
         },
+        validate: (value: string) => {
+            // 숫자로 변환 가능한지 확인
+            const parsedAge = parseInt(value, 10);
+            // NaN이 아니고 0보다 큰 정수인지, 30살이 넘는지 확인
+            return (
+                (!isNaN(parsedAge) && parsedAge > 0 && parsedAge <= 30) ||
+                '유효한 나이를 입력해주세요.'
+            );
+        },
+    };
+
+    const commentValidation = {
+        maxLength: {
+            value: 50,
+            message: '멍멍이 소개는 최대 50자 이하이어야 합니다!',
+        },
     };
 
     const isNextButtonDisabled =
-        !age || !size?.length || neutered === undefined;
+        !age || !size?.length || neuterYn === undefined || !!errors.comment;
 
     const handleNext = () => {
         if (getValue) {
@@ -57,7 +74,7 @@ export default function RegisterStep3({
                         {/* 중성화 여부 */}
                         <div className="flex flex-col gap-7 mb-4">
                             <CustomToggle
-                                name="neutered"
+                                name="neuterYn"
                                 label="중성화 여부"
                                 leftText="Yes"
                                 rightText="No"
@@ -71,6 +88,7 @@ export default function RegisterStep3({
                                 name="size"
                                 options={dogSizeOptions}
                                 control={control}
+                                singleSelect={true} // 단일 선택 모드
                                 rules={{
                                     required: '크기를 선택해주세요!',
                                     validate: (value: string[]) =>
@@ -86,22 +104,34 @@ export default function RegisterStep3({
                                 placeholder="나이를 연 단위로 입력해주세요 (예: 3)"
                                 register={register}
                                 watch={watch}
-                                validation={ageValidation}
+                                validation={{
+                                    required: ageValidation.required,
+                                    validate: ageValidation.validate,
+                                    valueAsNumber: true,
+                                }}
                                 error={errors.age?.message?.toString()}
                                 design="outline"
                                 successMsg=""
                             />
 
-                            {/* 선호 산책 장소 입력 */}
+                            {/* 멍멍이 소개 입력 */}
                             <CustomInput
-                                id="favoritePlace"
-                                label="선호 산책 장소"
-                                placeholder="(선택)선호 산책 장소를 입력해주세요"
+                                id="comment"
+                                label="멍멍이 소개 (최대 50글자)"
+                                type="textarea"
+                                placeholder="멍멍이 소개를 작성해주세요!"
                                 register={register}
                                 watch={watch}
+                                validation={commentValidation}
+                                error={errors.comment?.message}
                                 design="outline"
                                 successMsg=""
                             />
+                            <div className="flex justify-end">
+                                <span className="text-label-m text-gray-500">
+                                    {comment?.length || '0'}/50
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

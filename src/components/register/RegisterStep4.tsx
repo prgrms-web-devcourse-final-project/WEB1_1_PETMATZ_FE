@@ -1,164 +1,124 @@
 import { useState } from 'react';
+import { ToastAnchor } from '@/components/common';
+import { RegisterStep4Props } from '@/types/register';
+import { RadioOption } from '@/components/register';
 
-interface RegisterStep4Props {
-    onNext: () => void;
-    updateFormData: (field: string, value: string) => void;
-}
+export default function RegisterStep4({ setValue }: RegisterStep4Props) {
+    const [firstAnswer, setFirstAnswer] = useState(''); // E or I
+    const [secondAnswer, setSecondAnswer] = useState(''); // S or N
+    const [thirdAnswer, setThirdAnswer] = useState(''); // F or T
+    const [fourthAnswer, setFourthAnswer] = useState(''); // P or J
 
-export default function RegisterStep4({
-    onNext,
-    updateFormData,
-}: RegisterStep4Props) {
-    const [answers, setAnswers] = useState({
-        first: '', // E or I
-        second: '', // S or N
-        third: '', // F or T
-        fourth: '', // P or J
-    });
+    const questions = [
+        {
+            question:
+                '애견이 새로운 사람이나 애견 친구를 만나면 금방 친해지나요?',
+            name: 'dmbti_first',
+            value: firstAnswer,
+            options: [
+                { id: 'q1-yes', value: 'E', label: 'Yes' },
+                { id: 'q1-no', value: 'I', label: 'No' },
+            ],
+            setter: setFirstAnswer,
+        },
+        {
+            question:
+                '애견이 산책 중 새로운 냄새나 소리를 감지하면 바로 반응하나요?',
+            name: 'dmbti_second',
+            value: secondAnswer,
+            options: [
+                { id: 'q2-yes', value: 'S', label: 'Yes' },
+                { id: 'q2-no', value: 'N', label: 'No' },
+            ],
+            setter: setSecondAnswer,
+        },
+        {
+            question: '애견이 주인의 기분 변화에 민감하게 반응하나요?',
+            name: 'dmbti_third',
+            value: thirdAnswer,
+            options: [
+                { id: 'q3-yes', value: 'F', label: 'Yes' },
+                { id: 'q3-no', value: 'T', label: 'No' },
+            ],
+            setter: setThirdAnswer,
+        },
+        {
+            question:
+                '애견이 산책 중 우연히 발견한 것에 강한 호기심을 보이나요?',
+            name: 'dmbti_fourth',
+            value: fourthAnswer,
+            options: [
+                { id: 'q4-yes', value: 'P', label: 'Yes' },
+                { id: 'q4-no', value: 'J', label: 'No' },
+            ],
+            setter: setFourthAnswer,
+        },
+    ];
 
-    const handleAnswer = (question: string, value: string) => {
-        setAnswers((prev) => ({
-            ...prev,
-            [question]: value,
-        }));
+    const handleNext = () => {
+        const dmbti = `${firstAnswer}${secondAnswer}${thirdAnswer}${fourthAnswer}`;
+        setValue('temperament', dmbti);
     };
 
-    const handleSubmit = () => {
-        // DMBTI 계산
-        const dmbti = `${answers.first}${answers.second}${answers.third}${answers.fourth}`;
-        updateFormData('dmbti', dmbti); // 상태 업데이트
-        onNext(); // 다음 단계로 이동
-    };
+    const isNextButtonDisabled =
+        !firstAnswer || !secondAnswer || !thirdAnswer || !fourthAnswer;
 
     return (
-        <div>
-            <p className="text-lg py-4 font-extrabold">
-                애견의 성향을 입력해주세요.
-            </p>
+        <div className="flex flex-col justify-between h-full">
+            <div className="w-full bg-white h-1">
+                <div className="bg-point-400 h-1 w-[100%]"></div>
+            </div>
 
-            {/* Question 1 */}
-            <div className="mb-4">
-                <p>새로운 사람이나 애견 친구를 만나면 금방 친해지나요?</p>
-                <div className="flex gap-4">
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.first === 'E'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('first', 'E')}
-                    >
-                        예 (E)
-                    </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.first === 'I'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('first', 'I')}
-                    >
-                        아니오 (I)
-                    </button>
+            <section className="flex flex-col w-full flex-1">
+                <div className="bg-white pt-6 pb-12 flex flex-col">
+                    <div className="w-full max-w-[600px] px-6 mx-auto">
+                        <h1 className="mb-12 text-title-s text-gray-800 font-extrabold">
+                            마지막으로
+                            <br />
+                            멍멍이 성향 정보가 필요해요!
+                        </h1>
+
+                        <div className="flex flex-col gap-7">
+                            {questions.map((q) => (
+                                <div
+                                    key={q.name}
+                                    className="flex flex-col gap-2"
+                                >
+                                    <p className="text-gray-800">
+                                        {q.question}
+                                    </p>
+                                    <div className="flex flex-wrap">
+                                        {q.options.map((option) => (
+                                            <RadioOption
+                                                key={option.id}
+                                                id={option.id}
+                                                value={option.value}
+                                                name={q.name}
+                                                currentValue={q.value}
+                                                label={option.label}
+                                                onSelect={q.setter}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            {/* Question 2 */}
-            <div className="mb-4">
-                <p>산책 중 새로운 냄새를 맡으면 바로 반응하나요?</p>
-                <div className="flex gap-4">
+            <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto">
+                <ToastAnchor>
                     <button
-                        className={`px-4 py-2 rounded ${
-                            answers.second === 'S'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('second', 'S')}
+                        type="submit"
+                        className="btn-solid w-full"
+                        onClick={handleNext}
+                        disabled={isNextButtonDisabled}
                     >
-                        예 (S)
+                        다음
                     </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.second === 'N'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('second', 'N')}
-                    >
-                        아니오 (N)
-                    </button>
-                </div>
-            </div>
-
-            {/* Question 3 */}
-            <div className="mb-4">
-                <p>애견이 주인의 기분 변화에 민감하게 반응하나요?</p>
-                <div className="flex gap-4">
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.third === 'F'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('third', 'F')}
-                    >
-                        예 (F)
-                    </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.third === 'T'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('third', 'T')}
-                    >
-                        아니오 (T)
-                    </button>
-                </div>
-            </div>
-
-            {/* Question 4 */}
-            <div className="mb-4">
-                <p>애견이 산책 중 우연히 발견한 것에 강한 호기심을 보이나요?</p>
-                <div className="flex gap-4">
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.fourth === 'P'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('fourth', 'P')}
-                    >
-                        예 (P)
-                    </button>
-                    <button
-                        className={`px-4 py-2 rounded ${
-                            answers.fourth === 'J'
-                                ? 'bg-point-500 text-white'
-                                : 'bg-gray-200 text-gray-500'
-                        }`}
-                        onClick={() => handleAnswer('fourth', 'J')}
-                    >
-                        아니오 (J)
-                    </button>
-                </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="fixed py-2.5 bottom-0 w-full left-0 px-4">
-                <button
-                    className="btn-solid bg-point-500 w-full py-2 text-white"
-                    onClick={handleSubmit}
-                    disabled={
-                        !answers.first ||
-                        !answers.second ||
-                        !answers.third ||
-                        !answers.fourth
-                    } // 모든 질문에 응답해야 활성화
-                >
-                    DMBTI 완료
-                </button>
-            </div>
+                </ToastAnchor>
+            </footer>
         </div>
     );
 }

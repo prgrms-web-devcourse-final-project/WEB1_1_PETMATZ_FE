@@ -11,7 +11,7 @@ export default function RegisterStep2({
     setImgName,
 }: RegisterStep2Props) {
     const handleNext = () => {
-        setValue('dogImg', imgName);
+        setValue('profileImg', imgName);
         // console.log(getValue());
 
         onNext();
@@ -50,7 +50,7 @@ export default function RegisterStep2({
                             <input
                                 type="text"
                                 className="input-outline bg-gray-200"
-                                value={watch('dogName')}
+                                value={watch('petName')}
                                 disabled
                             />
                         </div>
