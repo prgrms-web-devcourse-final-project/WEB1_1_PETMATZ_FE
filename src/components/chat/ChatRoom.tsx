@@ -1,4 +1,5 @@
 import { useFadeNavigate } from '@/hooks';
+import { useChatStore } from '@/stores';
 import { IChatRoom } from '@/types/chat';
 import { getDefaultProfileImg, utcToCustomDateTime } from '@/utils';
 import { useState } from 'react';
@@ -14,6 +15,7 @@ export default function ChatRoom({
     swipedRoom,
     setSwipedRoom,
 }: ChatRoomProps) {
+    const { setSelectedUserEmail } = useChatStore();
     const [startX, setStartX] = useState<number | null>(null);
     const [dragDistance, setDragDistance] = useState<number>(0); // 드래그 거리 추적
     const navigate = useFadeNavigate();
@@ -48,36 +50,37 @@ export default function ChatRoom({
         setStartX(null); // 드래그 종료
     };
 
-    const handleClick = () => {
+    const handleClick = (email: string) => {
         if (Math.abs(dragDistance) < 10) {
             // 드래그 거리 10px 미만일 때만 클릭 동작 수행
-            navigate(`/chat/${chatRoom._id}`);
+            setSelectedUserEmail(email);
+            navigate(`/chat/${chatRoom.chatRoomId}`);
         }
     };
 
     return (
         <div
-            key={chatRoom._id}
+            key={chatRoom.chatRoomId}
             className="relative flex items-center w-full overflow-hidden hover:bg-point-50 active:bg-point-50 min-h-[72px]"
             onTouchStart={(e) => handleDragStart(e)}
-            onTouchMove={(e) => handleDragMove(e, chatRoom._id)}
+            onTouchMove={(e) => handleDragMove(e, chatRoom.chatRoomId)}
             onTouchEnd={handleDragEnd}
             onMouseDown={(e) => handleDragStart(e)}
-            onMouseMove={(e) => handleDragMove(e, chatRoom._id)}
+            onMouseMove={(e) => handleDragMove(e, chatRoom.chatRoomId)}
             onMouseUp={handleDragEnd}
             onMouseLeave={handleDragEnd} // 마우스가 벗어날 때도 드래그 종료
-            onClick={handleClick} // 클릭 이벤트 처리
+            onClick={() => handleClick(chatRoom.other.userEmail)} // 클릭 이벤트 처리
         >
             {/* 나가기 버튼 */}
             <button
                 className={`absolute right-0 top-0 bottom-0 w-20 rounded-tl-2xl h-[71px] rounded-bl-2xl bg-warning-300 hover:bg-warning-400 active:bg-warning-400 text-white font-bold transition-transform ${
-                    swipedRoom === chatRoom._id
+                    swipedRoom === chatRoom.chatRoomId
                         ? 'translate-x-0'
                         : 'translate-x-full'
                 }`}
                 onClick={(e) => {
                     e.stopPropagation();
-                    console.log(`채팅방 ${chatRoom._id} 나가기`);
+                    console.log(`채팅방 ${chatRoom.chatRoomId} 나가기`);
                 }}
             >
                 나가기
@@ -87,11 +90,13 @@ export default function ChatRoom({
             <div className="flex items-center py-[10px] px-[24px] gap-[10px] cursor-pointer w-full min-w-[360px]">
                 <img
                     className="w-[52px] h-[52px] border-[0.5px] border-gray-200 rounded-full"
-                    src={getDefaultProfileImg(chatRoom.other.profileImgUrl)}
+                    src={getDefaultProfileImg(
+                        chatRoom.other.profileURL || 'profile1',
+                    )}
                 />
                 <div className="flex flex-col flex-1 truncate">
                     <span className="text-body-s font-extrabold text-point-900">
-                        {chatRoom.other.nickname}
+                        {chatRoom.other.userName}
                     </span>
                     <span className="text-label-m text-gray-500 truncate">
                         {chatRoom.lastMessage}

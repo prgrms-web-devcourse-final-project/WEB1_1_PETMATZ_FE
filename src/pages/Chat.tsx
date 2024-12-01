@@ -1,43 +1,58 @@
 import { ChatRoom, NonChatRoom } from '@/components/chat';
-import { useChatStore, useTitleStore } from '@/stores';
+import { useChatStore, useTitleStore, useUserStore } from '@/stores';
 import { useEffect, useState } from 'react';
 
 export default function Chat() {
     const [swipedRoom, setSwipedRoom] = useState<number | null>(null);
     const { setTitle } = useTitleStore();
+    const { user } = useUserStore();
+    const [other, setOther] = useState<string>('');
 
     const {
-        fetchChatRoomList,
-        subToChatRoomList,
-        unSubFromChatRoomList,
         chatRoomList,
+        fetchChatRoomList,
+        unSubFromChatRoomList,
+        createChatRoom,
     } = useChatStore();
 
-    // 채팅방 리스트 가져오기 및 소켓 연결
-    useEffect(() => {
-        // 채팅방 리스트 가져오기
-        fetchChatRoomList();
+    const onClickCreateChatRoomBtn = async () => {
+        if (user) {
+            if (other.trim() === '') return;
 
-        // 모든 채팅방 소켓 연결
-        subToChatRoomList();
+            await createChatRoom(user.accountId, other);
+        }
+    };
+
+    useEffect(() => {
+        fetchChatRoomList();
+        setTitle('채팅');
 
         return () => {
-            // 페이지 언마운트 시 소켓 연결&구독 해제
             unSubFromChatRoomList();
         };
-    }, []);
-
-    useEffect(() => {
-        setTitle('채팅');
     }, []);
 
     return (
         <main className="flex flex-col h-full overflow-hidden bg-gray-100">
             <div className="flex flex-col h-full overflow-y-auto">
+                <div className="flex flex-col items-center justify-center gap-[16px] p-4">
+                    <input
+                        className="input-outline"
+                        value={other}
+                        onChange={(e) => setOther(e.target.value)}
+                        placeholder="상대방 email"
+                    />
+                    <button
+                        className="btn-solid"
+                        onClick={onClickCreateChatRoomBtn}
+                    >
+                        채팅방 생성
+                    </button>
+                </div>
                 {chatRoomList.length > 0 ? (
                     chatRoomList.map((chatRoom) => (
                         <ChatRoom
-                            key={chatRoom._id}
+                            key={chatRoom.chatRoomId}
                             chatRoom={chatRoom}
                             swipedRoom={swipedRoom}
                             setSwipedRoom={setSwipedRoom}

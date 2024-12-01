@@ -12,7 +12,7 @@ import { http } from './base';
  * 채팅방 리스트와 정보를 가져옵니다.
  */
 export const getChatRoomList = async (): Promise<ChatRoomListApiResponse> =>
-    await http.get<ChatRoomListApiResponse>('/match');
+    await http.get<ChatRoomListApiResponse>('/api/v1/match');
 
 /**
  * POST	ChatRoom	Create
@@ -20,10 +20,11 @@ export const getChatRoomList = async (): Promise<ChatRoomListApiResponse> =>
  */
 export const createChatRoom = async ({
     entrustedEmail,
+    caregiverEmail,
 }: ChatRoomCreateApiRequest): Promise<ChatRoomCreateApiResponse> =>
     await http.post<ChatRoomCreateApiResponse, ChatRoomCreateApiRequest>(
-        '/match',
-        { entrustedEmail },
+        '/api/v1/match',
+        { entrustedEmail, caregiverEmail },
     );
 
 /**
@@ -31,12 +32,13 @@ export const createChatRoom = async ({
  * 채팅 상세 내역을 가져옵니다.
  */
 export const getChatMessageList = async ({
+    receiverEmail,
     chatRoomId,
     pageSize,
     startPage,
     lastTimeStamp,
 }: ChatMessageListApiRequest): Promise<ChatMessageListApiResponse> =>
     await http.get<ChatMessageListApiResponse, ChatMessageListApiRequest>(
-        '/chat/message',
-        { chatRoomId, pageSize, startPage, lastTimeStamp },
+        '/api/v1/chat/message',
+        { receiverEmail, chatRoomId, pageSize, startPage, lastTimeStamp },
     );
