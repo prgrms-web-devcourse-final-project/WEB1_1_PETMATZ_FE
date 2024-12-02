@@ -1,13 +1,9 @@
-import { useFadeNavigate } from '@/hooks';
-import {
-    createChatRoom,
-    getChatMessageList,
-    getChatRoomList,
-} from '@/hooks/api/chat';
-import { IChatMessage, IChatRoom, IPub } from '@/types/chat';
+import { getChatMessageList, getChatRoomList } from '@/hooks/api/chat';
+import { IChatMessage, IChatRoom } from '@/types/chat';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { create } from 'zustand';
+import useUserStore from './useUserStore';
 
 interface ChatStore {
     // 상태
@@ -16,14 +12,13 @@ interface ChatStore {
     curRoomInfo: Pick<IChatRoom, 'chatRoomId' | 'other'> | null;
     connectedClient: Client | null;
     firstFetchedTimestamp: string | null;
-    selectedUserEmail: string | null;
-    setSelectedUserEmail: (email: string) => void;
+    subscriptionId: string | null;
 
-    // 채팅방 생성
-    createChatRoom: (
-        caregiverEmail: string,
-        entrustedEmail: string,
-    ) => Promise<void>;
+    isNewMsg: boolean;
+    setIsNewMsg: (state: boolean) => void;
+
+    morePage: boolean;
+    setMorePage: (state: boolean) => void;
 
     // 채팅방 리스트
     fetchChatRoomList: () => Promise<void>;
@@ -32,9 +27,9 @@ interface ChatStore {
 
     // 특정 채팅방
     fetchChatMessageList: (
-        receiverEmail: string,
         chatRoomId: number,
         page?: number,
+        lastFetchTimeStamp?: string,
     ) => Promise<void>;
     subToChatRoom: (chatRoomId: number) => void;
     unSubFromChatRoom: () => void;
@@ -53,32 +48,22 @@ interface ChatStore {
 const STOMP_CONNECT_URL = import.meta.env.VITE_STOMP_CONNECT_URL as string;
 
 const useChatStore = create<ChatStore>((set, get) => ({
+    isNewMsg: true,
     chatRoomList: [],
     messageList: [],
     curRoomInfo: null,
     connectedClient: null,
     firstFetchedTimestamp: null,
-    selectedUserEmail: null,
+    morePage: true,
+    subscriptionId: null,
 
-    // 선택된 유저 설정
-    setSelectedUserEmail: (email) => {
-        set({ selectedUserEmail: email });
+    setIsNewMsg: (state) => {
+        set({ isNewMsg: state });
     },
 
-    // 채팅방 생성
-    createChatRoom: async (caregiverEmail, entrustedEmail) => {
-        const { ok } = await createChatRoom({
-            caregiverEmail,
-            entrustedEmail,
-        });
-        // const navigate = useFadeNavigate();
-
-        if (!ok) {
-            console.error('채팅방 생성에 실패했습니다.');
-            return;
-        }
-
-        // navigate(`/chat/${data.result}`);
+    // 다음 페칭 페이지 상태 초기화
+    setMorePage: (state: boolean) => {
+        set({ morePage: state });
     },
 
     // 채팅방 리스트 가져오기
@@ -115,18 +100,21 @@ const useChatStore = create<ChatStore>((set, get) => ({
                     `/topic/chat/${room.chatRoomId}`,
                     (message) => {
                         const newMsg: IChatMessage = JSON.parse(message.body);
-
-                        set((state) => ({
-                            chatRoomList: state.chatRoomList.map((chatRoom) =>
-                                chatRoom.chatRoomId === room.chatRoomId
-                                    ? {
-                                          ...chatRoom,
-                                          lastMessage: newMsg.msg,
-                                          unreadCount: chatRoom.unreadCount + 1,
-                                      }
-                                    : chatRoom,
-                            ),
-                        }));
+                        if (newMsg.msg_type) {
+                            set((state) => ({
+                                chatRoomList: state.chatRoomList.map(
+                                    (chatRoom) =>
+                                        chatRoom.chatRoomId === room.chatRoomId
+                                            ? {
+                                                  ...chatRoom,
+                                                  lastMessage: newMsg.msg,
+                                                  unreadCount:
+                                                      chatRoom.unreadCount + 1,
+                                              }
+                                            : chatRoom,
+                                ),
+                            }));
+                        }
                     },
                 );
             });
@@ -144,14 +132,20 @@ const useChatStore = create<ChatStore>((set, get) => ({
     },
 
     // 특정 채팅방 메시지 가져오기(상세 페이지)
-    fetchChatMessageList: async (receiverEmail, chatRoomId, page) => {
+    fetchChatMessageList: async (chatRoomId, page) => {
         const { firstFetchedTimestamp } = get();
+
+        const fetchTimestamp = new Date().toISOString().replace('Z', '');
+
+        if (!get().firstFetchedTimestamp) {
+            set({ firstFetchedTimestamp: fetchTimestamp });
+        }
+
         const { ok, data } = await getChatMessageList({
             chatRoomId,
-            receiverEmail,
             pageSize: 15,
             startPage: page || 1,
-            lastTimeStamp: firstFetchedTimestamp || undefined,
+            lastFetchTimestamp: firstFetchedTimestamp || fetchTimestamp,
         });
 
         if (!ok) {
@@ -159,25 +153,18 @@ const useChatStore = create<ChatStore>((set, get) => ({
             return;
         }
 
-        console.log(data.result.chatMessage);
+        const reversed = data.result.chatMessage.reverse();
 
         set((state) => ({
-            messageList: [...data.result.chatMessage, ...state.messageList],
+            messageList: [...reversed, ...state.messageList],
             curRoomInfo: {
                 chatRoomId: data.result._id,
                 other: data.result.other,
             },
-            firstFetchedTimestamp:
-                state.firstFetchedTimestamp ||
-                (data.result.chatMessage.length > 0
-                    ? data.result.chatMessage[
-                          data.result.chatMessage.length - 1
-                      ]?.msgTimestamp
-                    : null),
+            morePage: reversed.length < 15 ? false : true,
         }));
 
         get().subToChatRoom(chatRoomId);
-        console.log(get().messageList);
     },
 
     // 특정 채팅방 구독
@@ -195,38 +182,45 @@ const useChatStore = create<ChatStore>((set, get) => ({
         client.onConnect = () => {
             console.log('소켓 연결 성공');
             // 메시지 수신 구독
-            client.subscribe(`/topic/chat/${chatRoomId}`, (message) => {
-                const newMsg: IPub = JSON.parse(message.body);
-                console.log(newMsg);
-                set((state) => ({
-                    messageList: [
-                        ...state.messageList,
-                        {
-                            msgTimestamp: newMsg.msgTimestamp,
-                            readStatus: newMsg.readStatus,
-                            msg_type: newMsg.msg_type,
-                            msg: newMsg.msg,
-                            senderId: newMsg.senderEmail,
-                            receiverId: newMsg.receiverEmail,
-                        },
-                    ],
-                }));
-            });
+            const subscription = client.subscribe(
+                `/topic/chat/${chatRoomId}`,
+                (message) => {
+                    const newMsg = JSON.parse(message.body);
 
-            // 읽음 처리 구독
-            client.subscribe(`/topic/chat/${chatRoomId}/read`, (message) => {
-                const readInfo = JSON.parse(message.body);
+                    if (newMsg.msg_type) {
+                        set((state) => ({
+                            messageList: [
+                                ...state.messageList,
+                                {
+                                    msgTimestamp: newMsg.msgTimestamp,
+                                    readStatus: newMsg.readStatus,
+                                    msg_type: newMsg.msg_type,
+                                    msg: newMsg.msg,
+                                    senderId: newMsg.senderEmail,
+                                    receiverId: newMsg.receiverEmail,
+                                },
+                            ],
+                            isNewMsg: true,
+                        }));
+                    } else {
+                        set((state) => ({
+                            messageList: state.messageList.map((msg) =>
+                                msg.receiverId === newMsg.senderId
+                                    ? { ...msg, readStatus: true }
+                                    : msg,
+                            ),
+                        }));
+                    }
 
-                console.log(readInfo);
+                    set({ subscriptionId: subscription.id });
+                },
+            );
 
-                set((state) => ({
-                    messageList: state.messageList.map((msg) =>
-                        msg.receiverId === readInfo.senderId
-                            ? { ...msg, readStatus: true }
-                            : msg,
-                    ),
-                }));
-            });
+            const { user } = useUserStore.getState();
+            if (user) {
+                get().markMsgAsRead(chatRoomId, user.accountId);
+                set({ isNewMsg: false });
+            }
         };
 
         client.activate();
@@ -236,9 +230,26 @@ const useChatStore = create<ChatStore>((set, get) => ({
     // 특정 채팅방 구독 해제
     unSubFromChatRoom: () => {
         const client = get().connectedClient;
-        if (client) client.deactivate();
+        const subscriptionId = get().subscriptionId;
+        const curRoomInfo = get().curRoomInfo;
 
-        set({ curRoomInfo: null, connectedClient: null, messageList: [] });
+        if (client) {
+            const { user } = useUserStore.getState();
+            if (subscriptionId) client.unsubscribe(subscriptionId);
+            if (curRoomInfo && user) {
+                client.unsubscribe(
+                    `/topic/chat/${curRoomInfo.chatRoomId}/${user.accountId}`,
+                );
+            }
+            client.deactivate();
+        }
+
+        set({
+            curRoomInfo: null,
+            connectedClient: null,
+            messageList: [],
+            subscriptionId: null,
+        });
     },
 
     // 메시지 전송
