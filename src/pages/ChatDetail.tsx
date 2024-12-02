@@ -6,77 +6,168 @@ import {
 } from '@/components/chat-detail';
 import { useChatStore } from '@/stores';
 import useUserStore from '@/stores/useUserStore';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export default function ChatDetail() {
     const { chatRoomId } = useParams();
+    const { user } = useUserStore();
     const {
+        isNewMsg,
+        setIsNewMsg,
+        morePage,
+        setMorePage,
         curRoomInfo,
         messageList,
         fetchChatMessageList,
         unSubFromChatRoom,
-        subToChatRoom,
         markMsgAsRead,
-        isLoading,
-        hasMore,
+        connectedClient,
     } = useChatStore();
+    const isFirstFetch = useRef(true);
+    // 무한 스크롤 trigger Ref
+    const scrollTriggerRef = useRef<HTMLDivElement | null>(null);
+    // 읽음 처리 trigger Ref
+    const readTriggerRef = useRef<HTMLDivElement | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+    const previousScrollHeight = useRef<number | null>(null);
+    const [page, setPage] = useState(1);
+    const [isScroll, setIsScroll] = useState(false);
 
-    const observerRef = useRef<IntersectionObserver | null>(null);
-    const triggerRef = useRef<HTMLDivElement | null>(null);
-    const pageRef = useRef(1);
-    const { user } = useUserStore();
-
-    // 메시지 가져오기 및 소켓 연결
+    // 메시지 로드 및 읽음 처리 초기화
     useEffect(() => {
-        if (chatRoomId) {
-            // 첫 페이지 메시지 가져오기
-            fetchChatMessageList(Number(chatRoomId), pageRef.current);
+        if (chatRoomId && user && isFirstFetch.current) {
+            fetchChatMessageList(Number(chatRoomId), page, undefined); // 첫 페이지 메시지 가져오기
+            isFirstFetch.current = false;
+            setPage((prev) => prev + 1);
 
-            // 소켓 연결
-            subToChatRoom(Number(chatRoomId));
+            markMsgAsRead(Number(chatRoomId), user.accountId);
+        }
 
-            // 읽음 처리
-            markMsgAsRead(Number(chatRoomId), user?.accountId || '');
+        const handleBeforeUnload = () => unSubFromChatRoom();
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            unSubFromChatRoom();
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            setMorePage(true);
+        };
+    }, [chatRoomId, user]);
+
+    // 스크롤 이동 처리
+    useEffect(() => {
+        if (
+            scrollContainerRef.current &&
+            readTriggerRef.current &&
+            messageList.length > 0 &&
+            !isScroll &&
+            isNewMsg
+        ) {
+            const targetPosition =
+                readTriggerRef.current.offsetTop +
+                readTriggerRef.current.offsetHeight;
+
+            setIsScroll(true);
+            scrollContainerRef.current.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth',
+            });
+            setIsScroll(false);
+        }
+    }, [messageList, isNewMsg]);
+
+    // 읽음 처리 트리거
+    useEffect(() => {
+        const handleIntersect: IntersectionObserverCallback = (entries) => {
+            const entry = entries[0];
+            if (
+                entry.isIntersecting &&
+                user &&
+                isNewMsg &&
+                connectedClient?.connected
+            ) {
+                markMsgAsRead(Number(chatRoomId), user.accountId);
+                setIsNewMsg(false);
+            }
+        };
+
+        const observer = new IntersectionObserver(handleIntersect, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 1.0,
+        });
+
+        if (readTriggerRef.current) {
+            observer.observe(readTriggerRef.current);
         }
 
         return () => {
-            // 페이지 언마운트 시 솤멧 연결&구독 해제
-            unSubFromChatRoom();
+            if (readTriggerRef.current)
+                observer.unobserve(readTriggerRef.current);
+            observer.disconnect();
         };
-    }, [chatRoomId]);
+    }, [chatRoomId, user, isNewMsg, connectedClient]);
 
-    // 무한 스크롤 트리거
+    // 무한 스크롤 처리
     useEffect(() => {
-        if (!triggerRef.current) return;
+        const handleIntersect: IntersectionObserverCallback = async (
+            entries,
+        ) => {
+            const entry = entries[0];
+            if (
+                entry.isIntersecting &&
+                chatRoomId &&
+                user &&
+                morePage &&
+                scrollContainerRef.current
+            ) {
+                // 스크롤 높이 저장
+                previousScrollHeight.current =
+                    scrollContainerRef.current.scrollHeight;
 
-        observerRef.current = new IntersectionObserver(
-            (entries) => {
-                const traget = entries[0];
-                if (
-                    traget.isIntersecting &&
-                    hasMore &&
-                    !isLoading &&
-                    chatRoomId
-                ) {
-                    pageRef.current += 1;
-                    fetchChatMessageList(Number(chatRoomId), pageRef.current);
+                await fetchChatMessageList(Number(chatRoomId), page);
+
+                // 페이지 증가
+                setPage((prev) => prev + 1);
+
+                // 스크롤 위치 복원
+                if (previousScrollHeight.current) {
+                    const newScrollHeight =
+                        scrollContainerRef.current.scrollHeight;
+                    const heightDiff =
+                        newScrollHeight - previousScrollHeight.current;
+
+                    scrollContainerRef.current.scrollTop += heightDiff;
                 }
-            },
-            { root: null, rootMargin: '0px', threshold: 0.1 },
-        );
+            }
+        };
 
-        observerRef.current.observe(triggerRef.current);
+        const observer = new IntersectionObserver(handleIntersect, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 1.0,
+        });
+
+        if (scrollTriggerRef.current) {
+            observer.observe(scrollTriggerRef.current);
+        }
 
         return () => {
-            observerRef.current?.disconnect();
+            if (scrollTriggerRef.current)
+                observer.unobserve(scrollTriggerRef.current);
+            observer.disconnect();
         };
-    }, [triggerRef, hasMore, isLoading, messageList]);
+    }, [chatRoomId, user, morePage, page]);
 
     return (
         <div className="flex flex-col h-full overflow-hidden bg-gray-100">
             <ChatDetailTitle />
-            <main className="flex flex-col h-full overflow-y-auto px-[24px] py-[16px] gap-[16px]">
+            <main
+                ref={scrollContainerRef}
+                className="flex flex-col h-full overflow-y-auto px-[24px] py-[16px] gap-[16px]"
+            >
+                <div ref={scrollTriggerRef} className="h-[0.5px]" />
                 {messageList.length > 0 && curRoomInfo
                     ? messageList.map((message, idx) =>
                           message.senderId !== user?.accountId ? (
@@ -94,6 +185,7 @@ export default function ChatDetail() {
                           ),
                       )
                     : null}
+                <div className="h-[0.5px]" ref={readTriggerRef} />
             </main>
             <ChatBottom />
         </div>

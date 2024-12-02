@@ -24,12 +24,12 @@ export default function ChatDetailTitle() {
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
                                 src={getDefaultProfileImg(
-                                    curRoomInfo.other.profileImgUrl,
+                                    curRoomInfo.other.profileURL || 'profile1',
                                 )}
-                                alt={`${curRoomInfo.other.nickname}님의 프로필 이미지`}
+                                alt={`${curRoomInfo.other.userName}님의 프로필 이미지`}
                             />
                             <span className="text-point-900 text-label-l font-extrabold">
-                                {curRoomInfo.other.nickname}
+                                {curRoomInfo.other.userName}
                             </span>
                         </div>
                         <MenuBugerIcon className="text-point-900 w-[24px] h-[24px]" />
