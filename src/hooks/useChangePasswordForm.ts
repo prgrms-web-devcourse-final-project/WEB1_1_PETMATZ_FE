@@ -28,11 +28,13 @@ export default function useChangePasswordForm() {
         mode: 'onChange',
     });
     const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     /**
      * Handles form submission
      */
     const onSubmit = async (data: ChangePasswordInputs) => {
+        setLoading(true);
         const { currentPassword, newPassword } = data;
         await postNewPassword({ currentPassword, newPassword }).then(
             (response) => {
@@ -41,6 +43,7 @@ export default function useChangePasswordForm() {
                 }
             },
         );
+        setLoading(false);
     };
 
     /**
@@ -97,5 +100,6 @@ export default function useChangePasswordForm() {
         onSubmit,
         isValid,
         success,
+        loading,
     };
 }
