@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { postNewPassword } from './api/password';
 
 /**
  * ChangePassword form input type
@@ -31,10 +32,15 @@ export default function useChangePasswordForm() {
     /**
      * Handles form submission
      */
-    const onSubmit = (data: ChangePasswordInputs) => {
-        console.log(data);
-        // 여기에 로직을 구현하세요
-        setSuccess(true);
+    const onSubmit = async (data: ChangePasswordInputs) => {
+        const { currentPassword, newPassword } = data;
+        await postNewPassword({ currentPassword, newPassword }).then(
+            (response) => {
+                if (response.ok) {
+                    setSuccess(true);
+                }
+            },
+        );
     };
 
     /**
