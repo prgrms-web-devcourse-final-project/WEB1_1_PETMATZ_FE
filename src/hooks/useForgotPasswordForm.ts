@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { postTemporaryPassword } from './api/password';
+import useFadeNavigate from './useFadeNavigate';
 
 /**
  * ForgotPassword form input type
@@ -23,14 +25,21 @@ export default function useForgotPasswordForm() {
         mode: 'onChange',
     });
     const [success, setSuccess] = useState(false);
+    const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
-    const onSubmit = (data: ForgotPasswordInputs) => {
-        console.log(data);
-        // 여기에 로그인 로직을 구현하세요
-        setSuccess(true);
+    const onSubmit = async (data: ForgotPasswordInputs) => {
+        const accountId = data.email;
+        await postTemporaryPassword({ accountId }).then((response) => {
+            if (response.ok) {
+                setSuccess(true);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
+            }
+        });
     };
 
     /**
