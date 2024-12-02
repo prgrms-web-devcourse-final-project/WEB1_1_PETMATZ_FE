@@ -15,7 +15,6 @@ export default function ChatRoom({
     swipedRoom,
     setSwipedRoom,
 }: ChatRoomProps) {
-    const { setSelectedUserEmail } = useChatStore();
     const [startX, setStartX] = useState<number | null>(null);
     const [dragDistance, setDragDistance] = useState<number>(0); // 드래그 거리 추적
     const navigate = useFadeNavigate();
@@ -50,10 +49,9 @@ export default function ChatRoom({
         setStartX(null); // 드래그 종료
     };
 
-    const handleClick = (email: string) => {
+    const handleClick = () => {
         if (Math.abs(dragDistance) < 10) {
             // 드래그 거리 10px 미만일 때만 클릭 동작 수행
-            setSelectedUserEmail(email);
             navigate(`/chat/${chatRoom.chatRoomId}`);
         }
     };
@@ -69,7 +67,7 @@ export default function ChatRoom({
             onMouseMove={(e) => handleDragMove(e, chatRoom.chatRoomId)}
             onMouseUp={handleDragEnd}
             onMouseLeave={handleDragEnd} // 마우스가 벗어날 때도 드래그 종료
-            onClick={() => handleClick(chatRoom.other.userEmail)} // 클릭 이벤트 처리
+            onClick={handleClick} // 클릭 이벤트 처리
         >
             {/* 나가기 버튼 */}
             <button

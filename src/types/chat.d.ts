@@ -53,11 +53,10 @@ interface ChatRoomListApiResponse extends BaseApiResponse {
 
 //	GET	MessageList
 interface ChatMessageListApiRequest {
-    receiverEmail: string;
     chatRoomId: number;
     pageSize?: number;
     startPage?: number;
-    lastTimeStamp?: string;
+    lastFetchTimestamp?: string;
 }
 interface ChatMessageListApiResponse extends BaseApiResponse {
     data: {

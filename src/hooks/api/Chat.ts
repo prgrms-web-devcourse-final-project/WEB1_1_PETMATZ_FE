@@ -32,13 +32,12 @@ export const createChatRoom = async ({
  * 채팅 상세 내역을 가져옵니다.
  */
 export const getChatMessageList = async ({
-    receiverEmail,
     chatRoomId,
     pageSize,
     startPage,
-    lastTimeStamp,
+    lastFetchTimestamp,
 }: ChatMessageListApiRequest): Promise<ChatMessageListApiResponse> =>
     await http.get<ChatMessageListApiResponse, ChatMessageListApiRequest>(
         '/api/v1/chat/message',
-        { receiverEmail, chatRoomId, pageSize, startPage, lastTimeStamp },
+        { chatRoomId, pageSize, startPage, lastFetchTimestamp },
     );

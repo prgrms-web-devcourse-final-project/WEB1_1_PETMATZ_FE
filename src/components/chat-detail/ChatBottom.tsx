@@ -29,7 +29,10 @@ export default function ChatBottom() {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            handleOnSend();
+
+            if (message.trim()) {
+                handleOnSend();
+            }
         }
     };
 
