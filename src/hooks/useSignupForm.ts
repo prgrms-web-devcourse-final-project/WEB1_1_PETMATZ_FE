@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
 import { postSignup } from './api/signup';
+import useCustomToast from './useCustomToast';
 
 /**
  * Signup form types
@@ -120,12 +121,17 @@ export default function useSignupForm() {
     const [success, setSuccess] = useState(false);
     const [imgName, setImgName] = useState('profile1');
     const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
     const onSubmit = async (data: SignUpInputs) => {
+        if (isToastActive()) {
+            return;
+        }
         setLoading(true);
         console.log(data);
         // 여기에 로그인 로직을 구현하세요
@@ -164,11 +170,14 @@ export default function useSignupForm() {
             profileImg,
         }).then((response) => {
             console.log(response);
+            setShowModal(false);
             if (response.ok) {
                 setSuccess(true);
                 setTimeout(() => {
                     navigate('/login');
                 }, 3000);
+            } else {
+                showToast('서버 연결 문제가 발생했습니다!', 'warning');
             }
         });
         setLoading(false);
@@ -270,5 +279,7 @@ export default function useSignupForm() {
         setImgName,
         loading,
         setLoading,
+        showModal,
+        setShowModal,
     };
 }

@@ -6,10 +6,15 @@ import {
     UseFormRegister,
     UseFormWatch,
 } from 'react-hook-form';
-import { CustomToggle, MultiSelectTag, SelectBox } from '../common';
+import {
+    CustomToggle,
+    MultiSelectTag,
+    SelectBox,
+    ToastAnchor,
+} from '../common';
 import { useSelectBox } from '@/hooks';
 import { Option } from '@/hooks/useSelectBox';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import Check from '@/assets/images/forgot-password/check.svg?react';
 
@@ -20,6 +25,9 @@ interface FourthStepPropsType {
     errors: FieldErrors<SignUpInputs>;
     control: Control<SignUpInputs, any>;
     isValid: boolean;
+    loading: boolean;
+    showModal: boolean;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function FourthStep({
@@ -29,6 +37,9 @@ export default function FourthStep({
     errors,
     control,
     isValid,
+    loading,
+    showModal,
+    setShowModal,
 }: FourthStepPropsType) {
     // 강아지 크기 옵션 정의
     const dogSizeOptions = [
@@ -64,8 +75,6 @@ export default function FourthStep({
         selectedOption,
         selectBoxRef,
     } = useSelectBox(options);
-
-    const [showModal, setShowModal] = useState(false);
 
     const handleNextBtn = useCallback(() => {
         setShowModal(true);
@@ -196,20 +205,24 @@ export default function FourthStep({
             <footer
                 className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 4 && 'hidden'}`}
             >
-                <button
-                    form="none"
-                    className="btn-solid"
-                    disabled={
-                        !isValid ||
-                        !!errors.dogSizes?.message ||
-                        !!errors.mbti?.message
-                    }
-                    onClick={handleNextBtn}
-                >
-                    다음
-                </button>
+                <ToastAnchor>
+                    <button
+                        form="none"
+                        className="btn-solid"
+                        disabled={
+                            !isValid ||
+                            !!errors.dogSizes?.message ||
+                            !!errors.mbti?.message
+                        }
+                        onClick={handleNextBtn}
+                    >
+                        다음
+                    </button>
+                </ToastAnchor>
             </footer>
-            {showModal && ReactDOM.createPortal(modalContent, document.body)}
+            {showModal &&
+                !loading &&
+                ReactDOM.createPortal(modalContent, document.body)}
         </>
     );
 }

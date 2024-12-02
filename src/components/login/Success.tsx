@@ -25,7 +25,7 @@ export default function Success() {
                 </p>
                 <div className="text-black text-body-xl font-extrabold text-center">
                     <p>
-                        <span className="text-point-500">{'정향'}</span>님,
+                        <span className="text-point-500">{'석준'}</span>님,
                     </p>
                     <p>환영해요 멍멍!</p>
                 </div>
