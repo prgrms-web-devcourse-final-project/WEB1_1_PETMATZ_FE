@@ -2,7 +2,7 @@ import { useChangePasswordForm, useFadeNavigate } from '@/hooks';
 import { useCallback, useState } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
 import Eye from '@/assets/images/change-password/eye.svg?react';
-import { CustomInput, Loading } from '@/components/common';
+import { CustomInput, Loading, ToastAnchor } from '@/components/common';
 import { Success } from '@/components/change-password';
 
 export default function ChangePassword() {
@@ -126,19 +126,21 @@ export default function ChangePassword() {
                             >
                                 돌아가기
                             </button>
-                            <button
-                                type="submit"
-                                form="change-form"
-                                className="btn-solid"
-                                disabled={
-                                    !isValid ||
-                                    !!errors.currentPassword ||
-                                    !!errors.newPassword ||
-                                    !!errors.confirmPassword
-                                }
-                            >
-                                변경하기
-                            </button>
+                            <ToastAnchor>
+                                <button
+                                    type="submit"
+                                    form="change-form"
+                                    className="btn-solid"
+                                    disabled={
+                                        !isValid ||
+                                        !!errors.currentPassword ||
+                                        !!errors.newPassword ||
+                                        !!errors.confirmPassword
+                                    }
+                                >
+                                    변경하기
+                                </button>
+                            </ToastAnchor>
                         </footer>
                     </>
                 ) : (

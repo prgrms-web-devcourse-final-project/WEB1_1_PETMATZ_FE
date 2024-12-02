@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { postTemporaryPassword } from './api/password';
-import useCustomToast from './useCustomToast';
+import { useCustomToast } from '@/components/common';
 
 /**
  * ForgotPassword form input type

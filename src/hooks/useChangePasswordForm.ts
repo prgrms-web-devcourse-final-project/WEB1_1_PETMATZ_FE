@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { postNewPassword } from './api/password';
+import { useCustomToast } from '@/components/common';
 
 /**
  * ChangePassword form input type
@@ -29,17 +30,27 @@ export default function useChangePasswordForm() {
     });
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { showToast, isToastActive } = useCustomToast();
 
     /**
      * Handles form submission
      */
     const onSubmit = async (data: ChangePasswordInputs) => {
+        if (isToastActive()) {
+            return;
+        }
         setLoading(true);
         const { currentPassword, newPassword } = data;
         await postNewPassword({ currentPassword, newPassword }).then(
             (response) => {
                 if (response.ok) {
                     setSuccess(true);
+                } else {
+                    if (response.error?.status === 403) {
+                        showToast('틀린 비밀번호입니다!', 'warning');
+                    } else {
+                        showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                    }
                 }
             },
         );
