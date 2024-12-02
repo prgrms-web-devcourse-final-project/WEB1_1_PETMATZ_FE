@@ -8,31 +8,23 @@ const utcToCustomDateTime = (utcTime: string): string => {
     // 3. 현재 한국 로컬 시간 가져오기
     const now = new Date();
 
-    // 4. 시간 차 계산
-    const timeDiff = now.getTime() - localDate.getTime();
-    const minutes = Math.floor(timeDiff / (1000 * 60));
-    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-
-    // 5. 조건에 따라 시간 변환
-    if (minutes < 60) {
-        return `${minutes}분 전`;
-    } else if (minutes < 60 * 24) {
-        // 같은 날이라면 오전/오후 시간 표시
+    // 4. 오늘인지 확인
+    if (now.toDateString() === localDate.toDateString()) {
         const hour = localDate.getHours();
         const minute = localDate.getMinutes().toString().padStart(2, '0');
         const period = hour >= 12 ? '오후' : '오전';
-        return `${period} ${hour % 12 || 12}:${minute}`;
-    } else if (days === 1) {
-        return '어제';
-    } else {
-        // 00월-00일(요일) 형식
-        const formatter = new Intl.DateTimeFormat('ko-KR', {
-            month: '2-digit',
-            day: '2-digit',
-            weekday: 'short',
-        });
-        return formatter.format(localDate); // e.g., '11-30(금)'
+        const formattedHour = (hour % 12 || 12).toString().padStart(2, '0');
+        return `${formattedHour}:${minute} ${period}`; // e.g., "오후 01:05"
     }
+
+    // 5. 오늘이 아닐 때: 00-00(요일) 형식
+    const month = localDate.getMonth() + 1; // 월
+    const day = localDate.getDate(); // 일
+    const weekday = localDate.toLocaleDateString('ko-KR', { weekday: 'short' }); // 요일
+
+    return `${month.toString().padStart(2, '0')}-${day
+        .toString()
+        .padStart(2, '0')} (${weekday})`;
 };
 
 export default utcToCustomDateTime;
