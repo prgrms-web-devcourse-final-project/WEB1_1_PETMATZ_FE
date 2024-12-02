@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchDogInfo } from '@/hooks/api/dogInfo';
 import { DogInfo } from '@/types/dogInfo';
 
+//유저에 등록된 강아지 목록 조회
 export const useDogInfo = (id: number) => {
     const [dogInfo, setDogInfo] = useState<DogInfo | null>(null);
     const [loading, setLoading] = useState(true);
@@ -13,8 +14,9 @@ export const useDogInfo = (id: number) => {
                 setLoading(true);
                 const response = await fetchDogInfo(id);
 
-                if (response.ok && response.data?.length) {
-                    setDogInfo(response.data[0]);
+                if (response.ok && response.data) {
+                    setDogInfo(response.data);
+                    console.log(dogInfo);
                 } else {
                     setError(
                         response.error?.msg || '정보를 불러오지 못했습니다.',
