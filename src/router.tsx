@@ -54,11 +54,11 @@ export default function AppRoutes() {
                         path="/forgot-password"
                         element={<ForgotPassword />}
                     />
-                    <Route
-                        path="/change-password"
-                        element={<ChangePassword />}
-                    />
                     <Route element={<AuthGaurd />}>
+                        <Route
+                            path="/change-password"
+                            element={<ChangePassword />}
+                        />
                         <Route
                             path="/delete-account"
                             element={<DeleteAccount />}

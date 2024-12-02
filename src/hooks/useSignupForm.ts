@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
 import { postSignup } from './api/signup';
-import useCustomToast from './useCustomToast';
+import { useCustomToast } from '@/components/common';
 
 /**
  * Signup form types

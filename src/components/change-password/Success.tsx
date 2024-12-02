@@ -7,7 +7,7 @@ export default function Success() {
     const navigate = useFadeNavigate();
 
     const handleCheckBtn = useCallback(() => {
-        navigate('/profile');
+        navigate(-1);
     }, []);
 
     return (

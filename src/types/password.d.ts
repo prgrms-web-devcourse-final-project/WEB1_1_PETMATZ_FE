@@ -4,6 +4,11 @@ import { BaseApiResponse } from './baseResponse';
 interface TemporaryPasswordApiRequest {
     accountId: string;
 }
+//	POST new password
+interface NewPasswordApiRequest {
+    currentPassword: string;
+    newPassword: string;
+}
 interface PasswordApiResponse extends BaseApiResponse {
     data: {
         responseCode: string;
@@ -11,4 +16,8 @@ interface PasswordApiResponse extends BaseApiResponse {
     };
 }
 
-export type { TemporaryPasswordApiRequest, PasswordApiResponse };
+export type {
+    TemporaryPasswordApiRequest,
+    NewPasswordApiRequest,
+    PasswordApiResponse,
+};

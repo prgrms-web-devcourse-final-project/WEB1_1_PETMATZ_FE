@@ -1,5 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { postNewPassword } from './api/password';
+import { useCustomToast } from '@/components/common';
 
 /**
  * ChangePassword form input type
@@ -27,14 +29,32 @@ export default function useChangePasswordForm() {
         mode: 'onChange',
     });
     const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { showToast, isToastActive } = useCustomToast();
 
     /**
      * Handles form submission
      */
-    const onSubmit = (data: ChangePasswordInputs) => {
-        console.log(data);
-        // 여기에 로직을 구현하세요
-        setSuccess(true);
+    const onSubmit = async (data: ChangePasswordInputs) => {
+        if (isToastActive()) {
+            return;
+        }
+        setLoading(true);
+        const { currentPassword, newPassword } = data;
+        await postNewPassword({ currentPassword, newPassword }).then(
+            (response) => {
+                if (response.ok) {
+                    setSuccess(true);
+                } else {
+                    if (response.error?.status === 403) {
+                        showToast('틀린 비밀번호입니다!', 'warning');
+                    } else {
+                        showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                    }
+                }
+            },
+        );
+        setLoading(false);
     };
 
     /**
@@ -45,6 +65,10 @@ export default function useChangePasswordForm() {
         minLength: {
             value: 8,
             message: '비밀번호는 최소 8자 이상이어야 합니다!',
+        },
+        maxLength: {
+            value: 20,
+            message: '비밀번호는 최대 20자 이하이어야 합니다!',
         },
         pattern: {
             value: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
@@ -60,6 +84,10 @@ export default function useChangePasswordForm() {
         minLength: {
             value: 8,
             message: '비밀번호는 최소 8자 이상이어야 합니다!',
+        },
+        maxLength: {
+            value: 20,
+            message: '비밀번호는 최대 20자 이하이어야 합니다!',
         },
         pattern: {
             value: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
@@ -91,5 +119,6 @@ export default function useChangePasswordForm() {
         onSubmit,
         isValid,
         success,
+        loading,
     };
 }

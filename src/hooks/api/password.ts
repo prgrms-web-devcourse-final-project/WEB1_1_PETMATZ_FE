@@ -1,4 +1,5 @@
 import {
+    NewPasswordApiRequest,
     PasswordApiResponse,
     TemporaryPasswordApiRequest,
 } from '@/types/password';
@@ -15,5 +16,21 @@ export const postTemporaryPassword = async ({
         '/api/auth/send-repassword',
         {
             accountId,
+        },
+    );
+
+/**
+ * POST	Send new password
+ * 비밀번호를 변경합니다.
+ */
+export const postNewPassword = async ({
+    currentPassword,
+    newPassword,
+}: NewPasswordApiRequest): Promise<PasswordApiResponse> =>
+    await http.post<PasswordApiResponse, NewPasswordApiRequest>(
+        '/api/auth/repassword',
+        {
+            currentPassword,
+            newPassword,
         },
     );
