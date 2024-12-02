@@ -9,7 +9,7 @@ export const getProfileInfo = async ({
     userId,
 }: ProfileApiQueryString): Promise<ProfileApiResponse> =>
     await http.get<ProfileApiResponse, ProfileApiQueryString>(
-        '/api/auth/get-profile',
+        '/api/auth/get-otherprofile',
         { userId },
     );
 

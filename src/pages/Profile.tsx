@@ -28,11 +28,7 @@ export default function Profile() {
         if (!data) {
             return;
         }
-        setImage(
-            data.data.profileImg?.startsWith('profile')
-                ? `/src/assets/images/profile/${data.data.profileImg}.svg`
-                : data.data.profileImg,
-        );
+        setImage(data.data.profileImg);
     }, [data, setImage]);
 
     if (isLoading || !user) {
