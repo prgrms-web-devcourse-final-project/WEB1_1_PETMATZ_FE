@@ -31,7 +31,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                     <span>{message.readStatus ? '(읽음)' : '(안읽음)'}</span>
                 </div>
             </div>
-            {/* {message.msg_type === 'PLG' && (
+            {message.msg_type === 'PLG' && (
                 <div className="flex flex-col gap-[4px]">
                     <div className="flex items-end gap-[8px]">
                         <img
@@ -116,7 +116,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                         </span>
                     </div>
                 </div>
-            )} */}
+            )}
         </>
     );
 }
