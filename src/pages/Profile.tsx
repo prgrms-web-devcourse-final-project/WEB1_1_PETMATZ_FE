@@ -7,48 +7,41 @@ import { useParams } from 'react-router-dom';
 import Heart from '@/assets/images/profile/heart.svg?react';
 import Lv5 from '@/assets/images/profile/lv-5.svg?react';
 import { Label, Tag } from '@/components/profile';
+import { useEffect, useState } from 'react';
 
 export default function Profile() {
-    // const { id } = useParams<{ id: string }>();
-    // const { user } = useUserStore();
+    const { id } = useParams<{ id: string }>();
+    const { user } = useUserStore();
+    const [image, setImage] = useState(
+        '/src/assets/images/profile/profile1.svg',
+    );
 
-    // const userId = id || '';
-    // const isMyProfile = id === user?.id;
-    const isMyProfile = true;
+    const userId = id || '';
+    const isMyProfile = id == user?.id;
 
-    // const { data, isLoading } = useQuery<ProfileApiResponse, Error>({
-    //     queryKey: ['user', userId],
-    //     queryFn: () => getProfileInfo({ userId }),
-    // });
+    const { data, isLoading } = useQuery<ProfileApiResponse, Error>({
+        queryKey: ['user', userId],
+        queryFn: () => getProfileInfo({ userId }),
+    });
 
-    // if (isLoading) {
-    //     return <Loading />;
-    // }
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+        setImage(data.data.profileImg);
+    }, [data, setImage]);
 
-    // if (!data || !data.data || data.error?.status === 500) {
-    //     return <div>서버 에러</div>;
-    // } else if (data.error?.status === 400) {
-    //     return <div>존재하지 않는 사용자입니다.</div>;
-    // }
+    if (isLoading || !user) {
+        return <Loading />;
+    }
 
-    // const profileData = data.data;
+    if (!data || !data.data || data.error?.status === 500) {
+        return <div>서버 에러</div>;
+    } else if (data.error?.status === 400) {
+        return <div>존재하지 않는 데이터입니다.</div>;
+    }
 
-    const profileData = {
-        accountId: 'tjrwns2715@naver.com',
-        nickname: '쭈니',
-        profileImg: 'src/assets/images/profile/profile3.svg',
-        role: '??',
-        preferredSize: ['MEDIUM', 'LARGE'],
-        gender: 'MALE',
-        introduction:
-            'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',
-        isRegistered: true,
-        recommendationCount: 166,
-        careCompletionCount: 30,
-        isCareAvailable: true,
-        mbti: 'ESTJ',
-        region: '부산광역시',
-    };
+    const profileData = data.data;
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
@@ -60,7 +53,7 @@ export default function Profile() {
                     <section className="flex flex-col gap-2 items-center">
                         <div className="relative w-[100px] h-[100px]">
                             <img
-                                src={profileData.profileImg}
+                                src={image}
                                 alt="프로필 이미지"
                                 className="object-cover w-full h-full rounded-full border-[1px] border-gray-200"
                             />
@@ -109,7 +102,7 @@ export default function Profile() {
                     <article className="flex flex-col gap-2">
                         <Label text="선호 애견 크기" />
                         <div className="flex gap-[10px]">
-                            {profileData.preferredSize.map((size) => (
+                            {profileData.preferredSizes.map((size, index) => (
                                 <Tag
                                     text={
                                         size === 'SMALL'
@@ -118,6 +111,7 @@ export default function Profile() {
                                               ? '중형견'
                                               : '대형견'
                                     }
+                                    key={index}
                                 />
                             ))}
                         </div>
