@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { postTemporaryPassword } from './api/password';
+import useCustomToast from './useCustomToast';
 
 /**
  * ForgotPassword form input type
@@ -23,14 +25,30 @@ export default function useForgotPasswordForm() {
         mode: 'onChange',
     });
     const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { showToast, isToastActive } = useCustomToast();
 
     /**
      * Handles form submission
      */
-    const onSubmit = (data: ForgotPasswordInputs) => {
-        console.log(data);
-        // 여기에 로그인 로직을 구현하세요
-        setSuccess(true);
+    const onSubmit = async (data: ForgotPasswordInputs) => {
+        if (isToastActive()) {
+            return;
+        }
+        setLoading(true);
+        const accountId = data.email;
+        await postTemporaryPassword({ accountId }).then((response) => {
+            if (response.ok) {
+                setSuccess(true);
+            } else {
+                if (response.error?.status === 404) {
+                    showToast('존재하지 않는 사용자입니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
+            }
+        });
+        setLoading(false);
     };
 
     /**
@@ -53,5 +71,6 @@ export default function useForgotPasswordForm() {
         onSubmit,
         isValid,
         success,
+        loading,
     };
 }
