@@ -1,7 +1,7 @@
 import { useFadeNavigate, useForgotPasswordForm } from '@/hooks';
 import { useCallback } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
-import { CustomInput } from '@/components/common';
+import { CustomInput, Loading } from '@/components/common';
 import { Success } from '@/components/forgot-password';
 
 export default function ForgotPassword() {
@@ -15,11 +15,16 @@ export default function ForgotPassword() {
         onSubmit,
         isValid,
         success,
+        loading,
     } = useForgotPasswordForm();
 
     const handleBackBtn = useCallback(() => {
         navigate('/login');
     }, []);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <div

@@ -25,12 +25,14 @@ export default function useForgotPasswordForm() {
         mode: 'onChange',
     });
     const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
     const onSubmit = async (data: ForgotPasswordInputs) => {
+        setLoading(true);
         const accountId = data.email;
         await postTemporaryPassword({ accountId }).then((response) => {
             if (response.ok) {
@@ -40,6 +42,7 @@ export default function useForgotPasswordForm() {
                 }, 3000);
             }
         });
+        setLoading(false);
     };
 
     /**
@@ -62,5 +65,6 @@ export default function useForgotPasswordForm() {
         onSubmit,
         isValid,
         success,
+        loading,
     };
 }
