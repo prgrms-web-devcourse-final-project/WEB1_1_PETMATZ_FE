@@ -21,6 +21,7 @@ import {
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthGaurd } from '@/components/auth';
+import DogEdit from './pages/DogEdit';
 
 export default function AppRoutes() {
     return (
@@ -70,6 +71,7 @@ export default function AppRoutes() {
                         <Route path="/sos/write" element={<SOSWrite />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/ranking" element={<Ranking />} />
+                        <Route path="/dog-edit" element={<DogEdit />} />
                     </Route>
                 </Route>
             </Routes>

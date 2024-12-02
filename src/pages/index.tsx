@@ -14,3 +14,4 @@ export { default as ChangePassword } from './ChangePassword';
 export { default as DeleteAccount } from './DeleteAccount';
 export { default as Register } from './Register';
 export { default as Ranking } from './Ranking';
+export { default as DogEdit } from './DogEdit';
