@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useFadeNavigate } from '@/hooks';
 import Profile1 from '@/assets/images/profile/profile1.svg?react';
 import MaleIcon from '@/assets/images/gender/male.svg?react';
 import FemaleIcon from '@/assets/images/gender/female.svg?react';
@@ -16,7 +16,7 @@ export default function DogCard({
     comment = false,
 }: DogCardProps) {
     const { dogInfo, loading, error } = useDogInfo(id); // 커스텀 훅 사용
-    const navigate = useNavigate();
+    const navigate = useFadeNavigate();
 
     // 사이즈 변환 함수
     const convertSizeToKorean = (size: string) => {

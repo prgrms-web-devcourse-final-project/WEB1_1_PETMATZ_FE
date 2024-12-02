@@ -2,7 +2,7 @@ import { BaseApiResponse } from './baseResponse';
 
 interface DogInfo {
     id: number; // 강아지 ID
-    dogRegNo: string | null; // 등록 번호 (없을 수 있음)
+    dogRegNo: string; // 등록 번호
     dogNm: string; // 강아지 이름
     sexNm: string; // 성별 ("수컷" 또는 "암컷")
     kindNm: string; // 품종
