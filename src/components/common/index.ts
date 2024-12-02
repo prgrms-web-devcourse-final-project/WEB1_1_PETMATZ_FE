@@ -7,3 +7,4 @@ export { CustomToast, ToastAnchor, useCustomToast } from './CustomToast';
 export { default as CustomToggle } from './CustomToggle';
 export { default as ImageSelectBox } from './ImageSelectBox';
 export { default as MultiSelectTag } from './MultiSelectTag';
+export { default as DogCard } from './DogCard';
