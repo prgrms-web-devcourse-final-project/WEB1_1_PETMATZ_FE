@@ -17,7 +17,7 @@ export default function PaymentSection({
     const paymentType = watch('paymentType') as FormData['paymentType'];
 
     return (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mt-4">
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                     지불 방식

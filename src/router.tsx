@@ -16,6 +16,7 @@ import {
     Signup,
     SOS,
     SOSWrite,
+    SOSDetail,
     Ranking,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
@@ -42,6 +43,7 @@ export default function AppRoutes() {
                         <Route path="/home" element={<Home />} />
                         <Route path="/profile/:id" element={<Profile />} />
                         <Route path="/sos" element={<SOS />} />
+                        <Route path="/sos/:id" element={<SOSDetail />} />
                         <Route path="/chat" element={<Chat />} />
                         <Route path="/please" element={<Please />} />
                         <Route path="/match" element={<Match />} />

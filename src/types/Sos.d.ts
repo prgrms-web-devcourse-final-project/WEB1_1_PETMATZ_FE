@@ -22,7 +22,7 @@ export interface DogInfo {
 // 게시물 타입
 export interface Post {
     title: string; // 제목
-    content: string; // 내용
+    comment: string; // 내용
     user: UserInfo; // 유저 정보
     dog: DogInfo; // 멍멍이 정보
     startDate: string; // 돌봄 시작일 ex)2024-11-18  11:30
@@ -58,42 +58,61 @@ export interface SOSListRequest {
     // 필터링은 default : 최신순
 }
 
-// SOS 글 작성 요청 인터페이스
+// SOS 글 생성 요청 타입
 export interface SOSCreateRequest {
     title: string;
-    content: string;
-    startDate: string;
-    endDate: string;
-    wantPrice: number;
-    wantPriceType: 'hour' | 'day';
+    comment: string;
+    startDate: string; // 'YYYY-MM-DD HH:MM' 형식
+    endDate: string; // 'YYYY-MM-DD HH:MM' 형식
+    paymentType: 'HOURLY' | 'DAILY' | 'NEGOTIABLE';
+    price: number;
+    petIds: number[];
+}
 
-    dog: {
-        name: string;
-        gender: 'male' | 'female';
-        size: '소형' | '중형' | '대형';
-        neuterYn: boolean;
-        breed: string;
-        age: number;
-        img?: string;
+// SOS 게시물 생성 응답 타입
+export interface SOSCreateResponse {
+    result: {
+        id: number;
     };
 }
 
-// SOS 글 작성 타입
+// SOS 게시물 생성 API 응답 타입
+export interface SOSCreateApiResponse extends BaseApiResponse {
+    data: SOSCreateResponse;
+}
+
+// SOS 글 작성 저장 타입
 export interface FormData {
     title: string;
-    content: string;
+    comment: string;
     startDate: string;
     startTime: string;
     endDate: string;
     endTime: string;
-    paymentType: '시급' | '일급' | '협의';
-    paymentAmount: number;
+    paymentType: 'HOURLY' | 'DAILY' | 'NEGOTIABLE';
+    price: number;
     selectedDogs: string[];
 }
 
-export interface Dog {
-    id: string;
-    name: string;
+// 유저 강아지 타입 정의
+export interface Pet {
+    id: number;
+    dogNm: string;
+    dogRegNo?: string | null;
+    sexNm?: string;
+    kindNm?: string;
+    neuterYn?: string;
+    profileImg?: string;
+    age?: number;
+    temperament?: string;
+    size?: string;
+    preferredWalkingLocation?: string | null;
+    comment?: string;
+}
+
+// 강아지 목록 API 응답 타입
+export interface PetListResponse extends BaseApiResponse {
+    data?: Pet[];
 }
 
 // SOS 글 수정 요청 인터페이스
