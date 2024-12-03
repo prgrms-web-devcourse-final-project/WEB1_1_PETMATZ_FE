@@ -139,7 +139,7 @@ export default function FirstStep({
                                     />
                                 </div>
                                 <button
-                                    form="verificateEmail"
+                                    form="none"
                                     className="btn-solid btn-md"
                                     disabled={
                                         readying ||
@@ -184,7 +184,7 @@ export default function FirstStep({
             >
                 <ToastAnchor>
                     <button
-                        form="next"
+                        form="none"
                         className="btn-solid"
                         disabled={
                             readying ||
