@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCustomToast } from '@/components/common';
+import { postDeleteAccount } from './api/deleteAccount';
+import useFadeNavigate from './useFadeNavigate';
 
 /**
  * Delete account form input type
@@ -26,12 +28,23 @@ export default function useDeleteAccountForm() {
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
     const { showToast, isToastActive } = useCustomToast();
+    const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
     const onSubmit = async (data: DeleteAccountInputs) => {
+        setLoading(true);
         // api 로직 추가
+        await postDeleteAccount(data).then((response) => {
+            if (response.ok) {
+                setSuccess(true);
+                setTimeout(() => {
+                    navigate('/home');
+                }, 3000);
+            }
+        });
+        setLoading(false);
     };
 
     /**
