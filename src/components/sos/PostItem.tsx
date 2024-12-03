@@ -9,7 +9,7 @@ import PencilIcon from '@/assets/images/sos/pencil.svg?react';
 export default function PostItem({ post, onClick }: PostItemProps) {
     const {
         title,
-        content,
+        comment,
         // user,
         dog,
         startDate,
@@ -46,7 +46,7 @@ export default function PostItem({ post, onClick }: PostItemProps) {
             {/* 제목 및 기간 */}
             <h3 className="font-bold text-lg">{title}</h3>
             {/* 내용 */}
-            <p className="text-sm text-gray-700">{content}</p>
+            <p className="text-sm text-gray-700">{comment}</p>
             {/* 돌봄 정보 */}
             <div className="bg-gray-200 px-2 py-1 rounded-lg mt-3">
                 <p className="text- text-gray-600 flex gap-1">

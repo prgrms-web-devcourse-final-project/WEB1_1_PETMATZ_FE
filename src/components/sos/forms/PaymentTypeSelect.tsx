@@ -16,9 +16,9 @@ export default function PaymentTypeSelect({
             className={getInputStyle('paymentType')}
         >
             <option value="">선택해주세요</option>
-            <option value="시급">시급</option>
-            <option value="일급">일급</option>
-            <option value="협의">협의</option>
+            <option value="HOURLY">시급</option>
+            <option value="DAILY">일급</option>
+            <option value="NEGOTIABLE">협의</option>
         </select>
     );
 }
