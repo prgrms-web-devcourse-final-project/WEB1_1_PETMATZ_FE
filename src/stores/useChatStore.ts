@@ -100,7 +100,6 @@ const useChatStore = create<ChatStore>((set, get) => ({
         client = new Client({ webSocketFactory: () => socket });
 
         client.onConnect = () => {
-            console.log('소켓 연결 성공');
             const chatRoomList = get().chatRoomList;
             chatRoomList.forEach((room) => {
                 client.subscribe(
@@ -187,7 +186,6 @@ const useChatStore = create<ChatStore>((set, get) => ({
         client = new Client({ webSocketFactory: () => socket });
 
         client.onConnect = () => {
-            console.log('소켓 연결 성공');
             // 메시지 수신 구독
             const subscription = client.subscribe(
                 `/topic/chat/${chatRoomId}`,
