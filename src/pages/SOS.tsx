@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Post } from '@/types/Sos';
 import { PostItem } from '@/components/sos';
 import { Loading } from '@/components/common';
+import { useUserStore } from '@/stores';
 
 const PostList = ({ posts }: { posts: Post[] }) => {
     return (
@@ -20,8 +21,10 @@ const PostList = ({ posts }: { posts: Post[] }) => {
 
 export default function SOS() {
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true); // 임시 loading
+    // const [isLoading, setIsLoading] = useState(true); // 임시 loading
     const [dummy, setDummy] = useState<Post[]>([]);
+    const { user } = useUserStore();
+    console.log(user?.region);
 
     const goToWrite = () => {
         navigate('/sos/write');
@@ -29,36 +32,36 @@ export default function SOS() {
 
     useEffect(() => {
         // 임시로 3초 뒤에 로딩 해제
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 3000);
+        // const timer = setTimeout(() => {
+        //     setIsLoading(false);
+        // }, 3000);
 
         fetch('/data/sosList.json')
             .then((res) => res.json())
             .then((res) => setDummy(res));
-        return () => clearTimeout(timer);
+        // return () => clearTimeout(timer);
     }, []);
 
-    if (isLoading) {
-        // @tanstack/react-query 적용 후 제거, 임시 테스트용
-        return <Loading />;
-    }
+    // if (isLoading) {
+    //     // @tanstack/react-query 적용 후 제거, 임시 테스트용
+    //     return <Loading />;
+    // }
 
     return (
-        <Suspense fallback={<Loading />}>
-            <div className="p-4 overflow-y-auto h-full">
-                <h1 className="text-xl font-bold">도와줘 멍멍</h1>
-                <h2 className="text-lg mb-4">
-                    급한 돌봄이 필요한 멍멍이들을 도와주세요!
-                </h2>
-                <button onClick={goToWrite} className="text-purple-500">
-                    글쓰러 가기(bottomSheet나 버튼으로 이동 적용)
-                </button>
+        // <Suspense fallback={<Loading />}>
+        <div className="p-4 overflow-y-auto h-full">
+            <h1 className="text-xl font-bold">도와줘 멍멍</h1>
+            <h2 className="text-lg mb-4">
+                급한 돌봄이 필요한 멍멍이들을 도와주세요!
+            </h2>
+            <button onClick={goToWrite} className="text-purple-500">
+                글쓰러 가기(bottomSheet나 버튼으로 이동 적용)
+            </button>
 
-                <PostList posts={dummy} />
+            <PostList posts={dummy} />
 
-                {/* pagination 적용 */}
-            </div>
-        </Suspense>
+            {/* pagination 적용 */}
+        </div>
+        // </Suspense>
     );
 }
