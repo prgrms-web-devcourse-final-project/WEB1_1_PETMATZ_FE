@@ -43,6 +43,9 @@ interface ChatStore {
         receiverId: string,
     ) => void;
     markMsgAsRead: (chatRoomId: number, senderId: string) => void;
+
+    // 타임 스탬프 초기화
+    resetTimestamp: () => void;
 }
 
 const STOMP_CONNECT_URL = import.meta.env.VITE_STOMP_CONNECT_URL as string;
@@ -56,6 +59,10 @@ const useChatStore = create<ChatStore>((set, get) => ({
     firstFetchedTimestamp: null,
     morePage: true,
     subscriptionId: null,
+
+    resetTimestamp: () => {
+        set({ firstFetchedTimestamp: null });
+    },
 
     setIsNewMsg: (state) => {
         set({ isNewMsg: state });

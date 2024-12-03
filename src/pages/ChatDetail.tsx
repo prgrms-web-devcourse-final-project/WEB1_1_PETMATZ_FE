@@ -23,6 +23,7 @@ export default function ChatDetail() {
         unSubFromChatRoom,
         markMsgAsRead,
         connectedClient,
+        resetTimestamp,
     } = useChatStore();
     const isFirstFetch = useRef(true);
     // 무한 스크롤 trigger Ref
@@ -52,6 +53,7 @@ export default function ChatDetail() {
             unSubFromChatRoom();
             window.removeEventListener('beforeunload', handleBeforeUnload);
             setMorePage(true);
+            resetTimestamp();
         };
     }, [chatRoomId, user]);
 
@@ -120,7 +122,8 @@ export default function ChatDetail() {
                 chatRoomId &&
                 user &&
                 morePage &&
-                scrollContainerRef.current
+                scrollContainerRef.current &&
+                !isScroll
             ) {
                 // 스크롤 높이 저장
                 previousScrollHeight.current =
