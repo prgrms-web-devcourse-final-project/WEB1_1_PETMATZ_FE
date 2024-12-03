@@ -281,5 +281,7 @@ export default function useSignupForm() {
         setLoading,
         showModal,
         setShowModal,
+        showToast,
+        isToastActive,
     };
 }
