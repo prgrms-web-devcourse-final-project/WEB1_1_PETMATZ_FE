@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
+import { useFadeNavigate } from '@/hooks';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { FormData } from '@/types/Sos';
+import { FormData, SOSCreateRequest } from '@/types/Sos';
+import { useCustomToast } from '@/components/common';
+import { createSOSPost } from './api/sos';
 
 export const useSosForm = () => {
-    const [selectedDogs, setSelectedDogs] = useState<string[]>([]);
+    const [petIds, setpetIds] = useState<number[]>([]);
     const [dateTimeError, setDateTimeError] = useState<string | null>(null);
+    const navigate = useFadeNavigate();
+    const { showToast } = useCustomToast();
 
     const {
         register,
@@ -52,22 +56,22 @@ export const useSosForm = () => {
     }, [startDate, startTime, endDate, endTime]);
 
     const getInputStyle = (fieldName: keyof FormData) => {
-        return `input-outline ${errors[fieldName] ? 'border-red-500' : ''}`;
+        return `input-solid ${errors[fieldName] ? 'border-red-500' : ''}`;
     };
 
-    const handleDogSelect = (dogName: string) => {
-        if (!selectedDogs.includes(dogName) && dogName) {
-            setSelectedDogs([...selectedDogs, dogName]);
+    const handleDogSelect = (dogId: number) => {
+        if (!petIds.includes(dogId)) {
+            setpetIds([...petIds, dogId]);
         }
     };
 
-    const handleRemoveDog = (dogName: string) => {
-        setSelectedDogs(selectedDogs.filter((dog) => dog !== dogName));
+    const handleRemoveDog = (dogId: number) => {
+        setpetIds(petIds.filter((id) => id !== dogId));
     };
 
-    const onSubmit = (data: FormData) => {
-        if (selectedDogs.length === 0) {
-            toast.error('최소 한 마리의 멍멍이를 선택해주세요');
+    const onSubmit = async (data: FormData) => {
+        if (petIds.length === 0) {
+            showToast('최소 한 마리의 멍멍이를 선택해주세요', 'warning');
             return;
         }
 
@@ -80,32 +84,40 @@ export const useSosForm = () => {
         );
 
         if (error) {
-            toast.error(error);
+            showToast(error, 'warning');
             return;
         }
 
-        const startDateTime = `${data.startDate} ${data.startTime}`;
-        const endDateTime = `${data.endDate} ${data.endTime}`;
-
-        const formData = {
+        const sosData: SOSCreateRequest = {
             title: data.title,
-            content: data.content,
-            startDateTime,
-            endDateTime,
-            selectedDogs,
+            comment: data.comment,
+            startDate: `${data.startDate} ${data.startTime}`,
+            endDate: `${data.endDate} ${data.endTime}`,
+            petIds,
             paymentType: data.paymentType,
-            paymentAmount: data.paymentType === '협의' ? 0 : data.paymentAmount,
+            price: data.paymentType === 'NEGOTIABLE' ? 0 : data.price,
         };
 
-        console.log(formData);
         // API 호출 로직 추가
+        const response = await createSOSPost(sosData);
+        if (response.ok) {
+            showToast('게시물이 성공적으로 등록되었습니다.', 'success');
+            setTimeout(() => {
+                navigate(`/sos/${response.data.result.id}`);
+            }, 1000); // 1초 후 이동
+        } else {
+            showToast(
+                response.error?.msg || '게시물 등록에 실패했습니다.',
+                'warning',
+            );
+        }
     };
 
     const onError = (errors: any) => {
         const errorGroups = {
-            basicInfo: ['title', 'content'],
+            basicInfo: ['title', 'comment'],
             timeInfo: ['startTime', 'endTime'],
-            paymentInfo: ['paymentType', 'paymentAmount'],
+            paymentInfo: ['paymentType', 'price'],
         };
 
         const missingGroups = [];
@@ -119,12 +131,12 @@ export const useSosForm = () => {
         if (errorGroups.paymentInfo.some((field) => errors[field])) {
             missingGroups.push('결제 정보');
         }
-        if (selectedDogs.length === 0) {
+        if (petIds.length === 0) {
             missingGroups.push('강아지 정보');
         }
 
         if (missingGroups.length > 0) {
-            toast.error(`${missingGroups.join(', ')}를 입력해주세요.`);
+            showToast(`${missingGroups.join(', ')}를 입력해주세요.`, 'warning');
         }
     };
 
@@ -135,7 +147,7 @@ export const useSosForm = () => {
         watch,
         errors,
         trigger,
-        selectedDogs,
+        petIds,
         dateTimeError,
         getInputStyle,
         handleDogSelect,
