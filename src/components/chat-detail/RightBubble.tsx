@@ -16,7 +16,7 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
         <>
             <div className="flex flex-col items-end gap-[4px]">
                 <div className="flex items-end gap-[8px]">
-                    <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl">
+                    <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl break-words">
                         {message.msg}
                     </div>
                 </div>

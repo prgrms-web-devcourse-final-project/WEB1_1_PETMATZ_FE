@@ -22,7 +22,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                             other.profileURL || 'profile1',
                         )}
                     />
-                    <div className="max-w-[238px] py-[12px] px-[16px] bg-gray-200 text-gray-900 text-label-l font-semibold rounded-t-2xl rounded-br-2xl">
+                    <div className="max-w-[238px] py-[12px] px-[16px] bg-gray-200 text-gray-900 text-label-l font-semibold rounded-t-2xl rounded-br-2xl break-words">
                         {message.msg}
                     </div>
                 </div>
