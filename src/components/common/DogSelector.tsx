@@ -32,8 +32,8 @@ export default function DogSelector({
     }, [user?.id]);
 
     return (
-        <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="mt-2">
+            <label className="block text-sm text-gray-700 mb-2">
                 대상 멍멍이
             </label>
             <select

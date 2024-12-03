@@ -44,8 +44,8 @@ export default function DateTimeSection({
     };
 
     return (
-        <div className="space-y-6 mt-2">
-            <div className="space-y-4">
+        <div className="space-y-4 mt-2">
+            <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                     돌봄 시작일
                 </label>
@@ -69,9 +69,9 @@ export default function DateTimeSection({
                     </div>
                 </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
-                    돌봄 종료
+                    돌봄 종료일
                 </label>
                 <div className="flex items-center space-x-4">
                     <div className="relative w-[fit-content]">
