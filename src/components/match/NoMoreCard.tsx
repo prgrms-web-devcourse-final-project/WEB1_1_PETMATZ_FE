@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
 
 // SVG
-import DogLargeIcon from '@/assets/images/dogs/dogLarge.svg?react';
+import DogCryIcon from '@/assets/images/dogs/dogCry.svg?react';
 
 export default function NoMoreCard() {
     return (
         <motion.div
-            className="absolute w-[240px] h-[375px] bg-gray-300 shadow-md rounded-xl flex flex-col items-center justify-center gap-[32px] border-1 border-point-100 text-gray-100"
+            className="absolute w-[240px] h-[375px] bg-gray-200 shadow-md rounded-xl flex flex-col items-center justify-center gap-[32px] border-1 border-point-100 text-gray-400"
             initial={{
                 scale: 0.75,
                 y: 65.5,
@@ -30,7 +30,7 @@ export default function NoMoreCard() {
                     찾을 수 없어요.
                 </span>
             </div>
-            <DogLargeIcon className="w-[111.5px] h-[120px]" />
+            <DogCryIcon className="w-[111.5px] h-[120px]" />
         </motion.div>
     );
 }
