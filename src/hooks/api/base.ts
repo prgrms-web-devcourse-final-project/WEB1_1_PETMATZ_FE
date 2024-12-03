@@ -64,9 +64,9 @@ export const http = {
             } as T;
         }
     },
-    delete: async function remove<T>(url: string): Promise<T> {
+    delete: async function remove<T, P>(url: string, params?: P): Promise<T> {
         try {
-            const response = await service.delete<T>(url);
+            const response = await service.delete<T>(url, { params });
             return {
                 ok: true,
                 status: response.status,
