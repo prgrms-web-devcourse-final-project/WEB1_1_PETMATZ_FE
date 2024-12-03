@@ -1,8 +1,11 @@
 import Logo from '@/assets/images/header/logo.svg?react';
 import SmallDog from '@/assets/images/login/smallDog.svg?react';
+import { useUserStore } from '@/stores';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function Success() {
+    const { user } = useUserStore();
+
     return (
         <div className="h-screen bg-white flex flex-col justify-between overflow-hidden">
             <header className="h-14 w-full flex items-center justify-center">
@@ -25,7 +28,8 @@ export default function Success() {
                 </p>
                 <div className="text-black text-body-xl font-extrabold text-center">
                     <p>
-                        <span className="text-point-500">{'석준'}</span>님,
+                        <span className="text-point-500">{user?.nickname}</span>
+                        님,
                     </p>
                     <p>환영해요 멍멍!</p>
                 </div>
