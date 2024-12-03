@@ -35,6 +35,8 @@ export default function Signup() {
         setLoading,
         showModal,
         setShowModal,
+        showToast,
+        isToastActive,
     } = useSignupForm();
 
     const handleBackBtn = useCallback(() => {
@@ -77,6 +79,8 @@ export default function Signup() {
                         isValid={isValid}
                         setPageNumber={setPageNumber}
                         setLoading={setLoading}
+                        showToast={showToast}
+                        isToastActive={isToastActive}
                     />
                     <SecondStep
                         pageNumber={pageNumber}
