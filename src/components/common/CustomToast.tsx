@@ -1,5 +1,5 @@
 import { toast, ToastContainer } from 'react-toastify';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import Success from '@/assets/images/success.svg?react';
 import Warning from '@/assets/images/warning.svg?react';
 
@@ -22,6 +22,7 @@ export function CustomToast({ message, type }: CustomToastProps) {
 }
 
 export function ToastAnchor({ children }: { children: React.ReactNode }) {
+    // ToastContainer를 직접 설정하여 autoClose가 확실히 동작하도록 함
     return (
         <div className="relative">
             <div className="absolute left-0 right-0 -top-20 z-50">
@@ -31,6 +32,10 @@ export function ToastAnchor({ children }: { children: React.ReactNode }) {
                     limit={1}
                     hideProgressBar
                     closeButton={false}
+                    closeOnClick={false}
+                    pauseOnFocusLoss={false}
+                    draggable={false}
+                    pauseOnHover={false}
                     style={{
                         position: 'relative',
                         inset: 'unset',
@@ -48,19 +53,41 @@ export function ToastAnchor({ children }: { children: React.ReactNode }) {
 
 export function useCustomToast() {
     const isToastActiveRef = useRef(false);
+    const toastIdRef = useRef<string | number | null>(null);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    const clearToastState = useCallback(() => {
+        isToastActiveRef.current = false;
+        toastIdRef.current = null;
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+    }, []);
 
     const showToast = useCallback(
         (message: string, type: 'success' | 'warning' = 'success') => {
-            if (isToastActiveRef.current) return false;
+            // 이전 toast가 있다면 강제로 제거
+            if (toastIdRef.current) {
+                toast.dismiss(toastIdRef.current);
+                clearToastState();
+            }
 
             isToastActiveRef.current = true;
 
-            toast(() => CustomToast({ message, type }), {
+            // 새로운 toast 생성
+            toastIdRef.current = toast(() => CustomToast({ message, type }), {
+                autoClose: 3000,
                 onClose: () => {
-                    setTimeout(() => {
-                        isToastActiveRef.current = false;
+                    // toast가 닫힐 때 300ms 후에 상태 초기화
+                    timerRef.current = setTimeout(() => {
+                        clearToastState();
                     }, 300);
                 },
+                closeOnClick: false,
+                pauseOnFocusLoss: false,
+                draggable: false,
+                pauseOnHover: false,
                 style: {
                     background: 'transparent',
                     boxShadow: 'none',
@@ -68,14 +95,32 @@ export function useCustomToast() {
                 },
             });
 
-            return true; // 토스트가 실제로 표시되었음을 반환
+            // 3초 후에 강제로 toast 제거
+            timerRef.current = setTimeout(() => {
+                if (toastIdRef.current) {
+                    toast.dismiss(toastIdRef.current);
+                    clearToastState();
+                }
+            }, 3000);
+
+            return true;
         },
-        [],
+        [clearToastState],
     );
 
     const isToastActive = useCallback(() => {
         return isToastActiveRef.current;
     }, []);
+
+    // cleanup
+    useEffect(() => {
+        return () => {
+            if (toastIdRef.current) {
+                toast.dismiss(toastIdRef.current);
+            }
+            clearToastState();
+        };
+    }, [clearToastState]);
 
     return { showToast, isToastActive };
 }
