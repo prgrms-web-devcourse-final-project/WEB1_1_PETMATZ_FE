@@ -22,6 +22,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthGaurd } from '@/components/auth';
 import DogEdit from './pages/DogEdit';
+import ProfileEdit from './pages/ProfileEdit';
 
 export default function AppRoutes() {
     return (
@@ -72,6 +73,7 @@ export default function AppRoutes() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/ranking" element={<Ranking />} />
                         <Route path="/dog-edit/:id" element={<DogEdit />} />
+                        <Route path="/profile-edit" element={<ProfileEdit />} />
                     </Route>
                 </Route>
             </Routes>
