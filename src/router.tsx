@@ -11,6 +11,7 @@ import {
     Login,
     Match,
     Please,
+    PleaseDetail,
     Profile,
     Register,
     Signup,
@@ -74,6 +75,7 @@ export default function AppRoutes() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/ranking" element={<Ranking />} />
                         <Route path="/dog-edit/:id" element={<DogEdit />} />
+                        <Route path="/please/:id" element={<PleaseDetail />} />
                     </Route>
                 </Route>
             </Routes>
