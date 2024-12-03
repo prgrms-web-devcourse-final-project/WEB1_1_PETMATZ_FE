@@ -4,8 +4,10 @@ import {
     ChatRoomCreateApiResponse,
     ChatRoomCreateApiRequest,
     ChatRoomListApiResponse,
+    ChatRoomDeleteApiRequest,
 } from '@/types/chat';
 import { http } from './base';
+import { BaseApiResponse } from '@/types/baseResponse';
 
 /**
  * GET	ChatRoomList
@@ -40,4 +42,14 @@ export const getChatMessageList = async ({
     await http.get<ChatMessageListApiResponse, ChatMessageListApiRequest>(
         '/api/v1/chat/message',
         { chatRoomId, pageSize, startPage, lastFetchTimestamp },
+    );
+
+/**
+ * DELETE	ChatRoom
+ * 채팅방을 삭제합니다.
+ */
+export const deleteChatRoom = async ({ roomId }: ChatRoomDeleteApiRequest) =>
+    await http.delete<BaseApiResponse, ChatRoomDeleteApiRequest>(
+        '/api/v1/match',
+        { roomId },
     );

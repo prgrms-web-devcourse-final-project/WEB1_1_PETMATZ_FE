@@ -17,7 +17,7 @@ export default function ChatDetailTitle() {
                 {curRoomInfo ? (
                     <>
                         <ArrowLeftIcon
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate('/chat')}
                             className="text-point-900 w-[24px] h-[24px] cursor-pointer"
                         />
                         <div className="flex-1 flex items-center gap-[12px]">
