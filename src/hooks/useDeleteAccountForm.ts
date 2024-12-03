@@ -34,6 +34,9 @@ export default function useDeleteAccountForm() {
      * Handles form submission
      */
     const onSubmit = async (data: DeleteAccountInputs) => {
+        if (isToastActive()) {
+            return;
+        }
         setLoading(true);
         // api 로직 추가
         await postDeleteAccount(data).then((response) => {
@@ -42,6 +45,13 @@ export default function useDeleteAccountForm() {
                 setTimeout(() => {
                     navigate('/home');
                 }, 3000);
+            } else {
+                console.log(response);
+                if (response.error?.status === 403) {
+                    showToast('비밀번호를 틀렸습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
             }
         });
         setLoading(false);
