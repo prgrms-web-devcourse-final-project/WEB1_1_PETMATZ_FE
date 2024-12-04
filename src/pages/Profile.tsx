@@ -50,7 +50,7 @@ export default function Profile() {
                 }
             },
         );
-    }, []);
+    }, [data, user]);
 
     if (isLoading || !user) {
         return <Loading />;
