@@ -1,6 +1,6 @@
 import { Loading } from '@/components/common';
 import { getProfileInfo, postLikeProfile } from '@/hooks/api/profile';
-import { useUserStore } from '@/stores';
+import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
@@ -8,10 +8,12 @@ import Star from '@/assets/images/profile/star.svg?react';
 import Lvl from '@/assets/images/profile/lvl.svg?react';
 import Heart from '@/assets/images/profile/heart.svg?react';
 import Unheart from '@/assets/images/profile/unheart.svg?react';
-import { Label, Tag } from '@/components/profile';
+import { DogList, Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
 import { createChatRoom } from '@/hooks/api/chat';
+import { DogsInfoResponse } from '@/types/dogInfo';
+import { fetchDogsInfo } from '@/hooks/api/dogInfo';
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
@@ -21,14 +23,31 @@ export default function Profile() {
         '/src/assets/images/profile/profile1.svg',
     );
     const [like, setLike] = useState(false);
+    const { setTitle } = useTitleStore();
+    const [showMenu, setShowMenu] = useState(false);
 
     const userId = id || '';
     const isMyProfile = id == user?.id;
 
-    const { data, isLoading } = useQuery<ProfileApiResponse, Error>({
+    const { data, isLoading: userLoading } = useQuery<
+        ProfileApiResponse,
+        Error
+    >({
         queryKey: ['user', userId],
         queryFn: () => getProfileInfo({ userId }),
     });
+
+    const { data: dogsData, isLoading: dogsLoading } = useQuery<
+        DogsInfoResponse,
+        Error
+    >({
+        queryKey: ['dogs', userId],
+        queryFn: () => fetchDogsInfo(Number(userId)),
+    });
+
+    useEffect(() => {
+        setTitle('프로필');
+    }, []);
 
     useEffect(() => {
         if (!data) {
@@ -69,14 +88,20 @@ export default function Profile() {
         });
     }, [data]);
 
-    if (isLoading || !user) {
+    if (userLoading || dogsLoading || !user) {
         return <Loading />;
     }
 
-    if (!data || !data.data || data.error?.status === 500) {
-        return <div>서버 에러</div>;
-    } else if (data.error?.status === 400) {
-        return <div>존재하지 않는 데이터입니다.</div>;
+    if (
+        !data ||
+        !dogsData ||
+        !data.data ||
+        !dogsData.data ||
+        data.error?.status === 400 ||
+        data.error?.status === 500 ||
+        dogsData.error?.status === 500
+    ) {
+        return <div>404 not found</div>;
     }
 
     const profileData = data.data;
@@ -101,11 +126,11 @@ export default function Profile() {
                                 {profileData.nickname}
                             </span>
                             {profileData.gender === 'MALE' ? (
-                                <span className="text-label-s font-semibold text-white bg-blue-600 px-[12.5px] py-[4.5px] rounded-lg">
+                                <span className="text-label-s font-semibold text-white bg-point-500 px-[12.5px] py-[4.5px] rounded-lg">
                                     남성
                                 </span>
                             ) : (
-                                <span className="text-label-s font-semibold text-white bg-warning-300 px-[12.5px] py-[4.5px] rounded-lg">
+                                <span className="text-label-s font-semibold text-white bg-warning-200 px-[12.5px] py-[4.5px] rounded-lg">
                                     여성
                                 </span>
                             )}
@@ -152,7 +177,7 @@ export default function Profile() {
                                     {like ? (
                                         <Heart
                                             onClick={handleLikeBtn}
-                                            className="text-warning-400 flex-1 cursor-pointer w-8 h-8"
+                                            className="flex-1 cursor-pointer w-8 h-8"
                                         />
                                     ) : (
                                         <Unheart
@@ -215,9 +240,13 @@ export default function Profile() {
                         <Label text="나의 대략적인 위치 정보" />
                         <Tag text={profileData.region} />
                     </article>
-                    <article className="flex flex-col gap-4">
-                        등록된 멍멍이 정보(추가될 예정)
-                    </article>
+                    <div className="border-[0.5px] border-gray-300 my-4"></div>
+                    <DogList
+                        dogsData={dogsData}
+                        isMyProfile={isMyProfile}
+                        showMenu={showMenu}
+                        setShowMenu={setShowMenu}
+                    />
                 </div>
             </div>
         </div>
