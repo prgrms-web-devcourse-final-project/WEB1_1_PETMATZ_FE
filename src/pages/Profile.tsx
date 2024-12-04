@@ -12,6 +12,8 @@ import { Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
 import { createChatRoom } from '@/hooks/api/chat';
+import { DogInfoResponse } from '@/types/dogInfo';
+import { fetchDogInfo } from '@/hooks/api/dogInfo';
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
@@ -26,9 +28,20 @@ export default function Profile() {
     const userId = id || '';
     const isMyProfile = id == user?.id;
 
-    const { data, isLoading } = useQuery<ProfileApiResponse, Error>({
+    const { data, isLoading: userLoading } = useQuery<
+        ProfileApiResponse,
+        Error
+    >({
         queryKey: ['user', userId],
         queryFn: () => getProfileInfo({ userId }),
+    });
+
+    const { data: dogsData, isLoading: dogsLoading } = useQuery<
+        DogInfoResponse,
+        Error
+    >({
+        queryKey: ['dogs', userId],
+        queryFn: () => fetchDogInfo(Number(userId)),
     });
 
     useEffect(() => {
@@ -74,7 +87,7 @@ export default function Profile() {
         });
     }, [data]);
 
-    if (isLoading || !user) {
+    if (userLoading || dogsLoading || !user) {
         return <Loading />;
     }
 
