@@ -2,30 +2,37 @@ import Back from '@/assets/images/header/back.svg?react';
 import { useFadeNavigate } from '@/hooks';
 import { useState, useCallback, useEffect } from 'react';
 import { useUserStore } from '@/stores';
-import { getMyProfileInfo } from '@/hooks/api/profile';
-import { ProfileApiResponse } from '@/types/user';
+import { getMyProfileInfo, editMyProfileInfo } from '@/hooks/api/profile';
 import ImageSelectBox from '@/components/common/ImageSelectBox';
+import { LocationChange } from '@/components/common/edit-profile';
+import { useCustomToast } from '@/hooks';
+import { ToastAnchor } from '@/components/common';
+import Loading from '@/components/common/Loading';
 
 export default function ProfileEdit() {
+    const { showToast } = useCustomToast();
     const navigate = useFadeNavigate();
-    const { user, setUser } = useUserStore();
+    const { setUser } = useUserStore();
 
-    const [profileData, setProfileData] = useState<
-        ProfileApiResponse['data'] | null
-    >(null);
     const [nickname, setNickname] = useState('');
-    const [region, setRegion] = useState('');
+    const [, setRegion] = useState('');
     const [introduction, setIntroduction] = useState('');
     const [preferredSizes, setPreferredSizes] = useState<
         ('SMALL' | 'MEDIUM' | 'LARGE')[]
     >([]);
     const [isCareAvailable, setIsCareAvailable] = useState(false);
     const [profileImg, setProfileImg] = useState('');
+    const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
 
     const SIZE_LABELS: Record<'SMALL' | 'MEDIUM' | 'LARGE', string> = {
         SMALL: '소형견',
         MEDIUM: '중형견',
         LARGE: '대형견',
+    };
+    const isValidNickname = nickname.length >= 2;
+
+    const handleButtonClick = () => {
+        showToast('위치가 변경되었습니다!', 'success');
     };
 
     // 프로필 정보를 API에서 가져오기
@@ -45,7 +52,6 @@ export default function ProfileEdit() {
                 });
 
                 // 상태 초기화
-                setProfileData(profile);
                 setNickname(profile.nickname || '');
                 setRegion(profile.region || '');
                 setIntroduction(profile.introduction || '');
@@ -54,33 +60,51 @@ export default function ProfileEdit() {
                 setProfileImg(profile.profileImg || '');
             } catch (err) {
                 console.log('Failed to retrieve profile', err);
+            } finally {
+                setIsLoading(false); // 로딩 완료
             }
         };
+
         fetchProfile();
     }, [setUser]);
 
     const handleBackBtn = useCallback(() => {
-        navigate('/');
+        navigate('-1');
     }, [navigate]);
 
-    const handleSubmit = () => {
-        console.log({
+    const handleDeleteAccountBtn = useCallback(() => {
+        navigate('/delete-account');
+    }, [navigate]);
+
+    const updateProfile = async () => {
+        const response = await editMyProfileInfo({
             nickname,
-            region,
-            introduction,
             preferredSizes,
+            introduction,
             isCareAvailable,
             profileImg,
         });
-        console.log('user : ', user);
 
-        // TODO: 업데이트된 정보를 백엔드에 전송하는 로직 추가
+        if (response.ok) {
+            console.log('프로필 업데이트 성공:', response.message);
+            navigate('-1');
+        } else {
+            console.error('프로필 업데이트 실패:', response.message);
+        }
     };
+
+    if (isLoading) {
+        return (
+            <div className="h-screen flex items-center justify-center bg-white">
+                <Loading />
+            </div>
+        );
+    }
 
     return (
         <div className="h-screen bg-white flex flex-col overflow-y-auto">
             {/* Header */}
-            <header className="bg-white min-h-14 w-full flex items-center justify-center sticky top-0">
+            <header className="bg-white min-h-14 w-full flex items-center justify-center sticky top-0 z-50">
                 <Back
                     onClick={handleBackBtn}
                     className="absolute left-[26px] cursor-pointer"
@@ -97,7 +121,6 @@ export default function ProfileEdit() {
                     어떤 프로필로
                     <br /> 대화할까요?
                 </p>
-
                 {/* Profile Image */}
                 <div className="mb-[18px]">
                     <ImageSelectBox
@@ -107,7 +130,6 @@ export default function ProfileEdit() {
                         setImgName={setProfileImg}
                     />
                 </div>
-
                 {/* Nickname */}
                 <div className="mb-[18px]">
                     <p className="text-label-m font-normal text-gray-500 mb-2">
@@ -117,11 +139,25 @@ export default function ProfileEdit() {
                         type="text"
                         placeholder="닉네임을 알려주세요."
                         value={nickname}
-                        onChange={(e) => setNickname(e.target.value)}
-                        className="w-full text-body-m font-normal text-gray-900 border border-gray-200 rounded-lg px-6 py-2.5"
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            const regex = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{0,10}$/; // 한글, 영문, 숫자 2~10글자 제한
+                            if (regex.test(value) || value === '') {
+                                setNickname(value); // 조건 만족 시 상태 업데이트
+                            }
+                        }}
+                        className={`w-full text-body-m font-normal text-gray-900 outline-none focus:ring-0 border ${
+                            isValidNickname
+                                ? 'border-gray-200 focus:border-gray-200'
+                                : 'border-1 border-warning-400 focus:border-warning-400'
+                        } rounded-lg px-6 py-2.5`}
                     />
+                    {!isValidNickname && (
+                        <p className="text-label-m font-normal mt-2 ml-6 text-gray-400">
+                            한글, 영문 또는 숫자 포함 2글자 이상 10글자 이하
+                        </p>
+                    )}
                 </div>
-
                 {/* Preferred Sizes */}
                 <div className="mb-[18px]">
                     <p className="text-label-m font-normal text-gray-500 mb-2">
@@ -166,49 +202,38 @@ export default function ProfileEdit() {
                         ))}
                     </div>
                 </div>
-
                 {/* Care Availability */}
                 <div className="mb-4">
                     <p className="text-label-m font-normal text-gray-500 mb-2">
                         돌봄이 가능 여부
                     </p>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setIsCareAvailable(true)}
-                            className={`px-[18px] py-1.5 rounded-lg border ${
-                                isCareAvailable
-                                    ? 'bg-point-500 text-white border-point-500'
-                                    : 'bg-white text-gray-300 border-gray-200'
-                            }`}
-                        >
-                            가능
-                        </button>
-                        <button
-                            onClick={() => setIsCareAvailable(false)}
-                            className={`px-[18px] py-1.5 rounded-lg border ${
-                                !isCareAvailable
-                                    ? 'bg-point-500 text-white border-point-500'
-                                    : 'bg-white text-gray-300 border-gray-200'
-                            }`}
-                        >
-                            불가능
-                        </button>
+                    <div className="flex">
+                        <div className="w-[170px] bg-gray-100 flex rounded-lg overflow-hidden">
+                            <button
+                                onClick={() => setIsCareAvailable(true)}
+                                className={`flex-1 px-[18px] py-1.5 rounded-lg transition-colors duration-300 ${
+                                    isCareAvailable
+                                        ? 'bg-point-500 text-white '
+                                        : 'text-gray-300 '
+                                }  -mr-[5px]`}
+                            >
+                                가능
+                            </button>
+                            <button
+                                onClick={() => setIsCareAvailable(false)}
+                                className={`flex-1 px-[18px] py-1.5 rounded-lg transition-colorsm duration-300 ${
+                                    !isCareAvailable
+                                        ? 'bg-point-500 text-white '
+                                        : 'text-gray-300 '
+                                }  -ml-[5px]`}
+                            >
+                                불가능
+                            </button>
+                        </div>
                     </div>
                 </div>
-
                 {/* Region */}
-                <div className="mb-[18px]">
-                    <p className="text-label-m font-normal text-gray-500 mb-2">
-                        지역
-                    </p>
-                    <div className="flex gap-2">
-                        <p className="rounded-lg">{region}</p>
-                        <button className="text-gray-400 text-body-s font-normal">
-                            위치 변경
-                        </button>
-                    </div>
-                </div>
-
+                <LocationChange onLocationChange={handleButtonClick} />
                 {/* Introduction */}
                 <div className="mb-4">
                     <p className="text-label-m font-normal text-gray-500 mb-2">
@@ -222,14 +247,28 @@ export default function ProfileEdit() {
                         maxLength={50}
                     />
                 </div>
-
+                <div className="flex items-center justify-center mb-8">
+                    <button
+                        onClick={handleDeleteAccountBtn}
+                        className="text-label-l  underline text-gray-400 p-1"
+                    >
+                        회원탈퇴
+                    </button>
+                </div>
                 {/* Submit Button */}
-                <button
-                    onClick={handleSubmit}
-                    className="w-full py-3 bg-point-500 text-white font-bold rounded-md"
-                >
-                    수정 완료
-                </button>
+                <ToastAnchor>
+                    <button
+                        onClick={updateProfile}
+                        className={`w-full px-6 py-2.5 text-white rounded-lg ${
+                            isValidNickname
+                                ? 'bg-point-500 hover:bg-point-600'
+                                : 'bg-gray-400'
+                        }`}
+                        disabled={!isValidNickname}
+                    >
+                        수정 완료
+                    </button>
+                </ToastAnchor>
             </div>
         </div>
     );
