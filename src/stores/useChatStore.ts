@@ -1,4 +1,8 @@
-import { getChatMessageList, getChatRoomList } from '@/hooks/api/chat';
+import {
+    deleteChatRoom,
+    getChatMessageList,
+    getChatRoomList,
+} from '@/hooks/api/chat';
 import { IChatMessage, IChatRoom } from '@/types/chat';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -13,6 +17,7 @@ interface ChatStore {
     connectedClient: Client | null;
     firstFetchedTimestamp: string | null;
     subscriptionId: string | null;
+    subscriptionList: Record<number, any>;
 
     isNewMsg: boolean;
     setIsNewMsg: (state: boolean) => void;
@@ -24,6 +29,7 @@ interface ChatStore {
     fetchChatRoomList: () => Promise<void>;
     subToChatRoomList: () => void;
     unSubFromChatRoomList: () => void;
+    deleteChatRoomFromList: (chatRoomId: string) => Promise<void>;
 
     // 특정 채팅방
     fetchChatMessageList: (
@@ -43,6 +49,9 @@ interface ChatStore {
         receiverId: string,
     ) => void;
     markMsgAsRead: (chatRoomId: number, senderId: string) => void;
+
+    // 타임 스탬프 초기화
+    resetTimestamp: () => void;
 }
 
 const STOMP_CONNECT_URL = import.meta.env.VITE_STOMP_CONNECT_URL as string;
@@ -56,6 +65,35 @@ const useChatStore = create<ChatStore>((set, get) => ({
     firstFetchedTimestamp: null,
     morePage: true,
     subscriptionId: null,
+    subscriptionList: {},
+
+    deleteChatRoomFromList: async (chatRoomId) => {
+        const client = get().connectedClient;
+        const subscriptionList = get().subscriptionList;
+
+        const { ok } = await deleteChatRoom({ roomId: String(chatRoomId) });
+
+        if (!ok) {
+            console.error('채팅방 삭제에 실패했습니다.');
+            return;
+        }
+
+        if (client && subscriptionList[Number(chatRoomId)]) {
+            subscriptionList[Number(chatRoomId)].unsubscribe();
+            delete subscriptionList[Number(chatRoomId)];
+        }
+
+        set((state) => ({
+            chatRoomList: state.chatRoomList.filter(
+                (room) => Number(room.chatRoomId) !== Number(chatRoomId),
+            ),
+            subscriptionList,
+        }));
+    },
+
+    resetTimestamp: () => {
+        set({ firstFetchedTimestamp: null });
+    },
 
     setIsNewMsg: (state) => {
         set({ isNewMsg: state });
@@ -83,6 +121,7 @@ const useChatStore = create<ChatStore>((set, get) => ({
     // 모든 채팅방 구독
     subToChatRoomList: () => {
         let client = get().connectedClient;
+        const subscriptionList = get().subscriptionList;
 
         if (client) {
             client.deactivate();
@@ -93,10 +132,9 @@ const useChatStore = create<ChatStore>((set, get) => ({
         client = new Client({ webSocketFactory: () => socket });
 
         client.onConnect = () => {
-            console.log('소켓 연결 성공');
             const chatRoomList = get().chatRoomList;
             chatRoomList.forEach((room) => {
-                client.subscribe(
+                const subscription = client.subscribe(
                     `/topic/chat/${room.chatRoomId}`,
                     (message) => {
                         const newMsg: IChatMessage = JSON.parse(message.body);
@@ -117,11 +155,13 @@ const useChatStore = create<ChatStore>((set, get) => ({
                         }
                     },
                 );
+
+                subscriptionList[room.chatRoomId] = subscription;
             });
         };
 
         client.activate();
-        set({ connectedClient: client });
+        set({ connectedClient: client, subscriptionList });
     },
 
     // 모든 채팅방 구독 해제
@@ -180,7 +220,6 @@ const useChatStore = create<ChatStore>((set, get) => ({
         client = new Client({ webSocketFactory: () => socket });
 
         client.onConnect = () => {
-            console.log('소켓 연결 성공');
             // 메시지 수신 구독
             const subscription = client.subscribe(
                 `/topic/chat/${chatRoomId}`,

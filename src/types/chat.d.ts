@@ -71,6 +71,11 @@ interface ChatMessageListApiResponse extends BaseApiResponse {
     };
 }
 
+// Delete	ChatRoom
+interface ChatRoomDeleteApiRequest {
+    roomId: string;
+}
+
 export type {
     IPub,
     IChatUser,
@@ -79,6 +84,7 @@ export type {
     ChatRoomListApiResponse,
     ChatRoomCreateApiRequest,
     ChatRoomCreateApiResponse,
+    ChatRoomDeleteApiRequest,
     ChatMessageListApiRequest,
     ChatMessageListApiResponse,
 };
