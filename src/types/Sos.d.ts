@@ -119,3 +119,24 @@ export interface PetListResponse extends BaseApiResponse {
 export interface SOSUpdateRequest extends Partial<SOSCreateRequest> {
     postId: number; // 수정할 게시물 ID
 }
+
+export interface SOSDetails {
+    id: number;
+    title: string;
+    paymentType: string;
+    price: number;
+    startDate: string;
+    endDate: string;
+    pets: Pet[];
+    authorNickname: string;
+    authorProfileImg: string;
+    authorGender: string; // MALE or FEMALE
+    authorRegion: string;
+}
+
+export interface SOSDetailsResponse extends BaseApiResponse {
+    data?: {
+        responseCode: string;
+        result: SOSDetails;
+    };
+}
