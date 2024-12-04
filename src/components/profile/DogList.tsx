@@ -2,10 +2,10 @@ import { useCallback } from 'react';
 import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
 import { DogCard } from '../common';
 import { useFadeNavigate } from '@/hooks';
-import { DogInfoResponse } from '@/types/dogInfo';
+import { DogsInfoResponse } from '@/types/dogInfo';
 
 interface DogListPropsType {
-    dogsData: DogInfoResponse;
+    dogsData: DogsInfoResponse;
     isMyProfile: boolean;
     showMenu: boolean;
     setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;

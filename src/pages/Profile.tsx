@@ -12,8 +12,8 @@ import { DogList, Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
 import { createChatRoom } from '@/hooks/api/chat';
-import { DogInfoResponse } from '@/types/dogInfo';
-import { fetchDogInfo } from '@/hooks/api/dogInfo';
+import { DogsInfoResponse } from '@/types/dogInfo';
+import { fetchDogsInfo } from '@/hooks/api/dogInfo';
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
@@ -38,11 +38,11 @@ export default function Profile() {
     });
 
     const { data: dogsData, isLoading: dogsLoading } = useQuery<
-        DogInfoResponse,
+        DogsInfoResponse,
         Error
     >({
         queryKey: ['dogs', userId],
-        queryFn: () => fetchDogInfo(Number(userId)),
+        queryFn: () => fetchDogsInfo(Number(userId)),
     });
 
     useEffect(() => {
