@@ -35,4 +35,21 @@ interface ProfileApiResponse extends BaseApiResponse {
     };
 }
 
-export type { IUser, ProfileApiQueryString, ProfileApiResponse };
+//	POST like user profile
+interface LikeApiRequest {
+    heartedId: number;
+}
+interface LikeApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+    };
+}
+
+export type {
+    IUser,
+    ProfileApiQueryString,
+    ProfileApiResponse,
+    LikeApiRequest,
+    LikeApiResponse,
+};
