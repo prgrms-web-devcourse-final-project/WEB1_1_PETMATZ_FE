@@ -1,16 +1,41 @@
-import { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFadeNavigate } from '@/hooks';
+import { motion, AnimatePresence } from 'framer-motion';
 import Back from '@/assets/images/header/back.svg?react';
-import { ToastAnchor } from '@/components/common';
+import { CustomToggle, ToastAnchor } from '@/components/common';
+import DogInfoComponent from '@/components/please/DogInformation';
+import RequestListComponent from '@/components/please/RequestList';
 
 export default function PleaseDetail() {
     const { id } = useParams();
     const navigate = useFadeNavigate();
 
+    // toggle 상태 관리
+    const [isInfoTab, setIsInfoTab] = useState(true);
+
     const handleBackBtn = useCallback(() => {
         navigate('/');
     }, []);
+
+    const handleToggleChange = (checked: boolean) => {
+        setIsInfoTab(checked);
+    };
+
+    const pageVariants = {
+        initial: {
+            opacity: 0,
+            x: isInfoTab ? -50 : 50,
+        },
+        animate: {
+            opacity: 1,
+            x: 0,
+        },
+        exit: {
+            opacity: 0,
+            x: isInfoTab ? 50 : -50,
+        },
+    };
 
     // useEffect로 부탁 id에 해당하는 데이터를 불러와서 상세 페이지 구성
 
@@ -29,11 +54,42 @@ export default function PleaseDetail() {
                 <section className="flex-1 flex flex-col justify-start">
                     <div className="bg-white pt-6 pb-12 flex flex-col">
                         <div className="w-full max-w-[600px] px-6 mx-auto">
-                            <div className="p-4 overflow-y-auto h-full">
-                                <h1 className="text-title-s font-extrabold text-gray-800 pb-12">
-                                    id : {id} 부탁 디테일 페이지
-                                </h1>
+                            <div className="flex flex-col justify-center items-center">
+                                <CustomToggle
+                                    name="pleaseTab"
+                                    leftText="멍멍이 정보"
+                                    rightText="부탁 리스트"
+                                    onChange={handleToggleChange}
+                                />
                             </div>
+                            {/* 조건부 렌더링 + dogId 전달 */}
+                            <AnimatePresence mode="wait">
+                                {isInfoTab ? (
+                                    <motion.div
+                                        key="info-tab"
+                                        className="w-full"
+                                        initial="initial"
+                                        animate="animate"
+                                        exit="exit"
+                                        variants={pageVariants}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <DogInfoComponent dogId={id} />
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="request-tab"
+                                        className="w-full"
+                                        initial="initial"
+                                        animate="animate"
+                                        exit="exit"
+                                        variants={pageVariants}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <RequestListComponent dogId={id} />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </section>
