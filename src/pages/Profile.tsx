@@ -9,6 +9,7 @@ import Lv5 from '@/assets/images/profile/lv-5.svg?react';
 import { Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
+import { createChatRoom } from '@/hooks/api/chat';
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
@@ -33,6 +34,24 @@ export default function Profile() {
         setImage(data.data.profileImg);
     }, [data, setImage]);
 
+    const handleEditBtn = useCallback(() => {
+        navigate('/edit-profile');
+    }, []);
+
+    const handleChatBtn = useCallback(async () => {
+        const entrustedEmail = data!.data.accountId; // 상대방 이메일
+        const caregiverEmail = user!.accountId; // 나의 이메일
+        await createChatRoom({ entrustedEmail, caregiverEmail }).then(
+            (response) => {
+                if (response.ok) {
+                    navigate(`/chat/${response.data.result}`);
+                } else {
+                    console.log(response.error?.msg);
+                }
+            },
+        );
+    }, []);
+
     if (isLoading || !user) {
         return <Loading />;
     }
@@ -44,12 +63,6 @@ export default function Profile() {
     }
 
     const profileData = data.data;
-
-    const handleEditBtn = useCallback(() => {
-        navigate('/edit-profile');
-    }, []);
-
-    const handleChatBtn = useCallback(() => {}, []);
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
