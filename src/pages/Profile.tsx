@@ -135,7 +135,7 @@ export default function Profile() {
                     <article className="flex flex-col gap-2">
                         <Label text="선호 애견 크기" />
                         <div className="flex gap-[10px]">
-                            {profileData.preferredSizes.map((size, index) => (
+                            {profileData.preferredSize?.map((size, index) => (
                                 <Tag
                                     text={
                                         size === 'SMALL'

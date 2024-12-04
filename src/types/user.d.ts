@@ -21,7 +21,8 @@ interface ProfileApiResponse extends BaseApiResponse {
         nickname: string;
         profileImg: string;
         role: string;
-        preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+        preferredSizes?: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+        preferredSize?: ('SMALL' | 'MEDIUM' | 'LARGE')[];
         gender: string;
         introduction: string;
         isRegistered: boolean;
