@@ -1,6 +1,6 @@
 import { Loading } from '@/components/common';
 import { getProfileInfo, postLikeProfile } from '@/hooks/api/profile';
-import { useUserStore } from '@/stores';
+import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
@@ -21,6 +21,7 @@ export default function Profile() {
         '/src/assets/images/profile/profile1.svg',
     );
     const [like, setLike] = useState(false);
+    const { setTitle } = useTitleStore();
 
     const userId = id || '';
     const isMyProfile = id == user?.id;
@@ -29,6 +30,10 @@ export default function Profile() {
         queryKey: ['user', userId],
         queryFn: () => getProfileInfo({ userId }),
     });
+
+    useEffect(() => {
+        setTitle('프로필');
+    }, []);
 
     useEffect(() => {
         if (!data) {
@@ -101,11 +106,11 @@ export default function Profile() {
                                 {profileData.nickname}
                             </span>
                             {profileData.gender === 'MALE' ? (
-                                <span className="text-label-s font-semibold text-white bg-blue-600 px-[12.5px] py-[4.5px] rounded-lg">
+                                <span className="text-label-s font-semibold text-white bg-point-500 px-[12.5px] py-[4.5px] rounded-lg">
                                     남성
                                 </span>
                             ) : (
-                                <span className="text-label-s font-semibold text-white bg-warning-300 px-[12.5px] py-[4.5px] rounded-lg">
+                                <span className="text-label-s font-semibold text-white bg-warning-200 px-[12.5px] py-[4.5px] rounded-lg">
                                     여성
                                 </span>
                             )}
@@ -152,7 +157,7 @@ export default function Profile() {
                                     {like ? (
                                         <Heart
                                             onClick={handleLikeBtn}
-                                            className="text-warning-400 flex-1 cursor-pointer w-8 h-8"
+                                            className="flex-1 cursor-pointer w-8 h-8"
                                         />
                                     ) : (
                                         <Unheart
