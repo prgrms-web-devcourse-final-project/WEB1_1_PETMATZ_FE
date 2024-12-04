@@ -34,7 +34,7 @@ const CustomToggle = ({
     // name이 pleaseTab일 때의 스타일 설정
     const isPleasePage = name === 'pleaseTab';
     const toggleHeight = isPleasePage ? 'h-[44px]' : 'h-8';
-    const togglePadding = isPleasePage ? 'p-0' : 'p-1';
+    const togglePadding = isPleasePage ? 'p-0' : 'p-2';
     const textStyle = isPleasePage ? 'text-body-m font-extrabold' : '';
 
     const value = watch ? watch(name) : localChecked;
@@ -90,7 +90,7 @@ const CustomToggle = ({
                     {...inputProps}
                 />
                 <div
-                    className={`relative flex items-center rounded-full transition-colors duration-200 bg-point-50 ${togglePadding}`}
+                    className={`relative flex items-center ${toggleHeight} rounded-full transition-colors duration-200 bg-point-50 ${togglePadding}`}
                     style={{ width: `${minWidth * 2 + 8}px` }}
                 >
                     <div
@@ -101,7 +101,7 @@ const CustomToggle = ({
                         }}
                     />
                     <div
-                        className={`relative flex w-full justify-between text-white ${toggleHeight}`}
+                        className={`relative flex w-full justify-between text-white`}
                     >
                         <span
                             className={`z-10 flex items-center justify-center ${isPleasePage ? 'px-[18px]' : 'px-2'} whitespace-nowrap transition-colors duration-200
