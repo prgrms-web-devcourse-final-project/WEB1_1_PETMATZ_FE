@@ -4,8 +4,9 @@ import { useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import Star from '@/assets/images/profile/star.svg?react';
+import Lvl from '@/assets/images/profile/lvl.svg?react';
 import Heart from '@/assets/images/profile/heart.svg?react';
-import Lv5 from '@/assets/images/profile/lv-5.svg?react';
 import { Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
@@ -98,7 +99,7 @@ export default function Profile() {
                         </span>
                         <div className="py-3 flex justify-center gap-4">
                             <article className="w-[88px] flex flex-col items-center gap-1">
-                                <Heart />
+                                <Star />
                                 <span className="text-label-s text-gray-500 font-semibold">
                                     추천수
                                 </span>
@@ -107,7 +108,22 @@ export default function Profile() {
                                 </span>
                             </article>
                             <article className="w-[88px] flex flex-col items-center gap-1">
-                                <Lv5 />
+                                <Lvl
+                                    className={
+                                        profileData.recommendationCount >= 50
+                                            ? 'text-point-500'
+                                            : profileData.recommendationCount >=
+                                                26
+                                              ? 'text-[#3EB2FF]'
+                                              : profileData.recommendationCount >=
+                                                  16
+                                                ? 'text-[#BCFF3E]'
+                                                : profileData.recommendationCount >=
+                                                    4
+                                                  ? 'text-[#FFBF3E]'
+                                                  : 'text-[#FFE53E]'
+                                    }
+                                />
                                 <span className="text-label-s text-gray-500 font-semibold">
                                     돌봄등급
                                 </span>
