@@ -43,7 +43,7 @@ export default function AppRoutes() {
                         <Route path="/home" element={<Home />} />
                         <Route path="/profile/:id" element={<Profile />} />
                         <Route path="/sos" element={<SOS />} />
-                        <Route path="/sos/:id" element={<SOSDetail />} />
+
                         <Route path="/chat" element={<Chat />} />
                         <Route path="/please" element={<Please />} />
                         <Route path="/match" element={<Match />} />
@@ -74,6 +74,7 @@ export default function AppRoutes() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/ranking" element={<Ranking />} />
                         <Route path="/dog-edit/:id" element={<DogEdit />} />
+                        <Route path="/sos/:id" element={<SOSDetail />} />
                     </Route>
                 </Route>
             </Routes>
