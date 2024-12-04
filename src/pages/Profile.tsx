@@ -7,11 +7,13 @@ import { useParams } from 'react-router-dom';
 import Heart from '@/assets/images/profile/heart.svg?react';
 import Lv5 from '@/assets/images/profile/lv-5.svg?react';
 import { Label, Tag } from '@/components/profile';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useFadeNavigate } from '@/hooks';
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
     const { user } = useUserStore();
+    const navigate = useFadeNavigate();
     const [image, setImage] = useState(
         '/src/assets/images/profile/profile1.svg',
     );
@@ -42,6 +44,12 @@ export default function Profile() {
     }
 
     const profileData = data.data;
+
+    const handleEditBtn = useCallback(() => {
+        navigate('/edit-profile');
+    }, []);
+
+    const handleChatBtn = useCallback(() => {}, []);
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
@@ -97,9 +105,13 @@ export default function Profile() {
                         </div>
                     </section>
                     {isMyProfile ? (
-                        <button className="btn-solid">프로필 편집하기</button>
+                        <button onClick={handleEditBtn} className="btn-solid">
+                            프로필 편집하기
+                        </button>
                     ) : (
-                        <button className="btn-solid">대화 시작해보기</button>
+                        <button onClick={handleChatBtn} className="btn-solid">
+                            대화 시작해보기
+                        </button>
                     )}
                     <article className="flex flex-col gap-2">
                         <Label text="이메일" />
