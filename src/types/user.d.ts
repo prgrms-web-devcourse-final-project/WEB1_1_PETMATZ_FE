@@ -31,6 +31,7 @@ interface ProfileApiResponse extends BaseApiResponse {
         isCareAvailable: boolean;
         mbti: string;
         region: string;
+        myHeartUser?: boolean;
     };
 }
 
