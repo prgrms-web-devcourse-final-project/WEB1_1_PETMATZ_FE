@@ -17,7 +17,7 @@ interface DogInfo {
 
 // 단일 강아지 정보 응답 타입
 interface DogInfoResponse extends BaseApiResponse {
-    data?: DogInfo;
+    data?: DogInfo[];
 }
 
 export type { DogInfo, DogInfoResponse };

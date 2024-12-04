@@ -1,4 +1,4 @@
-import { Loading } from '@/components/common';
+import { DogCard, Loading } from '@/components/common';
 import { getProfileInfo, postLikeProfile } from '@/hooks/api/profile';
 import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
@@ -8,6 +8,7 @@ import Star from '@/assets/images/profile/star.svg?react';
 import Lvl from '@/assets/images/profile/lvl.svg?react';
 import Heart from '@/assets/images/profile/heart.svg?react';
 import Unheart from '@/assets/images/profile/unheart.svg?react';
+import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
 import { Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
@@ -24,6 +25,7 @@ export default function Profile() {
     );
     const [like, setLike] = useState(false);
     const { setTitle } = useTitleStore();
+    const [showMenu, setShowMenu] = useState(false);
 
     const userId = id || '';
     const isMyProfile = id == user?.id;
@@ -87,14 +89,24 @@ export default function Profile() {
         });
     }, [data]);
 
+    console.log(dogsData);
+
+    const handleShowDogsBtn = useCallback(() => {}, []);
+
     if (userLoading || dogsLoading || !user) {
         return <Loading />;
     }
 
-    if (!data || !data.data || data.error?.status === 500) {
-        return <div>서버 에러</div>;
-    } else if (data.error?.status === 400) {
-        return <div>존재하지 않는 데이터입니다.</div>;
+    if (
+        !data ||
+        !dogsData ||
+        !data.data ||
+        !dogsData.data ||
+        data.error?.status === 400 ||
+        data.error?.status === 500 ||
+        dogsData.error?.status === 500
+    ) {
+        return <div>404 not found</div>;
     }
 
     const profileData = data.data;
@@ -233,8 +245,35 @@ export default function Profile() {
                         <Label text="나의 대략적인 위치 정보" />
                         <Tag text={profileData.region} />
                     </article>
+                    <div className="border-[0.5px] border-gray-300 my-4"></div>
                     <article className="flex flex-col gap-4">
-                        등록된 멍멍이 정보(추가될 예정)
+                        <div
+                            onClick={handleShowDogsBtn}
+                            className="flex justify-between px-6 py-[12.5px] text-body-l font-semibold text-point-900 border-1 border-gray-200 rounded-lg shadow-md cursor-pointer"
+                        >
+                            <span>등록된 멍멍이 정보</span>
+                            <Arrow className="text-gray-400" />
+                        </div>
+                        {dogsData?.data.map((dog) => (
+                            <DogCard
+                                id={dog.id}
+                                dogNm={dog.dogNm}
+                                sexNm={dog.sexNm}
+                                kindNm={dog.kindNm}
+                                neuterYn={dog.neuterYn}
+                                profileImg={dog.profileImg}
+                                age={dog.age}
+                                temperament={dog.temperament}
+                                size={dog.size}
+                                comment={true}
+                                edit={isMyProfile}
+                            />
+                        ))}
+                        {showMenu && isMyProfile && (
+                            <button className="btn-solid">
+                                + 멍멍이 등록하기
+                            </button>
+                        )}
                     </article>
                 </div>
             </div>
