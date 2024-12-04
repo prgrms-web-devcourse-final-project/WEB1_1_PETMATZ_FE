@@ -62,7 +62,15 @@ export default function Profile() {
                             <span className="text-body-l text-gray-800 font-extrabold">
                                 {profileData.nickname}
                             </span>
-                            {profileData.gender === 'MALE' ? '남성' : '여성'}
+                            {profileData.gender === 'MALE' ? (
+                                <span className="text-label-s font-semibold text-white bg-blue-600 px-[12.5px] py-[4.5px] rounded-lg">
+                                    남성
+                                </span>
+                            ) : (
+                                <span className="text-label-s font-semibold text-white bg-warning-300 px-[12.5px] py-[4.5px] rounded-lg">
+                                    여성
+                                </span>
+                            )}
                         </div>
                         <span className="text-label-l text-gray-400 font-semibold break-words max-w-full">
                             {profileData.introduction}
