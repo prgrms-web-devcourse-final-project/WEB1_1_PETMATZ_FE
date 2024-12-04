@@ -75,7 +75,7 @@ export default function AppRoutes() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/ranking" element={<Ranking />} />
                         <Route path="/dog-edit/:id" element={<DogEdit />} />
-                        <Route path="/profile-edit" element={<ProfileEdit />} />
+                        <Route path="/edit-profile" element={<ProfileEdit />} />
                     </Route>
                 </Route>
             </Routes>
