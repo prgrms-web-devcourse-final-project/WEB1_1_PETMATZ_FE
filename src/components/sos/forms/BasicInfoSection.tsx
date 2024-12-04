@@ -1,33 +1,40 @@
-import { UseFormRegister, FieldErrors } from 'react-hook-form';
+import { UseFormRegister, FieldErrors, UseFormWatch } from 'react-hook-form';
 import { FormData } from '@/types/Sos';
+import { CustomInput } from '@/components/common';
 
 interface BasicInfoSectionProps {
     register: UseFormRegister<FormData>;
     errors: FieldErrors<FormData>;
-    getInputStyle: (fieldName: keyof FormData) => string;
+    watch: UseFormWatch<FormData>;
 }
 
-export default function ({ register, getInputStyle }: BasicInfoSectionProps) {
+export default function ({ register, errors, watch }: BasicInfoSectionProps) {
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                    제목
-                </label>
-                <input
-                    {...register('title', { required: true })}
-                    className={getInputStyle('title') + ':valid:border-error'}
+                <CustomInput
+                    id="title"
+                    label="제목"
+                    type="text"
                     placeholder="제목을 입력하세요"
+                    register={register}
+                    watch={watch}
+                    error={errors.comment?.message}
+                    design="outline"
+                    successMsg=""
                 />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                    내용
-                </label>
-                <textarea
-                    {...register('content', { required: true })}
-                    className={`${getInputStyle('content')} h-32 resize-none`}
+                <CustomInput
+                    id="comment"
+                    label="내용"
+                    type="textarea"
                     placeholder="내용을 입력하세요"
+                    register={register}
+                    watch={watch}
+                    error={errors.comment?.message}
+                    design="outline"
+                    successMsg=""
                 />
             </div>
         </div>

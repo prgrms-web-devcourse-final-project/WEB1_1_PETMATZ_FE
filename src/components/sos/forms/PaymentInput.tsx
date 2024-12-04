@@ -15,17 +15,17 @@ export default function PaymentInput({
     return (
         <input
             type="number"
-            {...register('paymentAmount', {
-                required: paymentType !== '협의',
+            {...register('price', {
+                required: paymentType !== 'NEGOTIABLE',
                 min: {
                     value: 0,
                     message: '0원 이상 입력해주세요',
                 },
                 valueAsNumber: true,
             })}
-            className={getInputStyle('paymentAmount')}
+            className={getInputStyle('price')}
             placeholder="금액을 입력하세요"
-            disabled={paymentType === '협의'}
+            disabled={paymentType === 'NEGOTIABLE'}
             step="100"
         />
     );

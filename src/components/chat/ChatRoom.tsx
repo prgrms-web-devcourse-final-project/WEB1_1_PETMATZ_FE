@@ -1,8 +1,11 @@
 import { useFadeNavigate } from '@/hooks';
-import { useChatStore } from '@/stores';
 import { IChatRoom } from '@/types/chat';
 import { getDefaultProfileImg, utcToCustomDateTime } from '@/utils';
 import { useState } from 'react';
+
+// SVG
+import TrashCanIcon from '@/assets/images/chat/trashCan.svg?react';
+import { useChatStore } from '@/stores';
 
 interface ChatRoomProps {
     chatRoom: IChatRoom;
@@ -18,6 +21,7 @@ export default function ChatRoom({
     const [startX, setStartX] = useState<number | null>(null);
     const [dragDistance, setDragDistance] = useState<number>(0); // 드래그 거리 추적
     const navigate = useFadeNavigate();
+    const { deleteChatRoomFromList } = useChatStore();
 
     const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
         const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
@@ -56,6 +60,14 @@ export default function ChatRoom({
         }
     };
 
+    const handleClickDeleteBtn = async (
+        chatRoomId: number,
+        e: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        e.stopPropagation();
+        await deleteChatRoomFromList(String(chatRoomId));
+    };
+
     return (
         <div
             key={chatRoom.chatRoomId}
@@ -66,22 +78,19 @@ export default function ChatRoom({
             onMouseDown={(e) => handleDragStart(e)}
             onMouseMove={(e) => handleDragMove(e, chatRoom.chatRoomId)}
             onMouseUp={handleDragEnd}
-            onMouseLeave={handleDragEnd} // 마우스가 벗어날 때도 드래그 종료
-            onClick={handleClick} // 클릭 이벤트 처리
+            onMouseLeave={handleDragEnd}
+            onClick={handleClick}
         >
             {/* 나가기 버튼 */}
             <button
-                className={`absolute right-0 top-0 bottom-0 w-20 rounded-tl-2xl h-[71px] rounded-bl-2xl bg-warning-300 hover:bg-warning-400 active:bg-warning-400 text-white font-bold transition-transform ${
+                className={`absolute flex items-center justify-center right-0 top-0 bottom-0 w-[70px] px-[18px] py-[24px] h-[72px] bg-gray-300 hover:bg-gray-400 active:bg-gray-400 text-white transition-transform ${
                     swipedRoom === chatRoom.chatRoomId
                         ? 'translate-x-0'
                         : 'translate-x-full'
                 }`}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    console.log(`채팅방 ${chatRoom.chatRoomId} 나가기`);
-                }}
+                onClick={(e) => handleClickDeleteBtn(chatRoom.chatRoomId, e)}
             >
-                나가기
+                <TrashCanIcon className="w-[24px] h-[24px] text-white" />
             </button>
 
             {/* 채팅방 항목 */}
@@ -97,7 +106,9 @@ export default function ChatRoom({
                         {chatRoom.other.userName}
                     </span>
                     <span className="text-label-m text-gray-500 truncate">
-                        {chatRoom.lastMessage}
+                        {chatRoom.lastMessage === 'first'
+                            ? '메세지를 보내보세요.'
+                            : chatRoom.lastMessage}
                     </span>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-[4px]">

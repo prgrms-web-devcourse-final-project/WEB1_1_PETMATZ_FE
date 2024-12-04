@@ -6,6 +6,7 @@ export { default as Profile } from './Profile';
 export { default as Signup } from './Signup';
 export { default as SOS } from './SOS';
 export { default as SOSWrite } from './SOSWrite';
+export { default as SOSDetail } from './SOSDetail';
 export { default as Chat } from './Chat';
 export { default as ChatDetail } from './ChatDetail';
 export { default as Please } from './Please';

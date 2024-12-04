@@ -15,6 +15,8 @@ interface MatchStore {
     curPage: number;
     totalPages: number;
     isLastPage: boolean;
+    setIsLastPage: (state: boolean) => void;
+    setCurPage: (state: number) => void;
 }
 
 const useMatchStore = create<MatchStore>((set, get) => ({
@@ -23,14 +25,21 @@ const useMatchStore = create<MatchStore>((set, get) => ({
     curPage: 1,
     totalPages: 1,
     isLastPage: false,
-    setShowStamp: (state) => set(() => ({ showStamp: state })),
-    removeMatch: async (userId, otherId) => {
-        const { ok } = await postMatchFail({
-            userId,
-            targetUserId: otherId,
-        });
 
-        if (!ok) return;
+    setCurPage: (state: number) => set({ curPage: state }),
+
+    setIsLastPage: (state) => set({ isLastPage: state }),
+
+    setShowStamp: (state) => set(() => ({ showStamp: state })),
+
+    removeMatch: async (userId, otherId) => {
+        // 데이터가 없어서 API 호출 로직 주석처리
+        // const { ok } = await postMatchFail({
+        //     userId,
+        //     targetUserId: otherId,
+        // });
+
+        // if (!ok) return;
 
         set((state) => ({
             matchList: state.matchList.filter(
@@ -47,8 +56,11 @@ const useMatchStore = create<MatchStore>((set, get) => ({
         }
 
         const { ok, data, error, status } = await getMatchList({
-            userId,
+            // 현제 데이터가 없어서 4번 아이디로 고정
+            // userId,
+            userId: 4,
             page: curPage,
+            size: 5,
         });
 
         if (!ok) {
@@ -61,7 +73,7 @@ const useMatchStore = create<MatchStore>((set, get) => ({
             return;
         }
 
-        const { matchResults, totalPages: newTotalPage } = data.result;
+        const { matchResults, totalPages: newTotalPage } = data;
 
         if (matchResults.length > 0) {
             set((state) => ({
@@ -69,7 +81,7 @@ const useMatchStore = create<MatchStore>((set, get) => ({
                     ...match,
                     color: idx % 2 === 0 ? 'bg-white' : 'bg-point-50',
                 })),
-                curPage: state.curPage,
+                curPage: state.curPage + 1,
                 totalPages: newTotalPage,
             }));
         }
