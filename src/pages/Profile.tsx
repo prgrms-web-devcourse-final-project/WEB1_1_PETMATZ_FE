@@ -1,5 +1,5 @@
 import { Loading } from '@/components/common';
-import { getProfileInfo } from '@/hooks/api/profile';
+import { getProfileInfo, postLikeProfile } from '@/hooks/api/profile';
 import { useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
@@ -58,7 +58,16 @@ export default function Profile() {
         );
     }, [data, user]);
 
-    const handleLikeBtn = useCallback(() => {}, []);
+    const handleLikeBtn = useCallback(async () => {
+        const heartedId = data!.data.id;
+        await postLikeProfile({ heartedId }).then((response) => {
+            if (response.ok) {
+                setLike((prev) => !prev);
+            } else {
+                console.log(response.error?.msg);
+            }
+        });
+    }, [data]);
 
     if (isLoading || !user) {
         return <Loading />;
