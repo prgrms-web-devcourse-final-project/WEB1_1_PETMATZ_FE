@@ -1,4 +1,9 @@
-import { ProfileApiQueryString, ProfileApiResponse } from '@/types/user';
+import {
+    ProfileApiQueryString,
+    ProfileApiResponse,
+    EditMyProfileRequest,
+    EditMyProfileResponse,
+} from '@/types/user';
 import { http } from './base';
 
 /**
@@ -19,3 +24,15 @@ export const getProfileInfo = async ({
  */
 export const getMyProfileInfo = async (): Promise<ProfileApiResponse> =>
     await http.get<ProfileApiResponse>('/api/auth/get-myprofile');
+
+/**
+ * POST Edit MyProfile informations
+ * 나의 프로필 정보를 수정합니다.
+ */
+export const editMyProfileInfo = async (
+    data: EditMyProfileRequest,
+): Promise<EditMyProfileResponse> =>
+    await http.post<EditMyProfileResponse, EditMyProfileRequest>(
+        '/api/auth/edit-myprofile',
+        data,
+    );
