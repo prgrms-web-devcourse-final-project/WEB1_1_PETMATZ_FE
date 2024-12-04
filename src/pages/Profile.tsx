@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import Star from '@/assets/images/profile/star.svg?react';
 import Lvl from '@/assets/images/profile/lvl.svg?react';
 import Heart from '@/assets/images/profile/heart.svg?react';
+import Unheart from '@/assets/images/profile/unheart.svg?react';
 import { Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
@@ -19,6 +20,7 @@ export default function Profile() {
     const [image, setImage] = useState(
         '/src/assets/images/profile/profile1.svg',
     );
+    const [like, setLike] = useState(false);
 
     const userId = id || '';
     const isMyProfile = id == user?.id;
@@ -33,7 +35,10 @@ export default function Profile() {
             return;
         }
         setImage(data.data.profileImg);
-    }, [data, setImage]);
+        if (!isMyProfile) {
+            setLike(data.data.myHeartUser!);
+        }
+    }, [data, setImage, isMyProfile]);
 
     const handleEditBtn = useCallback(() => {
         navigate('/edit-profile');
@@ -52,6 +57,8 @@ export default function Profile() {
             },
         );
     }, [data, user]);
+
+    const handleLikeBtn = useCallback(() => {}, []);
 
     if (isLoading || !user) {
         return <Loading />;
@@ -131,6 +138,24 @@ export default function Profile() {
                                     마스터
                                 </span>
                             </article>
+                            {!isMyProfile && (
+                                <article className="w-[88px] flex flex-col items-center gap-1">
+                                    {like ? (
+                                        <Heart
+                                            onClick={handleLikeBtn}
+                                            className="text-warning-400 flex-1 cursor-pointer w-8 h-8"
+                                        />
+                                    ) : (
+                                        <Unheart
+                                            onClick={handleLikeBtn}
+                                            className="flex-1 cursor-pointer w-8 h-8"
+                                        />
+                                    )}
+                                    <span className="text-label-l text-point-800 font-extrabold">
+                                        찜하기
+                                    </span>
+                                </article>
+                            )}
                         </div>
                     </section>
                     {isMyProfile ? (
