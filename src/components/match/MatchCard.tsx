@@ -39,12 +39,12 @@ export default function MatchCard({
             }}
             initial={{
                 scale: index === 0 ? 1 : index === 1 ? 0.75 : 0.5, // 첫 번째 카드와 두 번째 카드의 크기 차이
-                y: index === 0 ? 0 : index === 1 ? 65.5 : 138.5, // 두 번째, 세번째 카드는 살짝 아래로 이동
+                y: index === 0 ? 0 : index === 1 ? 65.5 : 130, // 두 번째, 세번째 카드는 살짝 아래로 이동
                 opacity: 1,
             }}
             animate={{
                 scale: index === 0 ? 1 : index === 1 ? 0.75 : 0.5,
-                y: index === 0 ? 0 : index === 1 ? 65.5 : 138.5,
+                y: index === 0 ? 0 : index === 1 ? 65.5 : 130,
                 opacity: 1,
             }}
             exit={{
@@ -75,7 +75,7 @@ export default function MatchCard({
             )}
             <div className="flex flex-col items-center justify-between h-full">
                 <span className="py-[5.5px] px-[11px] rounded-full bg-gray-100 text-point-400 text-label-s">
-                    강남구
+                    {card.region}
                 </span>
                 <div className="px-[9px]">
                     <ProfileIcon className="w-[100px] h-[100px] border-1 border-gray-200 rounded-full" />
