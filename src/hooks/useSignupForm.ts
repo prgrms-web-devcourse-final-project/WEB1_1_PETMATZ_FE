@@ -153,7 +153,7 @@ export default function useSignupForm() {
         const isCareAvailable = possible;
         const preferredSizes = dogSizes;
         const gender = genderBool ? 'FEMALE' : 'MALE';
-        const profileImg = imgName;
+        const profileImg = imgName.startsWith('profile') ? imgName : '';
         // 위치 정보 가져오기
         const { latitude, longitude } = await getLocation();
         await postSignup({
