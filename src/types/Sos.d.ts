@@ -132,6 +132,9 @@ export interface SOSDetails {
     authorProfileImg: string;
     authorGender: string; // MALE or FEMALE
     authorRegion: string;
+    userId: string;
+    updatedAt: string;
+    createdAt: string;
 }
 
 export interface SOSDetailsResponse extends BaseApiResponse {

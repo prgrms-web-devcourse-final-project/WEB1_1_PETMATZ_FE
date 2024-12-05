@@ -4,15 +4,17 @@ import Back from '@/assets/images/header/back.svg?react';
 import { useCallback } from 'react';
 import { useFadeNavigate } from '@/hooks';
 import ProfileImg from '@/assets/images/profile/profile1.svg?react';
-import { DogCard } from '@/components/common';
+import { DogCard, Loading } from '@/components/common';
 import { getSOSDetails } from '@/hooks/api/sos';
 import { SOSDetails } from '@/types/Sos';
+import { useUserStore } from '@/stores';
 
 export default function SOSDetail() {
     const navigate = useFadeNavigate();
     const { id } = useParams<{ id: string }>();
     const [sosDetails, setSOSDetails] = useState<SOSDetails | null>(null);
     const [loading, setLoading] = useState(true);
+    const { user } = useUserStore();
 
     const handleBackBtn = useCallback(() => {
         navigate('/sos');
@@ -20,12 +22,11 @@ export default function SOSDetail() {
 
     useEffect(() => {
         const fetchSOSDetails = async () => {
-            setLoading(true);
             const { ok, data, error } = await getSOSDetails(Number(id));
+
             if (ok) {
                 if (data) {
                     setSOSDetails(data.result); // result가 있는 경우에만 상태 업데이트
-                    console.log(data.result);
                 } else {
                     console.error('result가 없습니다.');
                 }
@@ -39,12 +40,20 @@ export default function SOSDetail() {
         setLoading(false);
     }, [id]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!sosDetails) {
-        return <div>데이터를 불러오지 못했습니다.</div>;
+    if (loading || !sosDetails) {
+        return (
+            <div className="h-screen flex flex-col items-center justify-center bg-white">
+                <div>
+                    <Loading />
+                    <button
+                        onClick={handleBackBtn}
+                        className="flex w-full items-center justify-center mt-3 text-gray-400 underline text-body-m"
+                    >
+                        돌아가기
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -70,7 +79,9 @@ export default function SOSDetail() {
                                 <p className="text-body-l font-extrabold">
                                     {sosDetails.authorNickname}
                                 </p>
-                                <div className="ml-2 px-2 rounded-lg bg-pink-400">
+                                <div
+                                    className={`ml-2 px-2 rounded-lg ${sosDetails.authorGender === 'MALE' ? ' bg-point-500' : ' bg-pink-400'}`}
+                                >
                                     <p className="text-label-l p-1 text-white">
                                         {sosDetails.authorGender === 'MALE'
                                             ? '남성'
@@ -91,9 +102,20 @@ export default function SOSDetail() {
                             readOnly
                         />
                     </div>
-                    <p className="text-body-s text-gray-500 mt-2">
-                        기간 {sosDetails.startDate} ~ {sosDetails.endDate}
-                    </p>
+                    <div className="mb-2">
+                        <p className="text-label-m text-gray-500 mb-1">기간</p>
+                        <p className="text-label-l font-extrabold text-gray-600">
+                            {sosDetails.startDate}
+                            <br />
+                            {sosDetails.endDate}
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-label-m text-gray-500 mb-1">시급</p>
+                        <p className="text-label-l font-extrabold text-gray-600">
+                            {sosDetails.price}
+                        </p>
+                    </div>
                 </section>
                 <section>
                     <p className="text-label-m text-gray-500 mb-2">
@@ -115,6 +137,9 @@ export default function SOSDetail() {
                         />
                     ))}
                 </section>
+                {Number(user?.id) !== Number(sosDetails?.userId) && (
+                    <button className="btn-solid my-6">채팅하기</button>
+                )}
             </div>
         </div>
     );
