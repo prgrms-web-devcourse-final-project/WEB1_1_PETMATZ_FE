@@ -78,16 +78,16 @@ export default function DogCard({
                     </div>
                     <div className="text-label-m font-bold text-point-500 flex gap-1.5 flex-wrap">
                         <p className="px-2 py-1 bg-white rounded-[30px]">
+                            {temperament}
+                        </p>
+                        <p className="px-2 py-1 bg-white rounded-[30px]">
                             {convertSizeToKorean(size)}
                         </p>
                         <p className="px-2 py-1 bg-white rounded-[30px]">
                             {age}살
                         </p>
                         <p className="px-2 py-1 bg-white rounded-[30px]">
-                            {neuterYn}
-                        </p>
-                        <p className="px-2 py-1 bg-white rounded-[30px]">
-                            {temperament}
+                            {neuterYn === '중성' ? '중성화 완료' : ''}
                         </p>
                     </div>
                 </div>
