@@ -21,6 +21,7 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-hook-form": "^7.53.2",
+        "react-modal-sheet": "^3.3.0",
         "react-router-dom": "^6.28.0",
         "react-slick": "^0.30.2",
         "react-toastify": "^10.0.6",
