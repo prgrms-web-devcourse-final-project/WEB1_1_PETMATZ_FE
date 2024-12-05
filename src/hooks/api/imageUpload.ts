@@ -22,11 +22,13 @@ export const putImageToS3 = async ({
 }: ImageToS3Params): Promise<boolean> => {
     await httpForImage
         .put<BaseApiResponse, ImageToS3ApiRequest>(imgURL, { img })
-        .then((response) => {
+        .then(async (response) => {
             if (response.ok) {
                 return true;
             } else {
-                // 업로드 실패의 경우
+                const UUID = id;
+                const ImgType = type;
+                await deleteImageUploadError({ UUID, ImgType });
                 return false;
             }
         });
