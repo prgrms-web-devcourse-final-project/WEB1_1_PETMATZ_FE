@@ -2,12 +2,12 @@ import Back from '@/assets/images/header/back.svg?react';
 import { useFadeNavigate } from '@/hooks';
 import { useState, useCallback, useEffect } from 'react';
 import { useUserStore } from '@/stores';
-import { getMyProfileInfo, editMyProfileInfo } from '@/hooks/api/profile';
 import ImageSelectBox from '@/components/common/ImageSelectBox';
 import { LocationChange } from '@/components/common/edit-profile';
 import { useCustomToast } from '@/hooks';
 import { ToastAnchor } from '@/components/common';
 import Loading from '@/components/common/Loading';
+import { editMyProfileInfo, getMyProfileInfo } from '@/hooks/api/user';
 
 export default function ProfileEdit() {
     const { showToast } = useCustomToast();
