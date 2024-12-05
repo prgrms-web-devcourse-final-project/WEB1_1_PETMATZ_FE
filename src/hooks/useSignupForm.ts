@@ -124,6 +124,7 @@ export default function useSignupForm() {
     const [showModal, setShowModal] = useState(false);
     const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
+    const [img, setImg] = useState<File | null>(null);
 
     /**
      * Handles form submission
@@ -283,5 +284,6 @@ export default function useSignupForm() {
         setShowModal,
         showToast,
         isToastActive,
+        setImg,
     };
 }
