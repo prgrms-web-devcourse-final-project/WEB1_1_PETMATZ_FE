@@ -21,7 +21,8 @@ interface ProfileApiResponse extends BaseApiResponse {
         nickname: string;
         profileImg: string;
         role: string;
-        preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+        preferredSizes?: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+        preferredSize?: ('SMALL' | 'MEDIUM' | 'LARGE')[];
         gender: string;
         introduction: string;
         isRegistered: boolean;
@@ -30,6 +31,18 @@ interface ProfileApiResponse extends BaseApiResponse {
         isCareAvailable: boolean;
         mbti: string;
         region: string;
+        myHeartUser?: boolean;
+    };
+}
+
+//	POST like user profile
+interface LikeApiRequest {
+    heartedId: number;
+}
+interface LikeApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
     };
 }
 

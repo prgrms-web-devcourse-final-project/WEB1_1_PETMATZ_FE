@@ -93,6 +93,20 @@ export default {
                 normal: 400, // Regular
                 extralight: 200, // ExtraLight
             },
+            animation: {
+                'rotate-180': 'rotate180 0.3s linear forwards',
+                'rotate-360': 'rotate360 0.3s linear forwards',
+            },
+            keyframes: {
+                rotate180: {
+                    '0%': { transform: 'rotate(0deg)' },
+                    '100%': { transform: 'rotate(180deg)' },
+                },
+                rotate360: {
+                    '0%': { transform: 'rotate(180deg)' },
+                    '100%': { transform: 'rotate(360deg)' },
+                },
+            },
         },
     },
     plugins: [
