@@ -5,6 +5,23 @@ interface ImageToS3ApiRequest {
 interface ImageToS3Params extends ImageToS3ApiRequest {
     id: number;
     imgURL: string;
+    type: 'P' | 'H' | 'U';
 }
 
-export type { ImageToS3Params, ImageToS3ApiRequest };
+//	Delete Failed to upload image on s3
+interface ImageUploadErrorApiRequest {
+    UUID: number;
+    ImgType: 'P' | 'H' | 'U';
+}
+interface ImageUploadErrorApiResponse extends BaseApiResponse {
+    data: {
+        ok: string;
+    };
+}
+
+export type {
+    ImageToS3Params,
+    ImageToS3ApiRequest,
+    ImageUploadErrorApiRequest,
+    ImageUploadErrorApiResponse,
+};
