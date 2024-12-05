@@ -34,7 +34,7 @@ export default function RequestListAccordion() {
         <div className="flex flex-col">
             <motion.div
                 onClick={handleShowRequestsBtn}
-                className="flex justify-between px-6 py-[12.5px] sm:!mt-2 !mt-0 text-body-m font-extrabold text-point-900 rounded-lg cursor-pointer bg-gray-100"
+                className="flex justify-between px-6 py-[12.5px] sm:!mt-2 !mt-0 mb-2 text-body-m font-extrabold text-point-900 rounded-lg cursor-pointer bg-gray-100"
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
             >

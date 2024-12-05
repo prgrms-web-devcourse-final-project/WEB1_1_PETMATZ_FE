@@ -37,7 +37,7 @@ export default function PleaseDetail() {
     };
 
     return (
-        <div className="h-screen flex flex-col bg-gray-100">
+        <div className="h-screen flex flex-col bg-white">
             {/* Header - Fixed */}
             <header className="bg-white h-14 w-full flex items-center justify-center shrink-0">
                 <Back
@@ -96,7 +96,7 @@ export default function PleaseDetail() {
             </div>
 
             {/* Footer - Fixed */}
-            <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto shrink-0 bg-white">
+            <footer className="w-full max-w-[600px] px-6 py-2.5 mx-auto shrink-0">
                 <ToastAnchor>
                     <button type="submit" className="btn-solid">
                         멍멍이 돌봄 시작하기

@@ -131,9 +131,9 @@ export default function DogInformation({ dogId }: DogInfoProps) {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <p className="text-label-m text-gray-600 border border-b-gray-600 w-fit my-4">
+                    <button className="text-label-m text-gray-600 border-b border-b-gray-600 w-fit my-4">
                         멍멍이의 부탁 삭제
-                    </p>
+                    </button>
                 </div>
             </div>
         </main>
