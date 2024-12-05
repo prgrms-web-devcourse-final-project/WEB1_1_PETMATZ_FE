@@ -38,8 +38,8 @@ export default function ProfileEdit() {
     // 프로필 정보를 API에서 가져오기
     useEffect(() => {
         const fetchProfile = async () => {
-            try {
-                const response = await getMyProfileInfo();
+            const response = await getMyProfileInfo();
+            if (response.ok) {
                 const profile = response.data;
 
                 // Zustand에 사용자 데이터 저장
@@ -58,10 +58,9 @@ export default function ProfileEdit() {
                 setPreferredSizes(profile.preferredSizes || []);
                 setIsCareAvailable(profile.isCareAvailable || false);
                 setProfileImg(profile.profileImg || '');
-            } catch (err) {
-                console.log('Failed to retrieve profile', err);
-            } finally {
                 setIsLoading(false); // 로딩 완료
+            } else {
+                console.log('Failed to retrieve profile', response.error);
             }
         };
 

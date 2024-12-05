@@ -24,7 +24,8 @@ export default function LocationChange({
 
         setIsLoading(true); // 로딩 시작
         try {
-            const updatedLocation = await postLocation(data); // 위치 업데이트 API 호출
+            await postLocation(data); // 위치 업데이트 API 호출
+
             onLocationChange();
         } catch (error) {
             console.error('위치 업데이트 실패:', error);
