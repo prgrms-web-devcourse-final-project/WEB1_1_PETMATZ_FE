@@ -17,6 +17,7 @@ interface ThirdStepPropsType {
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
     imgName: string;
     setImgName: React.Dispatch<React.SetStateAction<string>>;
+    setImg: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 export default function ThirdStep({
@@ -29,6 +30,7 @@ export default function ThirdStep({
     setPageNumber,
     imgName,
     setImgName,
+    setImg,
 }: ThirdStepPropsType) {
     const nickname = watch('nickname');
     const introduce = watch('introduce');
@@ -57,6 +59,7 @@ export default function ThirdStep({
                                     bottomSheetLabel="프로필 이미지를 선택하세요."
                                     imgName={imgName}
                                     setImgName={setImgName}
+                                    setImg={setImg}
                                 />
                                 <CustomInput
                                     id="nickname"
