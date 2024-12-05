@@ -43,6 +43,7 @@ interface SignupApiResponse extends BaseApiResponse {
         responseCode: string;
         message: string;
         id?: number;
+        imgURL?: string;
     };
 }
 
