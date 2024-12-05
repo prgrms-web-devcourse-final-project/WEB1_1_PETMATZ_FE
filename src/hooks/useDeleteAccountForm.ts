@@ -1,86 +1,60 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useCustomToast } from '@/components/common';
+import { postDeleteAccount } from './api/deleteAccount';
 import useFadeNavigate from './useFadeNavigate';
-import { postLogin } from './api/login';
-import { useUserStore } from '@/stores';
-import useCustomToast from './useCustomToast';
 
 /**
- * Login form input type
+ * Delete account form input type
  */
-interface LoginInputs {
-    /** User's email address */
-    accountId: string;
+interface DeleteAccountInputs {
     /** User's password */
     password: string;
 }
 
 /**
- * Custom hook for handling login form logic
+ * Custom hook for handling Delete account form logic
  * @returns {Object} Form methods and handlers
  */
-export default function useLoginForm() {
+export default function useDeleteAccountForm() {
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors, isValid },
-    } = useForm<LoginInputs>({
+    } = useForm<DeleteAccountInputs>({
         mode: 'onChange',
     });
-    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
-    const { setUser } = useUserStore();
+    const [loading, setLoading] = useState(false);
     const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
 
     /**
      * Handles form submission
      */
-    const onSubmit = async (data: LoginInputs) => {
-        // ⭐️ 중요: 토스트가 이미 활성화되어 있다면 폼 제출 중단
+    const onSubmit = async (data: DeleteAccountInputs) => {
         if (isToastActive()) {
             return;
         }
         setLoading(true);
-        // 여기에 로그인 로직을 구현하세요.
-        await postLogin(data).then((response) => {
+        // api 로직 추가
+        await postDeleteAccount(data).then((response) => {
             if (response.ok) {
-                const { id, accountId, nickname, isRegistered, region } =
-                    response.data;
-                setUser({
-                    id,
-                    accountId,
-                    nickname,
-                    isRegistered,
-                    region,
-                });
                 setSuccess(true);
                 setTimeout(() => {
                     navigate('/home');
                 }, 3000);
             } else {
-                if (response.error?.status === 400) {
-                    showToast('유효하지 않은 입력값입니다!', 'warning');
-                } else if (response.error?.status === 401) {
-                    showToast('로그인 정보가 일치하지 않습니다!', 'warning');
+                console.log(response);
+                if (response.error?.status === 403) {
+                    showToast('비밀번호를 틀렸습니다!', 'warning');
                 } else {
                     showToast('서버 연결 문제가 발생했습니다!', 'warning');
                 }
             }
         });
         setLoading(false);
-    };
-
-    /**
-     * Email validation
-     */
-    const emailValidation = {
-        required: '이메일은 필수입니다!',
-        pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: '유효한 이메일 주소를 입력해주세요!',
-        },
     };
 
     /**
@@ -103,7 +77,6 @@ export default function useLoginForm() {
     };
 
     return {
-        emailValidation,
         passwordValidation,
         register,
         handleSubmit,

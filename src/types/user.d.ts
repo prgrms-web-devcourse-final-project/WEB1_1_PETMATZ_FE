@@ -21,7 +21,8 @@ interface ProfileApiResponse extends BaseApiResponse {
         nickname: string;
         profileImg: string;
         role: string;
-        preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+        preferredSizes?: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+        preferredSize?: ('SMALL' | 'MEDIUM' | 'LARGE')[];
         gender: string;
         introduction: string;
         isRegistered: boolean;
@@ -30,7 +31,39 @@ interface ProfileApiResponse extends BaseApiResponse {
         isCareAvailable: boolean;
         mbti: string;
         region: string;
+        myHeartUser?: boolean;
     };
 }
 
-export type { IUser, ProfileApiQueryString, ProfileApiResponse };
+//	POST like user profile
+interface LikeApiRequest {
+    heartedId: number;
+}
+interface LikeApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+    };
+}
+
+// POST Edit MyProfile informations
+interface EditMyProfileRequest {
+    nickname: string;
+    preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+    introduction: string;
+    isCareAvailable: boolean;
+    profileImg: string;
+}
+
+interface EditMyProfileResponse extends BaseApiResponse {
+    responseCode: string; // 응답 코드 (예: "SU")
+    message: string; // 응답 메시지 (예: "Success.")
+}
+
+export type {
+    IUser,
+    ProfileApiQueryString,
+    ProfileApiResponse,
+    EditMyProfileRequest,
+    EditMyProfileResponse,
+};

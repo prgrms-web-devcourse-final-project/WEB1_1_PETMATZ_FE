@@ -3,7 +3,7 @@ import {
     SignUpInputs,
     verificationCodeValidationType,
 } from '@/hooks/useSignupForm';
-import { CustomInput, ToastAnchor, useCustomToast } from '../common';
+import { CustomInput, ToastAnchor } from '../common';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -21,6 +21,8 @@ interface FirstStepPropsType {
     isValid: boolean;
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    showToast: (message: string, type?: 'success' | 'warning') => boolean;
+    isToastActive: () => boolean;
 }
 
 export default function FirstStep({
@@ -33,13 +35,14 @@ export default function FirstStep({
     isValid,
     setPageNumber,
     setLoading,
+    showToast,
+    isToastActive,
 }: FirstStepPropsType) {
     const emailTyped = useRef(false);
     const [sentNumber, setSentNumber] = useState(false);
     const [firstVisit, setFirstVisit] = useState(true);
     const [sending, setSending] = useState(false);
     const [readying, setReadying] = useState(false);
-    const { showToast, isToastActive } = useCustomToast();
 
     const email = watch('email');
     const verificationCode = watch('verificationCode');
@@ -136,7 +139,7 @@ export default function FirstStep({
                                     />
                                 </div>
                                 <button
-                                    form="verificateEmail"
+                                    form="none"
                                     className="btn-solid btn-md"
                                     disabled={
                                         readying ||
@@ -181,7 +184,7 @@ export default function FirstStep({
             >
                 <ToastAnchor>
                     <button
-                        form="next"
+                        form="none"
                         className="btn-solid"
                         disabled={
                             readying ||

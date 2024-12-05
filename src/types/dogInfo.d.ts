@@ -20,4 +20,9 @@ interface DogInfoResponse extends BaseApiResponse {
     data?: DogInfo;
 }
 
-export type { DogInfo, DogInfoResponse };
+// 복수 강아지 정보 응답 타입
+interface DogsInfoResponse extends BaseApiResponse {
+    data?: DogInfo[];
+}
+
+export type { DogInfo, DogInfoResponse, DogsInfoResponse };
