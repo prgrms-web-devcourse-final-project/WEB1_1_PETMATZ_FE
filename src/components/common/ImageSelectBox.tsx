@@ -38,19 +38,22 @@ export default function ImageSelectBox({
         setIsOpen((prev) => !prev);
     }, [chosenImgName]);
 
-    const handleButtonClick = () => {
+    const handleButtonClick = useCallback(() => {
         if (fileInput.current) {
             fileInput.current.click();
         }
-    };
+    }, [fileInput]);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setImg(file);
-            setChosenImgName(URL.createObjectURL(file));
-        }
-    };
+    const handleFileChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const file = event.target.files?.[0];
+            if (file) {
+                setImg(file);
+                setChosenImgName(URL.createObjectURL(file));
+            }
+        },
+        [setImg, setChosenImgName],
+    );
 
     const modalContent = (
         <div

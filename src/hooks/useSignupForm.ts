@@ -175,8 +175,7 @@ export default function useSignupForm() {
                 if (response.data.imgURL !== '') {
                     const id = response.data.id!;
                     const imgURL = response.data.imgURL!;
-                    const img = new FormData();
-                    img.append('file', imgFile!);
+                    const img = imgFile!;
                     const type = 'U';
 
                     const result = await putImageToS3({

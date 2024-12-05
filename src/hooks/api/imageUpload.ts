@@ -1,5 +1,4 @@
 import {
-    ImageToS3ApiRequest,
     ImageToS3Params,
     ImageUploadErrorApiRequest,
     ImageUploadErrorApiResponse,
@@ -19,9 +18,9 @@ export const putImageToS3 = async ({
     imgURL,
     img,
     type,
-}: ImageToS3Params): Promise<boolean> => {
+}: ImageToS3Params): Promise<boolean | void> => {
     await httpForImage
-        .put<BaseApiResponse, ImageToS3ApiRequest>(imgURL, { img })
+        .put<BaseApiResponse, File>(imgURL, img)
         .then(async (response) => {
             if (response.ok) {
                 return true;
@@ -32,7 +31,6 @@ export const putImageToS3 = async ({
                 return false;
             }
         });
-    return false;
 };
 
 /**
