@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
 import { postSignup } from './api/signup';
 import { useCustomToast } from '@/components/common';
+import { putImageToS3 } from './api/imageUpload';
 
 /**
  * Signup form types
@@ -124,7 +125,7 @@ export default function useSignupForm() {
     const [showModal, setShowModal] = useState(false);
     const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
-    const [img, setImg] = useState<File | null>(null);
+    const [imgFile, setImg] = useState<File | null>(null);
 
     /**
      * Handles form submission
@@ -134,7 +135,6 @@ export default function useSignupForm() {
             return;
         }
         setLoading(true);
-        console.log(data);
         // 여기에 로그인 로직을 구현하세요
         const {
             email,
@@ -169,14 +169,37 @@ export default function useSignupForm() {
             latitude,
             longitude,
             profileImg,
-        }).then((response) => {
-            console.log(response);
+        }).then(async (response) => {
             setShowModal(false);
             if (response.ok) {
-                setSuccess(true);
-                setTimeout(() => {
-                    navigate('/login');
-                }, 3000);
+                if (response.data.imgURL !== '') {
+                    const id = response.data.id!;
+                    const imgURL = response.data.imgURL!;
+                    const img = new FormData();
+                    img.append('file', imgFile!);
+                    const type = 'U';
+
+                    const result = await putImageToS3({
+                        id,
+                        imgURL,
+                        img,
+                        type,
+                    });
+
+                    if (result) {
+                        setSuccess(true);
+                        setTimeout(() => {
+                            navigate('/login');
+                        }, 3000);
+                    } else {
+                        showToast('회원 등록에 실패했습니다!', 'warning');
+                    }
+                } else {
+                    setSuccess(true);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 3000);
+                }
             } else {
                 showToast('서버 연결 문제가 발생했습니다!', 'warning');
             }

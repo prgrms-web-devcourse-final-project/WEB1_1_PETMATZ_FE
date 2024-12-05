@@ -45,6 +45,7 @@ export default function useLoginForm() {
         setLoading(true);
         // 여기에 로그인 로직을 구현하세요.
         await postLogin(data).then((response) => {
+            console.log(response);
             if (response.ok) {
                 const { id, accountId, nickname, isRegistered, region } =
                     response.data;
