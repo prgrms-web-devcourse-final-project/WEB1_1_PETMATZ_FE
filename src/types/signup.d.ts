@@ -42,6 +42,7 @@ interface SignupApiResponse extends BaseApiResponse {
     data: {
         responseCode: string;
         message: string;
+        id?: number;
     };
 }
 
