@@ -46,10 +46,24 @@ interface LikeApiResponse extends BaseApiResponse {
     };
 }
 
+// POST Edit MyProfile informations
+interface EditMyProfileRequest {
+    nickname: string;
+    preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+    introduction: string;
+    isCareAvailable: boolean;
+    profileImg: string;
+}
+
+interface EditMyProfileResponse extends BaseApiResponse {
+    responseCode: string; // 응답 코드 (예: "SU")
+    message: string; // 응답 메시지 (예: "Success.")
+}
+
 export type {
     IUser,
     ProfileApiQueryString,
     ProfileApiResponse,
-    LikeApiRequest,
-    LikeApiResponse,
+    EditMyProfileRequest,
+    EditMyProfileResponse,
 };
