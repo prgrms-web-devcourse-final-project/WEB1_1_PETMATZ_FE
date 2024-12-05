@@ -18,19 +18,16 @@ export const putImageToS3 = async ({
     imgURL,
     img,
     type,
-}: ImageToS3Params): Promise<boolean | void> => {
-    await httpForImage
-        .put<BaseApiResponse, File>(imgURL, img)
-        .then(async (response) => {
-            if (response.ok) {
-                return true;
-            } else {
-                const UUID = id;
-                const ImgType = type;
-                await deleteImageUploadError({ UUID, ImgType });
-                return false;
-            }
-        });
+}: ImageToS3Params): Promise<boolean> => {
+    const result = await httpForImage.put<BaseApiResponse, File>(imgURL, img);
+    if (result.ok) {
+        return true;
+    } else {
+        const UUID = id;
+        const ImgType = type;
+        await deleteImageUploadError({ UUID, ImgType });
+        return false;
+    }
 };
 
 /**
