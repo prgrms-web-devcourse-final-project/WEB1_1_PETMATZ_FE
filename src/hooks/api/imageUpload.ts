@@ -1,5 +1,10 @@
-import { ImageToS3ApiRequest, ImageToS3Params } from '@/types/imageUpload';
-import { httpForImage } from './base';
+import {
+    ImageToS3ApiRequest,
+    ImageToS3Params,
+    ImageUploadErrorApiRequest,
+    ImageUploadErrorApiResponse,
+} from '@/types/imageUpload';
+import { http, httpForImage } from './base';
 import { BaseApiResponse } from '@/types/baseResponse';
 
 /**
@@ -13,6 +18,7 @@ export const putImageToS3 = async ({
     id,
     imgURL,
     img,
+    type,
 }: ImageToS3Params): Promise<boolean> => {
     await httpForImage
         .put<BaseApiResponse, ImageToS3ApiRequest>(imgURL, { img })
@@ -26,3 +32,19 @@ export const putImageToS3 = async ({
         });
     return false;
 };
+
+/**
+ * DELETE	Failed to upload image on s3
+ * s3 이미지 업로드 실패를 백엔드 서버에 알립니다.
+ */
+const deleteImageUploadError = async ({
+    UUID,
+    ImgType,
+}: ImageUploadErrorApiRequest): Promise<ImageUploadErrorApiResponse> =>
+    await http.delete<ImageUploadErrorApiResponse, ImageUploadErrorApiRequest>(
+        '/api/v1/image/error',
+        {
+            UUID,
+            ImgType,
+        },
+    );
