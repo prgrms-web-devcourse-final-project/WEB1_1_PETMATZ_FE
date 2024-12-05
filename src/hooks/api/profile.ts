@@ -4,6 +4,12 @@ import {
     ProfileApiQueryString,
     ProfileApiResponse,
 } from '@/types/user';
+import {
+    ProfileApiQueryString,
+    ProfileApiResponse,
+    EditMyProfileRequest,
+    EditMyProfileResponse,
+} from '@/types/user';
 import { http } from './base';
 
 /**
@@ -35,3 +41,15 @@ export const postLikeProfile = async ({
     await http.post<LikeApiResponse, LikeApiRequest>('/api/auth/hearting', {
         heartedId,
     });
+
+/**
+ * POST Edit MyProfile informations
+ * 나의 프로필 정보를 수정합니다.
+ */
+export const editMyProfileInfo = async (
+    data: EditMyProfileRequest,
+): Promise<EditMyProfileResponse> =>
+    await http.post<EditMyProfileResponse, EditMyProfileRequest>(
+        '/api/auth/edit-myprofile',
+        data,
+    );

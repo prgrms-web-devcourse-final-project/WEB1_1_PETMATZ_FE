@@ -6,5 +6,9 @@ interface LocationResponse extends BaseApiResponse {
         longitude: number | null;
     };
 }
+interface LocationParams {
+    latitude: number | null;
+    longitude: number | null;
+}
 
-export type { LocationResponse };
+export type { LocationResponse, LocationParams };
