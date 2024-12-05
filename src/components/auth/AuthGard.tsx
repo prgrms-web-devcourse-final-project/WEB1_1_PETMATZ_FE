@@ -1,4 +1,4 @@
-import { getMyProfileInfo } from '@/hooks/api/profile';
+import { getMyProfileInfo } from '@/hooks/api/user';
 import { useUserStore } from '@/stores';
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';

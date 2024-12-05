@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { postNewPassword } from './api/password';
 import { useCustomToast } from '@/components/common';
+import { postNewPassword } from './api/auth';
 
 /**
  * ChangePassword form input type

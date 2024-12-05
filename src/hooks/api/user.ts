@@ -1,16 +1,30 @@
 import {
+    EditMyProfileRequest,
+    EditMyProfileResponse,
     LikeApiRequest,
     LikeApiResponse,
     ProfileApiQueryString,
     ProfileApiResponse,
 } from '@/types/user';
-import {
-    ProfileApiQueryString,
-    ProfileApiResponse,
-    EditMyProfileRequest,
-    EditMyProfileResponse,
-} from '@/types/user';
 import { http } from './base';
+import {
+    DeleteAccountApiRequest,
+    DeleteAccountApiResponse,
+} from '@/types/deleteAccount';
+
+/**
+ * POST	delete account
+ * 회원 탈퇴를 요청합니다.
+ */
+export const postDeleteAccount = async ({
+    password,
+}: DeleteAccountApiRequest): Promise<DeleteAccountApiResponse> =>
+    await http.post<DeleteAccountApiResponse, DeleteAccountApiRequest>(
+        '/api/auth/delete-user',
+        {
+            password,
+        },
+    );
 
 /**
  * GET	Profile informations

@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
-import { postSignup } from './api/signup';
 import { useCustomToast } from '@/components/common';
-import { putImageToS3 } from './api/imageUpload';
+import { postSignup, putImageToS3 } from './api/auth';
 
 /**
  * Signup form types
