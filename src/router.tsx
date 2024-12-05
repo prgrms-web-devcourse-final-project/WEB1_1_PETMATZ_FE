@@ -11,6 +11,7 @@ import {
     Login,
     Match,
     Please,
+    PleaseDetail,
     Profile,
     Register,
     Signup,
@@ -18,6 +19,7 @@ import {
     SOSWrite,
     SOSDetail,
     Ranking,
+    PleaseWrite,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -75,6 +77,8 @@ export default function AppRoutes() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/ranking" element={<Ranking />} />
                         <Route path="/dog-edit/:id" element={<DogEdit />} />
+                        <Route path="/please/write" element={<PleaseWrite />} />
+                        <Route path="/please/:id" element={<PleaseDetail />} />
                         <Route path="/edit-profile" element={<ProfileEdit />} />
                     </Route>
                 </Route>
