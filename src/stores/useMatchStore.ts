@@ -57,8 +57,7 @@ const useMatchStore = create<MatchStore>((set, get) => ({
 
         const { ok, data, error, status } = await getMatchList({
             // 현제 데이터가 없어서 4번 아이디로 고정
-            // userId,
-            userId: 4,
+            userId,
             page: curPage,
             size: 5,
         });
