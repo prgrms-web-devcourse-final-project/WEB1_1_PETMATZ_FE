@@ -9,6 +9,7 @@ export default function RegisterStep2({
     setValue,
     imgName,
     setImgName,
+    setImg,
 }: RegisterStep2Props) {
     const handleNext = () => {
         setValue('profileImg', imgName);
@@ -39,6 +40,7 @@ export default function RegisterStep2({
                                 bottomSheetLabel="프로필 이미지를 선택하세요."
                                 imgName={imgName}
                                 setImgName={setImgName}
+                                setImg={setImg}
                             />
                         </div>
 

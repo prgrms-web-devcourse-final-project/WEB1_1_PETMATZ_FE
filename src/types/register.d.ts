@@ -59,6 +59,7 @@ export interface RegisterStep2Props {
     setValue: UseFormSetValue<RegisterFormData>;
     imgName: string;
     setImgName: React.Dispatch<React.SetStateAction<string>>;
+    setImg: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 export interface RegisterStep3Props {
@@ -90,11 +91,12 @@ export interface DogRegistrationRequest {
 
 // 반려견 등록 응답 타입
 export interface DogRegistrationResponse extends BaseApiResponse {
-    result?: {
-        path?: string;
-        responseCode?: string;
-        message?: string;
-        timeStamp?: string;
+    data: {
+        responsecode: string;
+        result: {
+            UUID: number;
+            resultImgURL: string;
+        };
     };
 }
 

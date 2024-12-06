@@ -11,13 +11,16 @@ import { RegisterStep4 } from '@/components/register';
 import { RegisterComplete } from '@/components/register';
 import { RegisterFormData } from '@/types/register';
 import { useDogRegistration } from '@/hooks/api/register';
+import { useUserStore } from '@/stores';
 
 // 폼 데이터 타입 정의
 export default function Register() {
     const navigate = useFadeNavigate();
     const [step, setStep] = useState(1);
     const [imgName, setImgName] = useState('profile1');
+    const [img, setImg] = useState<File | null>(null); // 새롭게 추가된 부분 : 이미지 파일이 들어감. s3에 보낼 이미지 파일
     const { registerDog } = useDogRegistration();
+    const userId = useUserStore().user?.id;
 
     const {
         register,
@@ -85,7 +88,7 @@ export default function Register() {
             neuterYn: transformneuterYn(data.neuterYn as boolean),
         };
 
-        const response = await registerDog(transformedData);
+        const response = await registerDog(transformedData, img, userId!);
         if (response) {
             setTimeout(() => {
                 setStep(5); // 성공 시 1초 후 완료 단계로 이동
@@ -160,6 +163,7 @@ export default function Register() {
                                 setValue={setValue}
                                 imgName={imgName}
                                 setImgName={setImgName}
+                                setImg={setImg}
                             />
                         </motion.div>
                     )}
