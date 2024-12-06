@@ -101,13 +101,13 @@ export default function DogInformation({ dogId, missionInfo }: DogInfoProps) {
                                 id="startDate"
                                 className="input-outline flex-1 mr-2 sm:!px-4 px-3"
                                 value={formatDate(missionInfo.receiverStart)}
-                                style={{ pointerEvents: 'none' }}
+                                readOnly
                             />
                             <input
                                 id="startTime"
                                 className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
                                 value={formatTime(missionInfo.receiverStart)}
-                                style={{ pointerEvents: 'none' }}
+                                readOnly
                             />
                         </div>
                     </div>
@@ -120,13 +120,13 @@ export default function DogInformation({ dogId, missionInfo }: DogInfoProps) {
                                 id="startDate"
                                 className="input-outline flex-1 mr-2 sm:!px-4 px-3"
                                 value={formatDate(missionInfo.receiverEnd)}
-                                style={{ pointerEvents: 'none' }}
+                                readOnly
                             />
                             <input
                                 id="startTime"
                                 className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
                                 value={formatTime(missionInfo.receiverEnd)}
-                                style={{ pointerEvents: 'none' }}
+                                readOnly
                             />
                         </div>
                     </div>
