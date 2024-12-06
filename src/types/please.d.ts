@@ -36,6 +36,7 @@ interface PetInfo {
     neuterYn: string; // '중성' | '미중성',
     temperament: string;
     size: string;
+    profileImg: string;
 }
 
 // 미션 요청 정보 타입
@@ -56,8 +57,31 @@ interface PetMissionInfoResponse extends BaseApiResponse {
             receiverEnd: string;
             petMissionPetInfos: PetInfo[];
             petMissionAskInfos: PetMissionAskInfo[];
+            status: 'BEF' | 'INP' | 'AFT';
         };
     };
+}
+
+interface MissionInfo {
+    id: number;
+    careName: string;
+    receiverName: string;
+    receiverStart: string;
+    receiverEnd: string;
+    petMissionPetInfos: PetInfo[];
+    petMissionAskInfos: PetMissionAskInfo[];
+    status: 'BEF' | 'INP' | 'AFT';
+}
+
+interface Request {
+    id: number | null;
+    ask: string;
+    comment?: string | null;
+    imgURL?: string | null;
+}
+
+interface RequestListAccordionProps {
+    petMissionAskInfos: Request[];
 }
 
 export type {
@@ -65,4 +89,7 @@ export type {
     CreatePleaseApiRequest,
     CreatePleaseApiResponse,
     PetMissionInfoResponse,
+    MissionInfo,
+    Request,
+    RequestListAccordionProps,
 };

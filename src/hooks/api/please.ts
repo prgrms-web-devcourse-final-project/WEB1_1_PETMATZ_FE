@@ -30,5 +30,5 @@ export const getPetMissionInfo = async (
     petMissionId: string,
 ): Promise<PetMissionInfoResponse> =>
     await http.get<PetMissionInfoResponse>(
-        `/api/v1/pet/mission/info?petMissionId=${petMissionId}`,
+        `/api/v1/pet/mission/Info?petMissionId=${petMissionId}`,
     );

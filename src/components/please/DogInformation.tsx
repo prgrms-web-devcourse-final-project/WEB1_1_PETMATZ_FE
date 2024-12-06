@@ -4,23 +4,10 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './DogInformation.css';
 import { formatDate, formatTime } from '@/utils';
+import { MissionInfo } from '@/types/please';
 interface DogInfoProps {
     dogId?: string;
-    missionInfo: {
-        careName: string;
-        receiverName: string;
-        receiverStart: string;
-        receiverEnd: string;
-        petMissionPetInfos: Array<{
-            petName: string;
-            breed: string;
-            age: number;
-            gender: string;
-            neuterYn: string;
-            temperament: string;
-            size: string;
-        }>;
-    };
+    missionInfo: MissionInfo;
 }
 
 export default function DogInformation({ dogId, missionInfo }: DogInfoProps) {
@@ -42,7 +29,7 @@ export default function DogInformation({ dogId, missionInfo }: DogInfoProps) {
         sexNm: pet.gender === 'FEMALE' ? '암컷' : '수컷',
         kindNm: pet.breed,
         neuterYn: pet.neuterYn,
-        profileImg: 'https://example.com/uploads/default-dog.png', // 기본 이미지
+        profileImg: pet.profileImg, // 기본 이미지
         age: pet.age,
         temperament: pet.temperament,
         size: pet.size,

@@ -4,38 +4,14 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './DogInformation.css';
+import { MissionInfo } from '@/types/please';
 
 interface RequestListProps {
     dogId?: string;
+    missionInfo: MissionInfo;
 }
 
-// 요청은 상단 페이지에서 불러올 예정
-const dogs = [
-    {
-        id: 5,
-        dogNm: '예삐',
-        sexNm: '암컷',
-        kindNm: '페키니즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile.png',
-        age: 7,
-        temperament: 'ENTP',
-        size: 'SMALL',
-    },
-    {
-        id: 6,
-        dogNm: '몽이',
-        sexNm: '수컷',
-        kindNm: '말티즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile2.png',
-        age: 5,
-        temperament: 'ISFP',
-        size: 'SMALL',
-    },
-];
-
-export default function RequestList({ dogId }: RequestListProps) {
+export default function RequestList({ dogId, missionInfo }: RequestListProps) {
     const settings = {
         dots: true,
         infinite: false,
@@ -48,6 +24,18 @@ export default function RequestList({ dogId }: RequestListProps) {
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
     };
+
+    const dogs = missionInfo.petMissionPetInfos.map((pet) => ({
+        id: parseInt(pet.petName, 10),
+        dogNm: pet.petName,
+        sexNm: pet.gender === 'FEMALE' ? '암컷' : '수컷',
+        kindNm: pet.breed,
+        neuterYn: pet.neuterYn,
+        profileImg: pet.profileImg, // 기본 이미지
+        age: pet.age,
+        temperament: pet.temperament,
+        size: pet.size,
+    }));
 
     return (
         <main className="flex flex-col flex-1 overflow-hidden">
@@ -79,7 +67,9 @@ export default function RequestList({ dogId }: RequestListProps) {
                         </Slider>
                     </div>
 
-                    <RequestListAccordion />
+                    <RequestListAccordion
+                        petMissionAskInfos={missionInfo.petMissionAskInfos}
+                    />
                 </div>
             </div>
         </main>
