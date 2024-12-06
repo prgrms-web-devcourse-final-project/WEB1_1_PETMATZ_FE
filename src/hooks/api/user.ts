@@ -11,6 +11,7 @@ import {
     DeleteAccountApiRequest,
     DeleteAccountApiResponse,
 } from '@/types/deleteAccount';
+import { KakaoSignupApiRequest, KakaoSignupApiResponse } from '@/types/kakao';
 
 /**
  * POST	delete account
@@ -66,4 +67,34 @@ export const editMyProfileInfo = async (
     await http.post<EditMyProfileResponse, EditMyProfileRequest>(
         '/api/auth/edit-myprofile',
         data,
+    );
+
+/**
+ * POST
+ * 카카오 회원가입 정보입력.
+ */
+export const postkakaoSignup = async ({
+    nickname,
+    gender,
+    preferredSizes,
+    introduction,
+    isCareAvailable,
+    mbti,
+    latitude,
+    longitude,
+    profileImg,
+}: KakaoSignupApiRequest): Promise<KakaoSignupApiResponse> =>
+    await http.post<KakaoSignupApiResponse, KakaoSignupApiRequest>(
+        '/api/auth/edit-kakaoprofile',
+        {
+            nickname,
+            gender,
+            preferredSizes,
+            introduction,
+            isCareAvailable,
+            mbti,
+            latitude,
+            longitude,
+            profileImg,
+        },
     );
