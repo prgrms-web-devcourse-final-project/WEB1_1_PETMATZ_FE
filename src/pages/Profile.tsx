@@ -54,8 +54,10 @@ export default function Profile() {
         if (!data) {
             return;
         }
-        setImage(data.data.profileImg);
-        if (!isMyProfile) {
+        if (data.data?.profileImg) {
+            setImage(data.data.profileImg);
+        }
+        if (!isMyProfile && data.data?.myHeartUser) {
             setLike(data.data.myHeartUser!);
         }
     }, [data, setImage, isMyProfile]);
@@ -93,15 +95,7 @@ export default function Profile() {
         return <Loading />;
     }
 
-    if (
-        !data ||
-        !dogsData ||
-        !data.data ||
-        !dogsData.data ||
-        data.error?.status === 400 ||
-        data.error?.status === 500 ||
-        dogsData.error?.status === 500
-    ) {
+    if (!data || !dogsData || !data.ok || !dogsData.ok) {
         return <div>404 not found</div>;
     }
 

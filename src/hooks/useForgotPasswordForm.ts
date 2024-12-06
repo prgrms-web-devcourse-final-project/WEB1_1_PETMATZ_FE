@@ -38,6 +38,7 @@ export default function useForgotPasswordForm() {
         setLoading(true);
         const accountId = data.email;
         await postTemporaryPassword({ accountId }).then((response) => {
+            console.log(response);
             if (response.ok) {
                 setSuccess(true);
             } else {
