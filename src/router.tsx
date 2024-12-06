@@ -20,6 +20,8 @@ import {
     SOSDetail,
     Ranking,
     PleaseWrite,
+    KakaoLogin,
+    KakaoSignup,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -56,6 +58,8 @@ export default function AppRoutes() {
                     <Route index={true} path="/" element={<Intro />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/kakao-login" element={<KakaoLogin />} />
+                    <Route path="/kakao-signup" element={<KakaoSignup />} />
                     <Route
                         path="/forgot-password"
                         element={<ForgotPassword />}

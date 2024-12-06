@@ -19,3 +19,5 @@ export { default as Register } from './Register';
 export { default as Ranking } from './Ranking';
 export { default as DogEdit } from './DogEdit';
 export { default as ProfileEdit } from './ProfileEdit';
+export { default as KakaoLogin } from './KakaoLogin';
+export { default as KakaoSignup } from './KakaoSignup';
