@@ -10,7 +10,10 @@ export default function Intro() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const totalSlides = 3;
     const navigate = useFadeNavigate();
-
+    const handleKakaoLogin = () => {
+        // 백엔드 카카오 로그인 링크로 리다이렉트
+        window.location.href = '/oauth2/authorization/kakao';
+    };
     return (
         <div className="min-h-screen bg-white flex flex-col items-center justify-between overflow-hidden">
             <header className="h-14 w-full flex items-center justify-center">
@@ -50,6 +53,7 @@ export default function Intro() {
                                 이메일
                             </button>
                             <button
+                                onClick={handleKakaoLogin}
                                 className="btn-solid text-black gap-3"
                                 style={{ backgroundColor: '#FFDD00' }}
                             >
