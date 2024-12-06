@@ -48,7 +48,7 @@ export default function AppRoutes() {
                         <Route path="/home" element={<Home />} />
                         <Route path="/profile/:id" element={<Profile />} />
                         <Route path="/sos" element={<SOS />} />
-                        <Route path="/sos/:id" element={<SOSDetail />} />
+
                         <Route path="/chat" element={<Chat />} />
                         <Route path="/please" element={<Please />} />
                         <Route path="/match" element={<Match />} />
@@ -84,6 +84,7 @@ export default function AppRoutes() {
                         <Route path="/please/write" element={<PleaseWrite />} />
                         <Route path="/please/:id" element={<PleaseDetail />} />
                         <Route path="/edit-profile" element={<ProfileEdit />} />
+                        <Route path="/sos/:id" element={<SOSDetail />} />
                     </Route>
                 </Route>
             </Routes>

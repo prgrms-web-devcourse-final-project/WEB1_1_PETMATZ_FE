@@ -19,7 +19,7 @@ export default function ProfileEdit() {
     const [preferredSizes, setPreferredSizes] = useState<
         ('SMALL' | 'MEDIUM' | 'LARGE')[]
     >([]);
-    const [isCareAvailable, setIsCareAvailable] = useState(false);
+    const [careAvailable, setIsCareAvailable] = useState(false);
     const [profileImg, setProfileImg] = useState('');
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
 
@@ -40,6 +40,7 @@ export default function ProfileEdit() {
             const response = await getMyProfileInfo();
             if (response.ok) {
                 const profile = response.data;
+
                 // if (response.data.imgURL !== '') {
                 //     const id = response.data.id!;
                 //     const imgURL = response.data.imgURL!;
@@ -98,7 +99,7 @@ export default function ProfileEdit() {
             nickname,
             preferredSizes,
             introduction,
-            isCareAvailable,
+            careAvailable,
             profileImg,
         });
 
@@ -108,7 +109,7 @@ export default function ProfileEdit() {
         } else {
             console.error('프로필 업데이트 실패:', response.message);
         }
-    }, [nickname, preferredSizes, introduction, isCareAvailable, navigate]);
+    }, [nickname, preferredSizes, introduction, careAvailable, navigate]);
 
     if (isLoading) {
         return (
@@ -230,7 +231,7 @@ export default function ProfileEdit() {
                             <button
                                 onClick={() => setIsCareAvailable(true)}
                                 className={`flex-1 px-[18px] py-1.5 rounded-lg transition-colors duration-300 ${
-                                    isCareAvailable
+                                    careAvailable
                                         ? 'bg-point-500 text-white '
                                         : 'text-gray-300 '
                                 }  -mr-[5px]`}
@@ -240,7 +241,7 @@ export default function ProfileEdit() {
                             <button
                                 onClick={() => setIsCareAvailable(false)}
                                 className={`flex-1 px-[18px] py-1.5 rounded-lg transition-colorsm duration-300 ${
-                                    !isCareAvailable
+                                    !careAvailable
                                         ? 'bg-point-500 text-white '
                                         : 'text-gray-300 '
                                 }  -ml-[5px]`}

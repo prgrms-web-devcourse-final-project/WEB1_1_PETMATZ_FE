@@ -119,3 +119,41 @@ export interface PetListResponse extends BaseApiResponse {
 export interface SOSUpdateRequest extends Partial<SOSCreateRequest> {
     postId: number; // 수정할 게시물 ID
 }
+
+export interface SOSDetails {
+    id: number;
+    title: string;
+    paymentType: string;
+    accountId: string;
+    comment: string;
+    price: number;
+    startDate: string;
+    endDate: string;
+    pets: Pet[];
+    authorNickname: string;
+    authorProfileImg: string;
+    authorGender: string; // MALE or FEMALE
+    authorRegion: string;
+    userId: string;
+    updatedAt: string;
+    createdAt: string;
+}
+
+export interface SOSDetailsResponse extends BaseApiResponse {
+    data?: {
+        responseCode: string;
+        result: SOSDetails;
+    };
+}
+// SOS 글 삭제 요청 값
+export interface SOSDeleteRequest {
+    id: number; // 수정할 게시물 ID
+}
+
+// SOS 글 삭제 응답 값
+export interface SOSDeleteResponse extends BaseApiResponse {
+    data?: {
+        responseCode: string;
+        result: SOSDetails;
+    };
+}
