@@ -4,38 +4,13 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './DogInformation.css';
+import { MissionInfo } from '@/types/please';
 
 interface RequestListProps {
-    dogId?: string;
+    missionInfo: MissionInfo;
 }
 
-// 요청은 상단 페이지에서 불러올 예정
-const dogs = [
-    {
-        id: 5,
-        dogNm: '예삐',
-        sexNm: '암컷',
-        kindNm: '페키니즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile.png',
-        age: 7,
-        temperament: 'ENTP',
-        size: 'SMALL',
-    },
-    {
-        id: 6,
-        dogNm: '몽이',
-        sexNm: '수컷',
-        kindNm: '말티즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile2.png',
-        age: 5,
-        temperament: 'ISFP',
-        size: 'SMALL',
-    },
-];
-
-export default function RequestList({ dogId }: RequestListProps) {
+export default function RequestList({ missionInfo }: RequestListProps) {
     const settings = {
         dots: true,
         infinite: false,
@@ -49,6 +24,18 @@ export default function RequestList({ dogId }: RequestListProps) {
         prevArrow: <SamplePrevArrow />,
     };
 
+    const dogs = missionInfo.petMissionPetInfos.map((pet) => ({
+        id: parseInt(pet.petName, 10),
+        dogNm: pet.petName,
+        sexNm: pet.gender === 'FEMALE' ? '암컷' : '수컷',
+        kindNm: pet.breed,
+        neuterYn: pet.neuterYn,
+        profileImg: pet.profileImg, // 기본 이미지
+        age: pet.age,
+        temperament: pet.temperament,
+        size: pet.size,
+    }));
+
     return (
         <main className="flex flex-col flex-1 overflow-hidden">
             <div className="flex flex-col flex-1">
@@ -58,28 +45,25 @@ export default function RequestList({ dogId }: RequestListProps) {
                 </h1>
                 <div className="flex flex-col px-6">
                     <div className="slider-container">
-                        <Slider {...settings}>
-                            {dogs.map((dog) => (
-                                <div key={dog.id} className="px-2">
-                                    <DogCard
-                                        id={dog.id}
-                                        dogNm={dog.dogNm}
-                                        sexNm={dog.sexNm}
-                                        kindNm={dog.kindNm}
-                                        neuterYn={dog.neuterYn}
-                                        profileImg={dog.profileImg}
-                                        age={dog.age}
-                                        temperament={dog.temperament}
-                                        size={dog.size}
-                                        comment={false}
-                                        edit={false}
-                                    />
-                                </div>
-                            ))}
-                        </Slider>
+                        {dogs.length === 1 ? (
+                            // 한 마리일 때는 일반 div로 표시
+                            <div className="px-2">
+                                <DogCard {...dogs[0]} />
+                            </div>
+                        ) : (
+                            // 여러 마리일 때는 슬라이더 사용
+                            <Slider {...settings}>
+                                {dogs.map((dog) => (
+                                    <div key={dog.id} className="px-2">
+                                        <DogCard {...dog} />
+                                    </div>
+                                ))}
+                            </Slider>
+                        )}
                     </div>
-
-                    <RequestListAccordion />
+                    <RequestListAccordion
+                        petMissionAskInfos={missionInfo.petMissionAskInfos}
+                    />
                 </div>
             </div>
         </main>

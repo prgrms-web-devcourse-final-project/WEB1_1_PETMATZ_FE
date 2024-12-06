@@ -1,26 +1,17 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
+import { Request, RequestListAccordionProps } from '@/types/please';
 
-interface Request {
-    id: number;
-    title: string;
-}
-
-export default function RequestListAccordion() {
+export default function RequestListAccordion({
+    petMissionAskInfos,
+}: RequestListAccordionProps) {
     const [showMenu, setShowMenu] = useState(false);
 
-    const requests: Request[] = [
-        // 요청은 상단 페이지에서 불러올 예정
-        { id: 1, title: '산책 부탁' },
-        { id: 2, title: '급식 주기' },
-        { id: 3, title: '약 먹이기' },
-        { id: 4, title: '급식 주기' },
-        { id: 5, title: '급식 주기' },
-        { id: 6, title: '간식 주기' },
-        { id: 7, title: '물 채우기' },
-        { id: 8, title: '장난감 놀아주기' },
-    ];
+    const requests: Request[] = petMissionAskInfos.map((ask, index) => ({
+        id: ask.id || index,
+        ask: ask.ask,
+    }));
 
     const handleShowRequestsBtn = useCallback(() => {
         setShowMenu((prev) => !prev);
@@ -111,7 +102,7 @@ export default function RequestListAccordion() {
                                         </div>
                                         <div className="flex items-center px-2 py-1">
                                             <p className="flex-1 text-body-s font-semibold text-gray-900">
-                                                <strong>{request.title}</strong>{' '}
+                                                <strong>{request.ask}</strong>{' '}
                                             </p>
                                             <button
                                                 onClick={handleRegisterRequest}
