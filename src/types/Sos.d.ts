@@ -125,6 +125,7 @@ export interface SOSDetails {
     title: string;
     paymentType: string;
     accountId: string;
+    commnet: string;
     price: number;
     startDate: string;
     endDate: string;
@@ -144,7 +145,12 @@ export interface SOSDetailsResponse extends BaseApiResponse {
         result: SOSDetails;
     };
 }
+// SOS 글 삭제 요청 값
+export interface SOSDeleteRequest {
+    id: number; // 수정할 게시물 ID
+}
 
+// SOS 글 삭제 응답 값
 export interface SOSDeleteResponse extends BaseApiResponse {
     data?: {
         responseCode: string;

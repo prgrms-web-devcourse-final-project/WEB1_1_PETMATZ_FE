@@ -168,13 +168,15 @@ export default function SOSDetail() {
                             {sosDetails.paymentType === 'HOURLY' && `시급`}
                             {sosDetails.paymentType === 'DAILY' && `일급`}
                             {sosDetails.paymentType === 'NEGOTIABLE' &&
-                                '협의 가능'}
+                                '금액 협의'}
                         </p>
-                        <p className="text-label-xl font-bold text-gray-500">
-                            {new Intl.NumberFormat('ko-KR').format(
-                                sosDetails.price,
-                            )}
-                        </p>
+                        {sosDetails.paymentType !== 'NEGOTIABLE' && (
+                            <p className="text-label-xl font-bold text-gray-500">
+                                {new Intl.NumberFormat('ko-KR').format(
+                                    sosDetails.price,
+                                )}
+                            </p>
+                        )}
                     </div>
                 </section>
                 <section>
