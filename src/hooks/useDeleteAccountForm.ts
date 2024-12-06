@@ -44,7 +44,7 @@ export default function useDeleteAccountForm() {
             if (response.ok) {
                 setSuccess(true);
                 setTimeout(() => {
-                    navigate('/home');
+                    navigate('/');
                 }, 3000);
             } else {
                 console.log(response);
