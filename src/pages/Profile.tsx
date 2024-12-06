@@ -1,5 +1,5 @@
 import { Loading } from '@/components/common';
-import { getProfileInfo, postLikeProfile } from '@/hooks/api/profile';
+
 import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
@@ -14,6 +14,7 @@ import { useFadeNavigate } from '@/hooks';
 import { createChatRoom } from '@/hooks/api/chat';
 import { DogsInfoResponse } from '@/types/dogInfo';
 import { fetchDogsInfo } from '@/hooks/api/dogInfo';
+import { getProfileInfo, postLikeProfile } from '@/hooks/api/user';
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();

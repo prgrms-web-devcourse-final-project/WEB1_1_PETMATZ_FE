@@ -37,6 +37,7 @@ export default function Signup() {
         setShowModal,
         showToast,
         isToastActive,
+        setImg,
     } = useSignupForm();
 
     const handleBackBtn = useCallback(() => {
@@ -101,6 +102,7 @@ export default function Signup() {
                         setPageNumber={setPageNumber}
                         imgName={imgName}
                         setImgName={setImgName}
+                        setImg={setImg}
                     />
                     <FourthStep
                         pageNumber={pageNumber}

@@ -66,4 +66,6 @@ export type {
     ProfileApiResponse,
     EditMyProfileRequest,
     EditMyProfileResponse,
+    LikeApiRequest,
+    LikeApiResponse,
 };

@@ -53,7 +53,16 @@ export default function ChatDetailTitle() {
                 <span className="flex-1 text-gray-800 text-label-m font-semibold">
                     댕댕이를 위한 부탁을 등록해요!
                 </span>
-                <button className="btn-solid btn-extra-sm">부탁 등록</button>
+                <button
+                    className="btn-solid btn-extra-sm"
+                    onClick={() =>
+                        navigate(
+                            `/please/write?receiverId=${curRoomInfo?.other.userId}`,
+                        )
+                    }
+                >
+                    부탁 등록
+                </button>
             </article>
             <article className="flex flex-col items-center py-[16px] text-point-400 text-label-s font-extrabold">
                 <span>

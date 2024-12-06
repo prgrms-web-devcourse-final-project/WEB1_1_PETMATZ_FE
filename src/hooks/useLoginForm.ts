@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
-import { postLogin } from './api/login';
 import { useUserStore } from '@/stores';
 import useCustomToast from './useCustomToast';
+import { postLogin } from './api/auth';
 
 /**
  * Login form input type
@@ -45,6 +45,7 @@ export default function useLoginForm() {
         setLoading(true);
         // 여기에 로그인 로직을 구현하세요.
         await postLogin(data).then((response) => {
+            console.log(response);
             if (response.ok) {
                 const { id, accountId, nickname, isRegistered, region } =
                     response.data;

@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
     postCheckVerificationCode,
     postEmailVerificationCode,
-} from '@/hooks/api/signup';
+} from '@/hooks/api/auth';
 
 interface FirstStepPropsType {
     pageNumber: number;

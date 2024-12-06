@@ -1,0 +1,58 @@
+.dog-slider {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* 도트 스타일링 */
+.dog-slider .slick-dots {
+    bottom: -25px;
+}
+
+.dog-slider .slick-dots li button:before {
+    font-size: 10px;
+    color: #eaebed;
+    opacity: 1;
+}
+
+.dog-slider .slick-dots li.slick-active button:before {
+    color: #7486ff;
+    font-size: 10px;
+    opacity: 1;
+}
+
+/* 화살표 스타일링 */
+.custom-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.custom-arrow:before {
+    font-size: 24px;
+    color: #7486ff;
+}
+
+.prev-arrow {
+    left: -15px;
+}
+
+.next-arrow {
+    right: -15px;
+}
+
+/* 슬라이더 컨테이너 스타일링 */
+.slider-container {
+    position: relative;
+    padding: 0 20px; /* 화살표를 위한 여백 */
+    margin-bottom: 40px; /* 페이지네이션을 위한 하단 여백 */
+}

@@ -9,6 +9,7 @@ interface ImageSelectBoxProps {
     imgName: string; // state value of image name
     setImgName: React.Dispatch<React.SetStateAction<string>>; // setState about image name
     className?: string;
+    setImg: React.Dispatch<React.SetStateAction<File | null>>; // setState about image file
 }
 
 export default function ImageSelectBox({
@@ -17,6 +18,7 @@ export default function ImageSelectBox({
     imgName,
     setImgName,
     className = '',
+    setImg,
 }: ImageSelectBoxProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [chosenImgName, setChosenImgName] = useState(imgName);
@@ -36,23 +38,22 @@ export default function ImageSelectBox({
         setIsOpen((prev) => !prev);
     }, [chosenImgName]);
 
-    const handleButtonClick = () => {
+    const handleButtonClick = useCallback(() => {
         if (fileInput.current) {
             fileInput.current.click();
         }
-    };
+    }, [fileInput]);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e: ProgressEvent<FileReader>) => {
-                const result = e.target?.result as string; // 타입 단언 사용
-                setChosenImgName(result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+    const handleFileChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const file = event.target.files?.[0];
+            if (file) {
+                setImg(file);
+                setChosenImgName(URL.createObjectURL(file));
+            }
+        },
+        [setImg, setChosenImgName],
+    );
 
     const modalContent = (
         <div
