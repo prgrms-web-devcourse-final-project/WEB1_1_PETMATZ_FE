@@ -3,38 +3,27 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './DogInformation.css';
-
+import { formatDate, formatTime } from '@/utils';
 interface DogInfoProps {
     dogId?: string;
+    missionInfo: {
+        careName: string;
+        receiverName: string;
+        receiverStart: string;
+        receiverEnd: string;
+        petMissionPetInfos: Array<{
+            petName: string;
+            breed: string;
+            age: number;
+            gender: string;
+            neuterYn: string;
+            temperament: string;
+            size: string;
+        }>;
+    };
 }
 
-// 예시 데이터 - 실제로는 API나 props로 받아올 예정
-const dogs = [
-    {
-        id: 5,
-        dogNm: '예삐',
-        sexNm: '암컷',
-        kindNm: '페키니즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile.png',
-        age: 7,
-        temperament: 'ENTP',
-        size: 'SMALL',
-    },
-    {
-        id: 6,
-        dogNm: '몽이',
-        sexNm: '수컷',
-        kindNm: '말티즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile2.png',
-        age: 5,
-        temperament: 'ISFP',
-        size: 'SMALL',
-    },
-];
-
-export default function DogInformation({ dogId }: DogInfoProps) {
+export default function DogInformation({ dogId, missionInfo }: DogInfoProps) {
     const settings = {
         dots: true,
         infinite: false,
@@ -46,6 +35,18 @@ export default function DogInformation({ dogId }: DogInfoProps) {
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
     };
+
+    const dogs = missionInfo.petMissionPetInfos.map((pet) => ({
+        id: parseInt(pet.petName, 10),
+        dogNm: pet.petName,
+        sexNm: pet.gender === 'FEMALE' ? '암컷' : '수컷',
+        kindNm: pet.breed,
+        neuterYn: pet.neuterYn,
+        profileImg: 'https://example.com/uploads/default-dog.png', // 기본 이미지
+        age: pet.age,
+        temperament: pet.temperament,
+        size: pet.size,
+    }));
 
     return (
         <main className="p-4 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
@@ -79,13 +80,13 @@ export default function DogInformation({ dogId }: DogInfoProps) {
                     <div className="flex gap-5 items-center">
                         <p className="text-label-m text-gray-500">돌봄이</p>
                         <p className="text-body-m font-semibold text-gray-900 ml-2">
-                            솜이누나
+                            {missionInfo.receiverName}
                         </p>
                     </div>
                     <div className="flex gap-5 items-center">
                         <p className="text-label-m text-gray-500">맡김이</p>
                         <p className="text-body-m font-semibold text-gray-900 ml-2">
-                            절미방딩이
+                            {missionInfo.careName}
                         </p>
                     </div>
                 </div>
@@ -99,13 +100,13 @@ export default function DogInformation({ dogId }: DogInfoProps) {
                             <input
                                 id="startDate"
                                 className="input-outline flex-1 mr-2 sm:!px-4 px-3"
-                                value="2024년 11월 28일"
+                                value={formatDate(missionInfo.receiverStart)}
                                 style={{ pointerEvents: 'none' }}
                             />
                             <input
                                 id="startTime"
                                 className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
-                                value="오후 01:00"
+                                value={formatTime(missionInfo.receiverStart)}
                                 style={{ pointerEvents: 'none' }}
                             />
                         </div>
@@ -118,13 +119,13 @@ export default function DogInformation({ dogId }: DogInfoProps) {
                             <input
                                 id="startDate"
                                 className="input-outline flex-1 mr-2 sm:!px-4 px-3"
-                                value="2024년 11월 29일"
+                                value={formatDate(missionInfo.receiverEnd)}
                                 style={{ pointerEvents: 'none' }}
                             />
                             <input
                                 id="startTime"
                                 className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
-                                value="오후 03:00"
+                                value={formatTime(missionInfo.receiverEnd)}
                                 style={{ pointerEvents: 'none' }}
                             />
                         </div>
