@@ -1,15 +1,38 @@
 import { useFadeNavigate } from '@/hooks';
+import { Dropdown } from '@/components/common';
+import { useChatStore } from '@/stores';
+import { getDefaultProfileImg } from '@/utils';
 
 // SVG
 import ArrowLeftIcon from '@/assets/images/arrow/arrowLeft.svg?react';
 import MenuBugerIcon from '@/assets/images/common/menuBuger.svg?react';
 import FoodBowlIcon from '@/assets/images/chat/foodBowl.svg?react';
-import { useChatStore } from '@/stores';
-import { getDefaultProfileImg } from '@/utils';
+import ExitIcon from '@/assets/images/header/exit.svg?react';
+import ReportIcon from '@/assets/images/chat/report.svg?react';
+import { deleteChatRoom } from '@/hooks/api/Chat';
 
 export default function ChatDetailTitle() {
     const { curRoomInfo } = useChatStore();
+    const { unSubFromChatRoom } = useChatStore();
     const navigate = useFadeNavigate();
+
+    // 채팅방 나가기
+    const handleClickExit = async () => {
+        if (!curRoomInfo) return;
+
+        const { ok } = await deleteChatRoom({
+            roomId: String(curRoomInfo?.chatRoomId),
+        });
+
+        if (!ok) {
+            console.error('채팅방 삭제에 실패했습니다.');
+            return;
+        }
+
+        unSubFromChatRoom();
+
+        navigate('/chat');
+    };
 
     return (
         <>
@@ -32,7 +55,23 @@ export default function ChatDetailTitle() {
                                 {curRoomInfo.other.userName}
                             </span>
                         </div>
-                        <MenuBugerIcon className="text-point-900 w-[24px] h-[24px]" />
+                        <Dropdown
+                            icon={
+                                <MenuBugerIcon className="text-point-900 w-[24px] h-[24px] cursor-pointer" />
+                            }
+                        >
+                            <li
+                                className="flex items-center py-[10px] px-[14px] gap-[8px] hover:bg-point-50 active:bg-point-50 rounded-t-lg"
+                                onClick={handleClickExit}
+                            >
+                                <ExitIcon className="w-[18px] h-[18px]" />
+                                <span>방 나가기</span>
+                            </li>
+                            <li className="flex items-center py-[10px] px-[14px] gap-[8px] text-warning-400 hover:bg-warning-100 active:bg-warning-100 rounded-b-lg cursor-not-allowed">
+                                <ReportIcon className="w-[18px] h-[18px]" />
+                                <span>신고하기</span>
+                            </li>
+                        </Dropdown>
                     </>
                 ) : (
                     <>
