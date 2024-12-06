@@ -45,27 +45,22 @@ export default function RequestList({ missionInfo }: RequestListProps) {
                 </h1>
                 <div className="flex flex-col px-6">
                     <div className="slider-container">
-                        <Slider {...settings}>
-                            {dogs.map((dog) => (
-                                <div key={dog.id} className="px-2">
-                                    <DogCard
-                                        id={dog.id}
-                                        dogNm={dog.dogNm}
-                                        sexNm={dog.sexNm}
-                                        kindNm={dog.kindNm}
-                                        neuterYn={dog.neuterYn}
-                                        profileImg={dog.profileImg}
-                                        age={dog.age}
-                                        temperament={dog.temperament}
-                                        size={dog.size}
-                                        comment={false}
-                                        edit={false}
-                                    />
-                                </div>
-                            ))}
-                        </Slider>
+                        {dogs.length === 1 ? (
+                            // 한 마리일 때는 일반 div로 표시
+                            <div className="px-2">
+                                <DogCard {...dogs[0]} />
+                            </div>
+                        ) : (
+                            // 여러 마리일 때는 슬라이더 사용
+                            <Slider {...settings}>
+                                {dogs.map((dog) => (
+                                    <div key={dog.id} className="px-2">
+                                        <DogCard {...dog} />
+                                    </div>
+                                ))}
+                            </Slider>
+                        )}
                     </div>
-
                     <RequestListAccordion
                         petMissionAskInfos={missionInfo.petMissionAskInfos}
                     />

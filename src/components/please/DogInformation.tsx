@@ -41,25 +41,21 @@ export default function DogInformation({ missionInfo }: DogInfoProps) {
                     <p>우리가 도와줄 멍멍이는</p>
                 </h1>
                 <div className="slider-container">
-                    <Slider {...settings}>
-                        {dogs.map((dog) => (
-                            <div key={dog.id} className="px-2">
-                                <DogCard
-                                    id={dog.id}
-                                    dogNm={dog.dogNm}
-                                    sexNm={dog.sexNm}
-                                    kindNm={dog.kindNm}
-                                    neuterYn={dog.neuterYn}
-                                    profileImg={dog.profileImg}
-                                    age={dog.age}
-                                    temperament={dog.temperament}
-                                    size={dog.size}
-                                    comment={false}
-                                    edit={false}
-                                />
-                            </div>
-                        ))}
-                    </Slider>
+                    {dogs.length === 1 ? (
+                        // 한 마리일 때는 일반 div로 표시
+                        <div className="px-2">
+                            <DogCard {...dogs[0]} />
+                        </div>
+                    ) : (
+                        // 여러 마리일 때는 슬라이더 사용
+                        <Slider {...settings}>
+                            {dogs.map((dog) => (
+                                <div key={dog.id} className="px-2">
+                                    <DogCard {...dog} />
+                                </div>
+                            ))}
+                        </Slider>
+                    )}
                 </div>
 
                 <div className="space-y-4 !mt-8">
