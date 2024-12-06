@@ -6,11 +6,10 @@ import './DogInformation.css';
 import { formatDate, formatTime } from '@/utils';
 import { MissionInfo } from '@/types/please';
 interface DogInfoProps {
-    dogId?: string;
     missionInfo: MissionInfo;
 }
 
-export default function DogInformation({ dogId, missionInfo }: DogInfoProps) {
+export default function DogInformation({ missionInfo }: DogInfoProps) {
     const settings = {
         dots: true,
         infinite: false,

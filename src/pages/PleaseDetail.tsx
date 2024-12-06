@@ -9,46 +9,10 @@ import RequestListComponent from '@/components/please/RequestList';
 
 export default function PleaseDetail() {
     const { id } = useParams();
-    // const { data: missionInfo, isLoading, error } = usePetMissionInfo(id!);
+    const { data: missionInfo, isLoading, error } = usePetMissionInfo(id!);
     const navigate = useFadeNavigate();
-    // console.log(missionInfo?.result);
-    const missionInfo = {
-        id: 1,
-        careName: '파워', // 맡김이
-        receiverName: 'gunwoo121112', // 돌봄이
-        receiverStart: '2024-12-01T10:00:00',
-        receiverEnd: '2024-12-01T12:00:00',
-        petMissionPetInfos: [
-            {
-                petName: '야호22',
-                breed: '페키니2즈',
-                age: 17,
-                gender: 'FEMALE',
-                neuterYn: '중성',
-                temperament: 'ENFP',
-                size: 'SMALL',
-            },
-        ],
-        petMissionAskInfos: [
-            {
-                id: null,
-                comment: null,
-                ask: 'Feed the dog',
-                imgURL: null,
-            },
-            {
-                id: null,
-                comment: null,
-                ask: 'Walk the dog',
-                imgURL: null,
-            },
-        ],
-    };
-
-    // if (isLoading) return <Loading />;
-    // if (error) return <div>에러가 발생했습니다.</div>;
-
     const [isInfoTab, setIsInfoTab] = useState(true);
+    console.log(missionInfo?.result);
 
     const handleBackBtn = useCallback(() => {
         navigate(-1);
@@ -57,6 +21,9 @@ export default function PleaseDetail() {
     const handleToggleChange = (checked: boolean) => {
         setIsInfoTab(checked);
     };
+
+    if (isLoading) return <Loading />;
+    if (error) return <div>에러가 발생했습니다.</div>;
 
     const pageVariants = {
         initial: {
@@ -112,10 +79,11 @@ export default function PleaseDetail() {
                                     variants={pageVariants}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <DogInfoComponent
-                                        dogId={id}
-                                        missionInfo={missionInfo}
-                                    />
+                                    {missionInfo && (
+                                        <DogInfoComponent
+                                            missionInfo={missionInfo.result}
+                                        />
+                                    )}
                                 </motion.div>
                             ) : (
                                 <motion.div
@@ -127,7 +95,11 @@ export default function PleaseDetail() {
                                     variants={pageVariants}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <RequestListComponent dogId={id} />
+                                    {missionInfo && (
+                                        <RequestListComponent
+                                            missionInfo={missionInfo.result}
+                                        />
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>

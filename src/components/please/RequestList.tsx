@@ -7,11 +7,10 @@ import './DogInformation.css';
 import { MissionInfo } from '@/types/please';
 
 interface RequestListProps {
-    dogId?: string;
     missionInfo: MissionInfo;
 }
 
-export default function RequestList({ dogId, missionInfo }: RequestListProps) {
+export default function RequestList({ missionInfo }: RequestListProps) {
     const settings = {
         dots: true,
         infinite: false,
