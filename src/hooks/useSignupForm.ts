@@ -56,7 +56,9 @@ export interface passwordValidationType {
 
 export interface confirmPasswordValidationType {
     required: string;
-    validate: (value: string | number) => boolean | string;
+    validate: (
+        value: string | boolean | string[],
+    ) => boolean | string | Promise<boolean | string>;
 }
 
 export interface nicknameValidationType {
@@ -169,6 +171,7 @@ export default function useSignupForm() {
             longitude,
             profileImg,
         }).then(async (response) => {
+            console.log(response);
             setShowModal(false);
             if (response.ok) {
                 if (response.data.imgURL !== '') {
@@ -199,7 +202,11 @@ export default function useSignupForm() {
                     }, 3000);
                 }
             } else {
-                showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                if (response.error?.status === 401) {
+                    showToast('회원 등록에 실패했습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
             }
         });
         setLoading(false);
@@ -247,7 +254,7 @@ export default function useSignupForm() {
      */
     const confirmPasswordValidation = {
         required: '비밀번호 확인은 필수입니다!',
-        validate: (value: string | number) =>
+        validate: (value: string | boolean | string[]) =>
             value === watch('password') || '비밀번호가 일치하지 않아요!',
     };
 
