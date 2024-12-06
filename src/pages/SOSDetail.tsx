@@ -52,10 +52,7 @@ export default function SOSDetail() {
 
             if (ok) {
                 if (data) {
-                    setSOSDetails(data.result); // result가 있는 경우에만 상태 업데이트
-                    console.log('user', user);
-
-                    console.log('sosDetails', sosDetails);
+                    setSOSDetails(data.result);
                 } else {
                     console.error('result가 없습니다.');
                 }
@@ -157,7 +154,7 @@ export default function SOSDetail() {
                     </div>
                     <div className="mb-4">
                         <p className="text-label-m text-gray-500 mb-1">기간</p>
-                        <p className="text-label-xl font-bold text-gray-500">
+                        <p className="text-label-xl font-bold text-black">
                             {sosDetails.startDate}
                             <br />
                             {sosDetails.endDate}
@@ -171,7 +168,7 @@ export default function SOSDetail() {
                                 '금액 협의'}
                         </p>
                         {sosDetails.paymentType !== 'NEGOTIABLE' && (
-                            <p className="text-label-xl font-bold text-gray-500">
+                            <p className="text-label-xl font-bold text-black">
                                 {new Intl.NumberFormat('ko-KR').format(
                                     sosDetails.price,
                                 )}
