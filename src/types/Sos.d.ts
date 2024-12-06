@@ -125,7 +125,7 @@ export interface SOSDetails {
     title: string;
     paymentType: string;
     accountId: string;
-    commnet: string;
+    comment: string;
     price: number;
     startDate: string;
     endDate: string;

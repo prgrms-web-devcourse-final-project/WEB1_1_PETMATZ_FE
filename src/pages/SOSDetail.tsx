@@ -8,6 +8,42 @@ import { getSOSDetails, deleteSOSPost } from '@/hooks/api/sos';
 import { SOSDetails } from '@/types/Sos';
 import { useUserStore } from '@/stores';
 import { createChatRoom } from '@/hooks/api/chat';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+const SampleNextArrow = (props: any) => {
+    const { className, onClick } = props;
+    return (
+        <div
+            className={`${className} custom-arrow next-arrow`}
+            onClick={onClick}
+        />
+    );
+};
+
+const SamplePrevArrow = (props: any) => {
+    const { className, onClick } = props;
+    return (
+        <div
+            className={`${className} custom-arrow prev-arrow`}
+            onClick={onClick}
+        />
+    );
+};
+
+// Slider 설정
+const sliderSettings = {
+    dots: true, // 하단 점 표시
+    infinite: false, // 무한 슬라이드 비활성화
+    speed: 500, // 전환 속도
+    slidesToShow: 1, // 한 번에 보여줄 슬라이드 수
+    slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
+    arrows: true, // 좌우 화살표 표시
+    className: 'dog-slider',
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+};
 
 export default function SOSDetail() {
     const navigate = useFadeNavigate();
@@ -53,6 +89,7 @@ export default function SOSDetail() {
             if (ok) {
                 if (data) {
                     setSOSDetails(data.result);
+                    console.log(data);
                 } else {
                     console.error('result가 없습니다.');
                 }
@@ -129,14 +166,14 @@ export default function SOSDetail() {
                     <div className="mt-2">
                         <textarea
                             name="comment"
-                            className="pointer-events-none w-full rounded-lg bg-gray-100 border border-gray-100 p-2 mb-2"
-                            value={`안녕하세요`}
+                            className="pointer-events-none w-full text-label-l text-black font-bold rounded-lg bg-gray-100 border border-gray-200 p-2 mb-2"
+                            value={sosDetails.comment}
                             readOnly
                         />
                     </div>
                     <div className="mb-2 flex justify-start ">
-                        <p className="text-label-m text-gray-500 mb-1 mr-2">
-                            작성일
+                        <p className="text-label-m text-gray-500 mb-1 mr-1">
+                            작성일 :
                         </p>
                         <p className="text-label-m text-gray-500 pb-2">
                             {new Date(sosDetails.createdAt).toLocaleString(
@@ -152,27 +189,61 @@ export default function SOSDetail() {
                             )}
                         </p>
                     </div>
-                    <div className="mb-4">
-                        <p className="text-label-m text-gray-500 mb-1">기간</p>
-                        <p className="text-label-xl font-bold text-black">
-                            {sosDetails.startDate}
-                            <br />
-                            {sosDetails.endDate}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-label-m text-gray-500 mb-1">
-                            {sosDetails.paymentType === 'HOURLY' && `시급`}
-                            {sosDetails.paymentType === 'DAILY' && `일급`}
-                            {sosDetails.paymentType === 'NEGOTIABLE' &&
-                                '금액 협의'}
-                        </p>
-                        {sosDetails.paymentType !== 'NEGOTIABLE' && (
-                            <p className="text-label-xl font-bold text-black">
-                                {new Intl.NumberFormat('ko-KR').format(
-                                    sosDetails.price,
-                                )}
+                    <div className="flex flex-col mb-4">
+                        <div>
+                            <p className="text-label-m text-gray-500 mb-1">
+                                기간
                             </p>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <div className="flex font-bold text-point-500 border border-point-500 p-2 rounded-lg">
+                                <p className="text-label-l ">
+                                    {new Date(
+                                        sosDetails.startDate,
+                                    ).toLocaleString('ko-KR', {
+                                        timeZone: 'Asia/Seoul',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
+                                </p>
+                            </div>
+                            <div className="text-point-500">~</div>
+                            <div className="flex font-bold text-point-500 border border-point-500 p-2 rounded-lg">
+                                <p className="text-label-l ">
+                                    {new Date(
+                                        sosDetails.endDate,
+                                    ).toLocaleString('ko-KR', {
+                                        timeZone: 'Asia/Seoul',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
+                                </p>
+                            </div>
+                        </div>
+                        <p className="text-label-l font-bold text-point-500"></p>
+                    </div>
+                    <div className="flex flex-col">
+                        <div>
+                            <p className="text-label-m text-gray-500 mb-1">
+                                {sosDetails.paymentType === 'HOURLY' && `시급`}
+                                {sosDetails.paymentType === 'DAILY' && `일급`}
+                                {sosDetails.paymentType === 'NEGOTIABLE' &&
+                                    '금액 협의'}
+                            </p>
+                        </div>
+                        {sosDetails.paymentType !== 'NEGOTIABLE' && (
+                            <div className="flex w-fit font-bold text-point-500 border border-point-500 p-2 rounded-lg">
+                                <p className="text-label-l font-bold text-point-500">
+                                    {new Intl.NumberFormat('ko-KR').format(
+                                        sosDetails.price,
+                                    )}{' '}
+                                    원
+                                </p>
+                            </div>
                         )}
                     </div>
                 </section>
@@ -180,29 +251,64 @@ export default function SOSDetail() {
                     <p className="text-label-m text-gray-500 mb-2">
                         강아지 정보
                     </p>
-                    {sosDetails.pets.map((pet) => (
-                        <DogCard
-                            key={pet.id}
-                            id={pet.id}
-                            dogNm={pet.dogNm ?? ''}
-                            sexNm={pet.sexNm === 'FEMALE' ? '암컷' : '수컷'}
-                            kindNm={pet.kindNm ?? ''}
-                            neuterYn={pet.neuterYn ?? ''}
-                            profileImg={pet.profileImg ?? ''}
-                            age={pet.age ?? 0}
-                            temperament={pet.temperament ?? ''}
-                            size={pet.size ?? ''}
-                            comment={!!pet.comment}
-                        />
-                    ))}
+                    {sosDetails.pets.length === 1 ? (
+                        // 강아지가 한 마리일 경우
+                        <div className="px-2">
+                            <DogCard
+                                id={sosDetails.pets[0].id}
+                                dogNm={sosDetails.pets[0].dogNm ?? ''}
+                                sexNm={
+                                    sosDetails.pets[0].sexNm === 'FEMALE'
+                                        ? '암컷'
+                                        : '수컷'
+                                }
+                                kindNm={sosDetails.pets[0].kindNm ?? ''}
+                                neuterYn={sosDetails.pets[0].neuterYn ?? ''}
+                                profileImg={sosDetails.pets[0].profileImg ?? ''}
+                                age={sosDetails.pets[0].age ?? 0}
+                                temperament={
+                                    sosDetails.pets[0].temperament ?? ''
+                                }
+                                size={sosDetails.pets[0].size ?? ''}
+                                comment={!!sosDetails.pets[0].comment}
+                            />
+                        </div>
+                    ) : (
+                        // 강아지가 여러 마리일 경우 슬라이더로 표시
+                        <Slider {...sliderSettings}>
+                            {sosDetails.pets.map((pet) => (
+                                <div
+                                    key={pet.id}
+                                    className="px-2 flex justify-center items-center"
+                                >
+                                    <DogCard
+                                        id={pet.id}
+                                        dogNm={pet.dogNm ?? ''}
+                                        sexNm={
+                                            pet.sexNm === 'FEMALE'
+                                                ? '암컷'
+                                                : '수컷'
+                                        }
+                                        kindNm={pet.kindNm ?? ''}
+                                        neuterYn={pet.neuterYn ?? ''}
+                                        profileImg={pet.profileImg ?? ''}
+                                        age={pet.age ?? 0}
+                                        temperament={pet.temperament ?? ''}
+                                        size={pet.size ?? ''}
+                                        comment={false}
+                                    />
+                                </div>
+                            ))}
+                        </Slider>
+                    )}
                 </section>
                 {user?.accountId !== sosDetails?.accountId && (
-                    <button onClick={handleChatBtn} className="btn-solid my-6">
+                    <button onClick={handleChatBtn} className="btn-solid mt-12">
                         채팅하기
                     </button>
                 )}
                 {user?.accountId == sosDetails?.accountId && (
-                    <div className="flex justify-center items-center mt-6">
+                    <div className="flex justify-center items-center mt-12">
                         <button
                             onClick={() => setShowModal(true)}
                             className="flex text-label-l w-24 text-gray-400 justify-center underline"
@@ -215,11 +321,11 @@ export default function SOSDetail() {
             {/* 모달 */}
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-72 h-32 flex flex-col justify-center items-center">
-                        <h3 className="text-body-m mb-4">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-72 h-36 flex flex-col justify-center items-center">
+                        <h3 className="text-body-m mb-6">
                             게시글을 삭제하시겠습니까?
                         </h3>
-                        <div className="flex justify-between gap-2">
+                        <div className="flex justify-between gap-4">
                             <button
                                 className="px-6 py-2 bg-gray-200 rounded-lg text-gray-600"
                                 onClick={() => setShowModal(false)} // 취소
@@ -227,7 +333,7 @@ export default function SOSDetail() {
                                 취소
                             </button>
                             <button
-                                className="px-6 py-2 bg-red-500 text-white rounded-lg"
+                                className="px-6 py-2 bg-point-500 text-white rounded-lg"
                                 onClick={handleDeletePost} // 삭제
                             >
                                 삭제
