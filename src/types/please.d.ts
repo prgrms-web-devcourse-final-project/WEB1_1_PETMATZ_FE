@@ -35,6 +35,7 @@ interface PetInfo {
     gender: 'MALE' | 'FEMALE';
     neuterYn: string; // '중성' | '미중성',
     temperament: string;
+    size: string;
 }
 
 // 미션 요청 정보 타입
