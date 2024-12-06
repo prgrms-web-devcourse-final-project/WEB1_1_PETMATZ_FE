@@ -41,11 +41,11 @@ export default function Header() {
                         className="flex items-center py-[10px] px-[14px] gap-[8px] hover:bg-point-50 active:bg-point-50"
                         onClick={() => navigate('/like')}
                     >
-                        <HeartIcon className="w-[18px] h-[18px]" />
+                        <HeartIcon className="w-[18px] h-[18px] text-gray-900" />
                         <span>찜 목록</span>
                     </li>
                     <li
-                        className="flex items-center py-[10px] px-[14px] gap-[8px] text-warning-400 hover:bg-point-50 active:bg-point-50 rounded-b-lg"
+                        className="flex items-center py-[10px] px-[14px] gap-[8px] text-warning-400 hover:bg-warning-100 active:bg-warning-100 rounded-b-lg"
                         onClick={handleClickLogout}
                     >
                         <ExitIcon className="w-[18px] h-[18px]" />
