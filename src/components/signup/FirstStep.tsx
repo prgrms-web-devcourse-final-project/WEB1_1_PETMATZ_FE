@@ -69,6 +69,7 @@ export default function FirstStep({
         // api 요청
         const accountId = email;
         await postEmailVerificationCode({ accountId }).then((response) => {
+            console.log(response);
             if (response.ok) {
                 setSentNumber(true);
                 showToast('인증코드를 전송하였습니다!', 'success');

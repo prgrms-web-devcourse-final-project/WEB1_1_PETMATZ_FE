@@ -140,12 +140,15 @@ export const putImageToS3 = async ({
     type,
 }: ImageToS3Params): Promise<boolean> => {
     const result = await httpForImage.put<BaseApiResponse, File>(imgURL, img);
+    console.log('이미지 업로드 result : ', result);
     if (result.ok) {
         return true;
     } else {
         const UUID = id;
         const ImgType = type;
-        await deleteImageUploadError({ UUID, ImgType });
+        await deleteImageUploadError({ UUID, ImgType }).then((response) => {
+            console.log(response);
+        });
         return false;
     }
 };

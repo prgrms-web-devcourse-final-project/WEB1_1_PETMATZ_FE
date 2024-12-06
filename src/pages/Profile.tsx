@@ -1,4 +1,4 @@
-import { Loading } from '@/components/common';
+import { Loading, PageNotFound } from '@/components/common';
 
 import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
@@ -54,8 +54,10 @@ export default function Profile() {
         if (!data) {
             return;
         }
-        setImage(data.data.profileImg);
-        if (!isMyProfile) {
+        if (data.data?.profileImg) {
+            setImage(data.data.profileImg);
+        }
+        if (!isMyProfile && data.data?.myHeartUser) {
             setLike(data.data.myHeartUser!);
         }
     }, [data, setImage, isMyProfile]);
@@ -93,16 +95,8 @@ export default function Profile() {
         return <Loading />;
     }
 
-    if (
-        !data ||
-        !dogsData ||
-        !data.data ||
-        !dogsData.data ||
-        data.error?.status === 400 ||
-        data.error?.status === 500 ||
-        dogsData.error?.status === 500
-    ) {
-        return <div>404 not found</div>;
+    if (!data || !dogsData || !data.ok || !dogsData.ok) {
+        return <PageNotFound />;
     }
 
     const profileData = data.data;
