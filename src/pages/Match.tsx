@@ -4,7 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { IntroMatch, MatchCard, NoMoreCard } from '@/components/match';
 import FetchMoreCard from '@/components/match/FetchMoreCard';
-import { createChatRoom } from '@/hooks/api/chat';
+import { createChatRoom } from '@/hooks/api/Chat';
 import { useFadeNavigate } from '@/hooks';
 
 export default function Match() {
@@ -56,7 +56,7 @@ export default function Match() {
 
     const handleOnClickResetBtn = () => {
         setIsLastPage(false);
-        setCurPage(1);
+        setCurPage(0);
     };
 
     // 인트로 관련 이벤트 핸들러
