@@ -124,6 +124,7 @@ export interface SOSDetails {
     id: number;
     title: string;
     paymentType: string;
+    accountId: string;
     price: number;
     startDate: string;
     endDate: string;
@@ -138,6 +139,13 @@ export interface SOSDetails {
 }
 
 export interface SOSDetailsResponse extends BaseApiResponse {
+    data?: {
+        responseCode: string;
+        result: SOSDetails;
+    };
+}
+
+export interface SOSDeleteResponse extends BaseApiResponse {
     data?: {
         responseCode: string;
         result: SOSDetails;

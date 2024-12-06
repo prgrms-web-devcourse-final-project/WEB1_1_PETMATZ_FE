@@ -4,6 +4,7 @@ import {
     SOSCreateRequest,
     SOSCreateApiResponse,
     SOSDetailsResponse,
+    SOSDeleteResponse,
 } from '@/types/Sos';
 
 // 강아지 목록 불러오는 API 함수
@@ -23,4 +24,9 @@ export const getSOSDetails = async (
     userId: number,
 ): Promise<SOSDetailsResponse> => {
     return await http.get<SOSDetailsResponse>(`/api/sosboard/${userId}`);
+};
+
+// SOS 특정 게시글 삭제 API 함수
+export const deleteSOSPost = async (id: number): Promise<SOSDeleteResponse> => {
+    return await http.get<SOSDeleteResponse>(`/api/sosboard/${id}`);
 };
