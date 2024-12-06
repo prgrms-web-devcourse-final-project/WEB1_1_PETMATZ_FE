@@ -2,7 +2,7 @@ import {
     deleteChatRoom,
     getChatMessageList,
     getChatRoomList,
-} from '@/hooks/api/chat';
+} from '@/hooks/api/Chat';
 import { IChatMessage, IChatRoom } from '@/types/chat';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -272,16 +272,25 @@ const useChatStore = create<ChatStore>((set, get) => ({
         const subscriptionId = get().subscriptionId;
         const curRoomInfo = get().curRoomInfo;
 
-        if (client) {
-            const { user } = useUserStore.getState();
-            if (subscriptionId) client.unsubscribe(subscriptionId);
-            if (curRoomInfo && user) {
-                client.unsubscribe(
-                    `/topic/chat/${curRoomInfo.chatRoomId}/${user.accountId}`,
-                );
-            }
-            client.deactivate();
+        if (!client || !client.connected) {
+            set({
+                curRoomInfo: null,
+                connectedClient: null,
+                messageList: [],
+                subscriptionId: null,
+            });
+
+            return;
         }
+
+        const { user } = useUserStore.getState();
+        if (subscriptionId) client.unsubscribe(subscriptionId);
+        if (curRoomInfo && user) {
+            client.unsubscribe(
+                `/topic/chat/${curRoomInfo.chatRoomId}/${user.accountId}`,
+            );
+        }
+        client.deactivate();
 
         set({
             curRoomInfo: null,
