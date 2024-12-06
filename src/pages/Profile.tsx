@@ -1,4 +1,4 @@
-import { Loading } from '@/components/common';
+import { Loading, PageNotFound } from '@/components/common';
 
 import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
@@ -96,7 +96,7 @@ export default function Profile() {
     }
 
     if (!data || !dogsData || !data.ok || !dogsData.ok) {
-        return <div>404 not found</div>;
+        return <PageNotFound />;
     }
 
     const profileData = data.data;
