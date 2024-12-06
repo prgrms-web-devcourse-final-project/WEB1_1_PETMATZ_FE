@@ -41,7 +41,11 @@ export default function KakaoSignup() {
 
     return (
         <>
-            {loading && <Loading />}
+            {loading && (
+                <div className="bg-white h-full flex justify-center items-center">
+                    <Loading />
+                </div>
+            )}
             <div
                 className={`${loading && 'hidden'} h-screen bg-gray-100 flex flex-col overflow-hidden`}
             >

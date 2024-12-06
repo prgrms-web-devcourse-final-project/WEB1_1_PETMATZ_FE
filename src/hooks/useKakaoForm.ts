@@ -152,7 +152,7 @@ export default function useKakaoSignupForm() {
                 // }
                 setSuccess(true);
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate('/home');
                 }, 3000);
             } else {
                 showToast('서버 연결 문제가 발생했습니다!', 'warning');
