@@ -11,7 +11,7 @@ export default function PageNotFound() {
     }, []);
 
     return (
-        <div className="h-screen bg-white flex flex-col justify-between overflow-hidden">
+        <div className="h-screen bg-inherit flex flex-col justify-between overflow-hidden">
             <section className="flex-1 flex flex-col justify-center items-center">
                 <Foot className="mb-2" />
                 <h2 className="text-gray-800 text-title-s font-extrabold">

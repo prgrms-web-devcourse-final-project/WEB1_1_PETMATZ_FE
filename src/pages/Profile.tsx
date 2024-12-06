@@ -103,7 +103,7 @@ export default function Profile() {
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
-            <div className="w-full bg-white pt-6 pb-12">
+            <div className="w-full bg-gray-50 pt-6 pb-12">
                 <div className="w-full max-w-[600px] mx-auto px-6 flex flex-col gap-4">
                     <h2 className="text-title-s font-extrabold text-gray-800">
                         {isMyProfile ? <p>나의 프로필</p> : <p>안녕하세요!</p>}
