@@ -11,60 +11,60 @@ import { useUserStore } from '@/stores';
 export default function PleaseDetail() {
     const { id } = useParams(); // 부탁에 대한 id
     const userId = useUserStore().user?.id; // userId
-    // const { data: missionInfo, isLoading, error } = usePetMissionInfo(id!);
+    const { data: missionInfo, isLoading, error } = usePetMissionInfo(id!);
     const navigate = useFadeNavigate();
     const [isInfoTab, setIsInfoTab] = useState(true);
     // console.log(missionInfo?.result);
-    const missionInfo = {
-        result: {
-            id: 1,
-            careName: '파워', // 맡김이
-            careId: 2,
-            receiverName: 'gunwoo121112', // 돌봄이
-            receiverId: 1,
-            receiverStart: '2024-12-01T10:00:00',
-            receiverEnd: '2024-12-01T12:00:00',
-            petMissionPetInfos: [
-                {
-                    petName: '야호22',
-                    breed: '페키니2즈',
-                    age: 17,
-                    gender: 'FEMALE' as 'FEMALE' | 'MALE',
-                    neuterYn: '중성',
-                    temperament: 'ENFP',
-                    size: 'SMALL',
-                    profileImg: 'https://cdn.pixabay.com/photo',
-                },
-            ],
-            petMissionAskInfos: [
-                {
-                    id: null,
-                    comment: null,
-                    ask: 'Feed the dog',
-                    imgURL: null,
-                },
-                {
-                    id: null,
-                    comment: null,
-                    ask: 'Walk the dog',
-                    imgURL: null,
-                },
-                {
-                    id: null,
-                    comment: null,
-                    ask: 'Walk the dog',
-                    imgURL: null,
-                },
-                {
-                    id: null,
-                    comment: null,
-                    ask: 'Walk the dog',
-                    imgURL: null,
-                },
-            ],
-            status: 'INP' as 'BEF' | 'AFT' | 'INP',
-        },
-    };
+    // const missionInfo = {
+    //     result: {
+    //         id: 1,
+    //         careName: '파워', // 맡김이
+    //         careId: 2,
+    //         receiverName: 'gunwoo121112', // 돌봄이
+    //         receiverId: 1,
+    //         receiverStart: '2024-12-01T10:00:00',
+    //         receiverEnd: '2024-12-01T12:00:00',
+    //         petMissionPetInfos: [
+    //             {
+    //                 petName: '야호22',
+    //                 breed: '페키니2즈',
+    //                 age: 17,
+    //                 gender: 'FEMALE' as 'FEMALE' | 'MALE',
+    //                 neuterYn: '중성',
+    //                 temperament: 'ENFP',
+    //                 size: 'SMALL',
+    //                 profileImg: 'https://cdn.pixabay.com/photo',
+    //             },
+    //         ],
+    //         petMissionAskInfos: [
+    //             {
+    //                 id: null,
+    //                 comment: null,
+    //                 ask: 'Feed the dog',
+    //                 imgURL: null,
+    //             },
+    //             {
+    //                 id: null,
+    //                 comment: null,
+    //                 ask: 'Walk the dog',
+    //                 imgURL: null,
+    //             },
+    //             {
+    //                 id: null,
+    //                 comment: null,
+    //                 ask: 'Walk the dog',
+    //                 imgURL: null,
+    //             },
+    //             {
+    //                 id: null,
+    //                 comment: null,
+    //                 ask: 'Walk the dog',
+    //                 imgURL: null,
+    //             },
+    //         ],
+    //         status: 'INP' as 'BEF' | 'AFT' | 'INP',
+    //     },
+    // };
 
     const handleBackBtn = useCallback(() => {
         navigate(-1);
@@ -89,8 +89,8 @@ export default function PleaseDetail() {
 
     const isButtonDisabled = missionInfo?.result.status === 'AFT';
 
-    // if (isLoading) return <Loading />;
-    // if (error) return <div>에러가 발생했습니다.</div>;
+    if (isLoading) return <Loading />;
+    if (error) return <div>에러가 발생했습니다.</div>;
 
     const pageVariants = {
         initial: {
