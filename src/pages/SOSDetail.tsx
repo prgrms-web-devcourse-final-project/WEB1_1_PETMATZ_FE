@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Back from '@/assets/images/header/back.svg?react';
 import { useCallback } from 'react';
@@ -155,12 +155,12 @@ export default function SOSDetail() {
                     </span>
                 </section>
                 {/* 타이틀 */}
-                <section className="flex-1">
+                <section className="flex flex-col flex-1">
                     <h2 className="text-point-500 text-body-m font-extrabold flex items-center gap-[4px] py-[16px]">
                         <LetterIcon className="w-[20px] h-[20px]" />
                         <span>{sosDetails.title}</span>
                     </h2>
-                    <div className="flex flex-col border-t-2 border-point-500">
+                    <div className="flex-1 flex flex-col border-t-2 border-point-500">
                         <div className="flex items-center gap-[4px] p-[8px] bg-point-50 border-b-1 border-point-200">
                             <CalendarIcon className="w-[20px] h-[20px]" />
                             <div className="flex flex-col text-gray-500 text-label-m">
@@ -243,10 +243,18 @@ export default function SOSDetail() {
                                 </Slider>
                             )}
                         </div>
-                        <div className="py-[16px]">
-                            <p className="text-label-l font-semibold">
-                                {sosDetails.comment}
-                            </p>
+                        <div className="py-[16px] flex-1 flex flex-col">
+                            <div className="text-label-l font-semibold border-none w-full flex-1">
+                                {sosDetails.comment &&
+                                    sosDetails.comment
+                                        .split('\n')
+                                        .map((line, idx) => (
+                                            <React.Fragment key={idx}>
+                                                {line}
+                                                <br />
+                                            </React.Fragment>
+                                        ))}
+                            </div>
                         </div>
                     </div>
                 </section>

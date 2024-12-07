@@ -1,6 +1,7 @@
 import { useFadeNavigate } from '@/hooks';
 import MaleIcon from '@/assets/images/gender/male.svg?react';
 import FemaleIcon from '@/assets/images/gender/female.svg?react';
+import React from 'react';
 
 interface DogCardProps {
     id: number;
@@ -94,8 +95,14 @@ export default function DogCard({
             {/* isComment true일 때만 멍멍이 소개 영역 표시 */}
             {/* true인 경우 : 돌봄 디테일 페이지 , false인 경우 : 부탁 상세조회 페이지 */}
             {isComment && (
-                <div className="flex items-center h-[40px] overflow-y-auto">
-                    <p className="rounded-lg text-label-l w-full">{comment}</p>
+                <div className="flex items-center h-[40px] overflow-y-auto text-label-l">
+                    {comment &&
+                        comment.split('\n').map((line, idx) => (
+                            <React.Fragment key={idx}>
+                                {line}
+                                <br />
+                            </React.Fragment>
+                        ))}
                 </div>
             )}
 
