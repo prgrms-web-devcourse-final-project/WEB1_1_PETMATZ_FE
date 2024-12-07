@@ -1,64 +1,77 @@
-import { Suspense, useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Post } from '@/types/Sos';
-import { PostItem } from '@/components/sos';
+import SOSTabMenu from '@/components/sos/SOSTabMenu';
+import useFetchSOSList from '@/hooks/sos/useFetchSOSList';
 import { Loading } from '@/components/common';
+import { SOSCard, SOSNonContent } from '@/components/sos';
+import { useTitleStore } from '@/stores';
 
-const PostList = ({ posts }: { posts: Post[] }) => {
-    return (
-        <div>
-            {posts.length > 0 ? (
-                posts.map((post, id) => <PostItem key={id} post={post} />)
-            ) : (
-                <p className="text-center text-gray-500">
-                    아직 게시된 SOS 요청이 없습니다.
-                </p>
-            )}
-        </div>
-    );
-};
+// SVG
+import PencilIcon from '@/assets/images/sos/pencil.svg?react';
 
 export default function SOS() {
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true); // 임시 loading
-    const [dummy, setDummy] = useState<Post[]>([]);
+    const [activeTab, setActiveTab] = useState('all');
+    const { setTitle } = useTitleStore();
+    const observerRef = useRef<HTMLDivElement | null>(null);
 
-    const goToWrite = () => {
-        navigate('/sos/write');
-    };
+    const { data, fetchNextPage, hasNextPage, isLoading } =
+        useFetchSOSList(activeTab);
 
     useEffect(() => {
-        // 임시로 3초 뒤에 로딩 해제
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 3000);
-
-        fetch('/data/sosList.json')
-            .then((res) => res.json())
-            .then((res) => setDummy(res));
-        return () => clearTimeout(timer);
+        setTitle('도와줘 멍멍');
     }, []);
 
-    if (isLoading) {
-        // @tanstack/react-query 적용 후 제거, 임시 테스트용
-        return <Loading />;
-    }
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasNextPage) {
+                    fetchNextPage();
+                }
+            },
+            { threshold: 1.0 },
+        );
+
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+
+        return () => {
+            if (observerRef.current) observer.unobserve(observerRef.current);
+        };
+    }, [hasNextPage, fetchNextPage]);
+
+    const isEmptyContent =
+        !isLoading &&
+        (!data ||
+            data.pages.every((page) => page.data.result.content.length === 0));
 
     return (
-        <Suspense fallback={<Loading />}>
-            <div className="p-4 overflow-y-auto h-full">
-                <h1 className="text-xl font-bold">도와줘 멍멍</h1>
-                <h2 className="text-lg mb-4">
-                    급한 돌봄이 필요한 멍멍이들을 도와주세요!
-                </h2>
-                <button onClick={goToWrite} className="text-purple-500">
-                    글쓰러 가기(bottomSheet나 버튼으로 이동 적용)
-                </button>
+        <div className="h-full bg-gray-100 overflow-y-auto">
+            <SOSTabMenu activeTab={activeTab} onTabChange={setActiveTab} />
+            {isLoading ? (
+                <Loading />
+            ) : isEmptyContent ? (
+                <SOSNonContent />
+            ) : (
+                <>
+                    {data?.pages.map((page, idx) => (
+                        <div key={idx} className="divide-y-1 divide-point-100">
+                            {page.data.result.content.map((item) => (
+                                <SOSCard key={item.id} item={item} />
+                            ))}
+                        </div>
+                    ))}
+                    <div ref={observerRef} className="h-[0.5px]" />
+                </>
+            )}
 
-                <PostList posts={dummy} />
-
-                {/* pagination 적용 */}
+            <div
+                className="fixed bottom-[64px] right-[16px] flex items-center justify-center w-[70px] h-[70px] text-gray-100 rounded-full shadow-xl bg-point-300 opacity-75 cursor-pointer hover:opacity-100 active:opacity-100"
+                onClick={() => navigate('/sos/write')}
+            >
+                <PencilIcon className="w-[35px] h-[35px]" />
             </div>
-        </Suspense>
+        </div>
     );
 }
