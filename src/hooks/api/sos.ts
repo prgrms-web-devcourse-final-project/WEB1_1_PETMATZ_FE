@@ -6,6 +6,8 @@ import {
     SOSDetailsResponse,
     SOSDeleteResponse,
     SOSDeleteRequest,
+    SOSListApiRequest,
+    SOSListApiResponse,
 } from '@/types/Sos';
 
 // 강아지 목록 불러오는 API 함수
@@ -33,3 +35,31 @@ export const deleteSOSPost = async (id: number): Promise<SOSDeleteResponse> => {
         `/api/sosboard/${id}`,
     );
 };
+
+/**
+ * GET	SOSList	All
+ * SOS 전체 리스트를 가져옵니다.
+ */
+export const getSOSList = async ({
+    region,
+    pageNum = 1,
+    size = 10,
+}: SOSListApiRequest): Promise<SOSListApiResponse> =>
+    await http.get<SOSListApiResponse, SOSListApiRequest>('/api/sosboard', {
+        region,
+        pageNum,
+        size,
+    });
+
+/**
+ * GET	SOSList	User
+ * 특정 사용자의 SOS 리스트를 가져옵니다.
+ */
+export const getMySOSList = async (
+    nickname: string,
+    { pageNum = 1, size = 10 }: Omit<SOSListApiRequest, 'region'>,
+): Promise<SOSListApiResponse> =>
+    await http.get<SOSListApiResponse, Omit<SOSListApiRequest, 'region'>>(
+        `/api/sosboard/user/${nickname}`,
+        { pageNum, size },
+    );
