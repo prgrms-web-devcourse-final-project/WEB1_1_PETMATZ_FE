@@ -22,13 +22,15 @@ interface MatchStore {
 const useMatchStore = create<MatchStore>((set, get) => ({
     matchList: [],
     showStamp: false,
-    curPage: 1,
+    curPage: 0,
     totalPages: 1,
     isLastPage: false,
 
     setCurPage: (state: number) => set({ curPage: state }),
 
-    setIsLastPage: (state) => set({ isLastPage: state }),
+    setIsLastPage: (state) => {
+        set({ isLastPage: state });
+    },
 
     setShowStamp: (state) => set(() => ({ showStamp: state })),
 
@@ -56,7 +58,6 @@ const useMatchStore = create<MatchStore>((set, get) => ({
         }
 
         const { ok, data, error, status } = await getMatchList({
-            // 현제 데이터가 없어서 4번 아이디로 고정
             userId,
             page: curPage,
             size: 5,
@@ -70,6 +71,10 @@ const useMatchStore = create<MatchStore>((set, get) => ({
         if (status === 204) {
             set(() => ({ isLastPage: true }));
             return;
+        }
+
+        if (data.matchResults.length < 5) {
+            set(() => ({ isLastPage: true }));
         }
 
         const { matchResults, totalPages: newTotalPage } = data;

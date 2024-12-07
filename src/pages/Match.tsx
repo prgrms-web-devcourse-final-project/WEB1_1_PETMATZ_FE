@@ -57,6 +57,8 @@ export default function Match() {
     const handleOnClickResetBtn = () => {
         setIsLastPage(false);
         setCurPage(0);
+
+        if (user) fetchMatchList(user.id);
     };
 
     // 인트로 관련 이벤트 핸들러
@@ -96,7 +98,7 @@ export default function Match() {
                             />
                         ))}
                         {/* 모든 카드가 사라지면 새로운 데이터를 요청하는 카드 표시 */}
-                        {isLastPage && <NoMoreCard />}
+                        {matchList.length === 0 && isLastPage && <NoMoreCard />}
                         {matchList.length === 0 && !isLastPage && (
                             <FetchMoreCard onFetchMore={handleFetchMore} />
                         )}
