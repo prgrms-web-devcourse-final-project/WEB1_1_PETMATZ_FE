@@ -1,5 +1,4 @@
 import { useFadeNavigate } from '@/hooks';
-import Profile1 from '@/assets/images/profile/profile1.svg?react';
 import MaleIcon from '@/assets/images/gender/male.svg?react';
 import FemaleIcon from '@/assets/images/gender/female.svg?react';
 
@@ -64,9 +63,9 @@ export default function DogCard({
                         </h2>
                         <span className="text-sm">
                             {sexNm == '암컷' ? (
-                                <FemaleIcon className="w-6 h-6 p-[2px]" />
+                                <FemaleIcon className="w-6 h-6 p-[2px] text-warning-400" />
                             ) : (
-                                <MaleIcon className="w-6 h-6 p-[2px]" />
+                                <MaleIcon className="w-6 h-6 p-[2px] text-point-500" />
                             )}
                         </span>
                         <span className="text-label-m font-semibold text-gray-400 ml-2">
@@ -83,9 +82,11 @@ export default function DogCard({
                         <p className="px-2 py-1 bg-white rounded-[30px]">
                             {age}살
                         </p>
-                        <p className="px-2 py-1 bg-white rounded-[30px]">
-                            {neuterYn === '중성' ? '중성화 완료' : ''}
-                        </p>
+                        {neuterYn === '중성' && (
+                            <p className="px-2 py-1 bg-white rounded-[30px]">
+                                중성화 완료
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
@@ -93,15 +94,8 @@ export default function DogCard({
             {/* isComment true일 때만 멍멍이 소개 영역 표시 */}
             {/* true인 경우 : 돌봄 디테일 페이지 , false인 경우 : 부탁 상세조회 페이지 */}
             {isComment && (
-                <div className="flex flex-col gap-2 mt-4">
-                    <p className="text-label-m font-regular text-gray-400">
-                        멍멍이 소개
-                    </p>
-                    <textarea
-                        className="pointer-events-none rounded-lg text-label-l border-gray-200 p-3 w-full"
-                        value={comment}
-                        readOnly
-                    ></textarea>
+                <div className="flex items-center h-[40px] overflow-y-auto">
+                    <p className="rounded-lg text-label-l w-full">{comment}</p>
                 </div>
             )}
 
