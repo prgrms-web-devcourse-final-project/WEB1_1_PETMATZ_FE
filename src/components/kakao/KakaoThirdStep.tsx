@@ -1,19 +1,28 @@
+import { useEffect } from 'react';
+import { useUserStore } from '@/stores'; // Zustand store import
 import {
     introduceValidationType,
     nicknameValidationType,
     KakaoSignUpInputs,
 } from '@/hooks/useKakaoForm';
 import { CustomInput, ImageSelectBox } from '../common';
-import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import {
+    FieldErrors,
+    UseFormRegister,
+    UseFormWatch,
+    UseFormSetValue,
+} from 'react-hook-form';
 import { useCallback } from 'react';
 
 interface ThirdStepPropsType {
     pageNumber: number;
     register: UseFormRegister<KakaoSignUpInputs>;
     watch: UseFormWatch<KakaoSignUpInputs>;
+    setValue: UseFormSetValue<KakaoSignUpInputs>; // 추가
     nicknameValidation: nicknameValidationType;
     introduceValidation: introduceValidationType;
     errors: FieldErrors<KakaoSignUpInputs>;
+
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
     imgName: string;
     setImgName: React.Dispatch<React.SetStateAction<string>>;
@@ -24,6 +33,7 @@ export default function ThirdStep({
     pageNumber,
     register,
     watch,
+    setValue, // 추가
     nicknameValidation,
     introduceValidation,
     errors,
@@ -32,12 +42,21 @@ export default function ThirdStep({
     setImgName,
     setImg,
 }: ThirdStepPropsType) {
+    const { user } = useUserStore(); // Zustand에서 닉네임 가져오기
+
+    // 닉네임 초기값 설정
+    useEffect(() => {
+        if (user?.nickname) {
+            setValue('nickname', user.nickname); // React Hook Form에 초기값 설정
+        }
+    }, [user?.nickname, setValue]);
+
     const nickname = watch('nickname');
     const introduce = watch('introduce');
 
     const handleNextBtn = useCallback(() => {
         setPageNumber((prev) => prev + 1);
-    }, []);
+    }, [setPageNumber]);
 
     return (
         <>
