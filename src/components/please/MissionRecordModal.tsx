@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import CustomInput from '@/components/common/CustomInput';
+import { createMissionContent } from '@/hooks/api/please';
 
 interface RecordModalProps {
     isOpen: boolean;
     onClose: () => void;
-    requestId: number;
-    requestContent: string;
+    askId: number;
 }
 
 interface FormInputs {
-    episode: string;
+    comment: string;
 }
 
 export default function MissionRecordModal({
     isOpen,
     onClose,
-    requestId,
-    requestContent,
+    askId,
 }: RecordModalProps) {
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    // const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
         register,
@@ -51,14 +51,22 @@ export default function MissionRecordModal({
         }
     };
 
-    const onSubmit = (data: FormInputs) => {
+    const onSubmit = async (data: FormInputs) => {
         console.log({
-            requestId,
-            requestContent,
-            image: selectedImage,
-            episode: data.episode,
+            askId,
+            imgURL: selectedImage,
+            comment: data.comment,
         });
-        onClose();
+
+        /// api 호출 로직
+        const response = await createMissionContent({
+            askId: askId.toString(),
+            comment: data.comment,
+            imgURL: 'Y', // 추후 put 요청을 통해 s3 url 전달, 이미지 없을경우 빈 문자열, 이미지 있으면 Y 전달
+        });
+        console.log(response);
+
+        // onClose();
     };
 
     if (!isOpen) return null;
@@ -88,10 +96,10 @@ export default function MissionRecordModal({
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="hidden"
-                                    id={`image-upload-${requestId}`}
+                                    id={`image-upload-${askId}`}
                                 />
                                 <label
-                                    htmlFor={`image-upload-${requestId}`}
+                                    htmlFor={`image-upload-${askId}`}
                                     className="cursor-pointer px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
                                 >
                                     사진 선택하기
@@ -116,7 +124,7 @@ export default function MissionRecordModal({
                                 미션을 하며 생긴 에피소드를 입력해주세요.
                             </p>
                             <CustomInput<FormInputs>
-                                id="episode"
+                                id="comment"
                                 label=""
                                 type="textarea"
                                 placeholder="오늘의 에피소드를 입력해주세요"
@@ -125,7 +133,7 @@ export default function MissionRecordModal({
                                 validation={{
                                     required: '에피소드를 반드시 입력해주세요!',
                                 }}
-                                error={errors.episode?.message}
+                                error={errors.comment?.message}
                                 design="solid"
                                 successMsg=""
                             />

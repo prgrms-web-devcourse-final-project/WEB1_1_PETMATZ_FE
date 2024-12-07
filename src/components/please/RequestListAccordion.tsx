@@ -7,7 +7,7 @@ import MissionRecordModal from './MissionRecordModal';
 interface ModalState {
     isOpen: boolean;
     selectedRequest: Request | null;
-    episode: string;
+    comment: string;
     imagePreview: string | null;
 }
 
@@ -40,19 +40,19 @@ export default function RequestListAccordion({
             [request.id]: {
                 isOpen: true,
                 selectedRequest: request,
-                episode: '',
+                comment: '',
                 imagePreview: null,
             },
         }));
     }, []);
 
-    const handleCloseModal = useCallback((requestId: number) => {
+    const handleCloseModal = useCallback((askId: number) => {
         setModalStates((prev) => ({
             ...prev,
-            [requestId]: {
+            [askId]: {
                 isOpen: false,
                 selectedRequest: null,
-                episode: '',
+                comment: '',
                 imagePreview: null,
             },
         }));
@@ -167,8 +167,7 @@ export default function RequestListAccordion({
                     key={request.id}
                     isOpen={modalStates[request.id]?.isOpen || false}
                     onClose={() => handleCloseModal(request.id)}
-                    requestId={request.id}
-                    requestContent={request.ask}
+                    askId={request.id}
                 />
             ))}
         </div>
