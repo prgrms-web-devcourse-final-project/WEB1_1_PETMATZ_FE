@@ -2,13 +2,30 @@ import { useFadeNavigate } from '@/hooks';
 import { useCallback } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
 import Heart from '@/assets/images/profile/heart.svg?react';
+import { useQuery } from '@tanstack/react-query';
+import { LikedUserListApiResponse } from '@/types/user';
+import { useUserStore } from '@/stores';
+import { getLikedUserList } from '@/hooks/api/user';
+import { Loading } from '@/components/common';
 
 export default function Like() {
     const navigate = useFadeNavigate();
+    const { user } = useUserStore();
+
+    const { data, isLoading } = useQuery<LikedUserListApiResponse, Error>({
+        queryKey: ['likedList'],
+        queryFn: () => getLikedUserList(),
+    });
 
     const handleBackBtn = useCallback(() => {
         navigate(-1);
     }, []);
+
+    if (isLoading || !user) {
+        return <Loading />;
+    }
+
+    console.log(data);
 
     return (
         <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
