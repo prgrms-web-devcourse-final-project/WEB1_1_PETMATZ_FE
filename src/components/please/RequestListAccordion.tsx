@@ -2,6 +2,14 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
 import { Request, RequestListAccordionProps } from '@/types/please';
+import MissionRecordModal from './MissionRecordModal';
+
+interface ModalState {
+    isOpen: boolean;
+    selectedRequest: Request | null;
+    episode: string;
+    imagePreview: string | null;
+}
 
 export default function RequestListAccordion({
     petMissionAskInfos,
@@ -10,6 +18,10 @@ export default function RequestListAccordion({
     receiverId,
 }: RequestListAccordionProps) {
     const [showMenu, setShowMenu] = useState(false);
+    // 각 미션별 모달 상태를 관리하는 객체
+    const [modalStates, setModalStates] = useState<Record<number, ModalState>>(
+        {},
+    );
 
     const canRegister = status === 'INP' && userId === receiverId;
 
@@ -22,8 +34,28 @@ export default function RequestListAccordion({
         setShowMenu((prev) => !prev);
     }, []);
 
-    const handleRegisterRequest = useCallback(() => {
-        console.log('부탁 등록');
+    const handleRegisterRequest = useCallback((request: Request) => {
+        setModalStates((prev) => ({
+            ...prev,
+            [request.id]: {
+                isOpen: true,
+                selectedRequest: request,
+                episode: '',
+                imagePreview: null,
+            },
+        }));
+    }, []);
+
+    const handleCloseModal = useCallback((requestId: number) => {
+        setModalStates((prev) => ({
+            ...prev,
+            [requestId]: {
+                isOpen: false,
+                selectedRequest: null,
+                episode: '',
+                imagePreview: null,
+            },
+        }));
     }, []);
 
     return (
@@ -111,8 +143,10 @@ export default function RequestListAccordion({
                                             </p>
                                             {canRegister && (
                                                 <button
-                                                    onClick={
-                                                        handleRegisterRequest
+                                                    onClick={() =>
+                                                        handleRegisterRequest(
+                                                            request,
+                                                        )
                                                     }
                                                     className="text-label-m w-fit p-2 text-point-500 hover:bg-gray-200 rounded-lg transition-colors"
                                                 >
@@ -127,6 +161,16 @@ export default function RequestListAccordion({
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {requests.map((request) => (
+                <MissionRecordModal
+                    key={request.id}
+                    isOpen={modalStates[request.id]?.isOpen || false}
+                    onClose={() => handleCloseModal(request.id)}
+                    requestId={request.id}
+                    requestContent={request.ask}
+                />
+            ))}
         </div>
     );
 }
