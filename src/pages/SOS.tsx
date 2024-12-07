@@ -14,6 +14,8 @@ export default function SOS() {
     const [activeTab, setActiveTab] = useState('all');
     const { setTitle } = useTitleStore();
     const observerRef = useRef<HTMLDivElement | null>(null);
+    const scrollRef = useRef<HTMLDivElement | null>(null); // 스크롤 컨테이너 참조
+    const [buttonPosition, setButtonPosition] = useState<number>(0);
 
     const { data, fetchNextPage, hasNextPage, isLoading } =
         useFetchSOSList(activeTab);
@@ -41,13 +43,36 @@ export default function SOS() {
         };
     }, [hasNextPage, fetchNextPage]);
 
+    // 스크롤 위치 업데이트
+    useEffect(() => {
+        const handleScroll = () => {
+            if (scrollRef.current) {
+                const scrollTop = scrollRef.current.scrollTop;
+                setButtonPosition(scrollTop);
+            }
+        };
+
+        if (scrollRef.current) {
+            scrollRef.current.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (scrollRef.current) {
+                scrollRef.current.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
+
     const isEmptyContent =
         !isLoading &&
         (!data ||
             data.pages.every((page) => page.data.result.content.length === 0));
 
     return (
-        <div className="h-full bg-gray-100 overflow-y-auto">
+        <div
+            ref={scrollRef}
+            className="relative h-full bg-gray-100 overflow-y-auto"
+        >
             <SOSTabMenu activeTab={activeTab} onTabChange={setActiveTab} />
             {isLoading ? (
                 <Loading />
@@ -67,7 +92,11 @@ export default function SOS() {
             )}
 
             <div
-                className="fixed bottom-[64px] right-[16px] flex items-center justify-center w-[70px] h-[70px] text-gray-100 rounded-full shadow-xl bg-point-300 opacity-75 cursor-pointer hover:opacity-100 active:opacity-100"
+                style={{
+                    transform: `translateY(${buttonPosition}px)`,
+                    transition: 'transform 0.2s ease',
+                }}
+                className="absolute bottom-[16px] right-[16px] flex items-center justify-center w-[70px] h-[70px] text-gray-100 rounded-full shadow-xl bg-point-300 opacity-75 cursor-pointer hover:opacity-100 active:opacity-100"
                 onClick={() => navigate('/sos/write')}
             >
                 <PencilIcon className="w-[35px] h-[35px]" />
