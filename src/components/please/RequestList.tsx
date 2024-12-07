@@ -8,9 +8,15 @@ import { MissionInfo } from '@/types/please';
 
 interface RequestListProps {
     missionInfo: MissionInfo;
+    status: string;
+    userId?: number;
 }
 
-export default function RequestList({ missionInfo }: RequestListProps) {
+export default function RequestList({
+    missionInfo,
+    status,
+    userId,
+}: RequestListProps) {
     const settings = {
         dots: true,
         infinite: false,
@@ -37,13 +43,13 @@ export default function RequestList({ missionInfo }: RequestListProps) {
     }));
 
     return (
-        <main className="flex flex-col flex-1 overflow-hidden">
+        <main className="p-4 flex flex-col flex-1 overflow-hidden">
             <div className="flex flex-col flex-1">
-                <h1 className="sm:text-title-s text-body-l font-extrabold text-gray-800 sm:pt-8 pt-5 pb-4 px-6">
+                <h1 className="sm:text-title-s text-body-l font-extrabold text-gray-800 sm:pt-8 pt-1 pb-5">
                     <p>멍멍이와 함께</p>
                     <p>미션을 시작해볼까요?</p>
                 </h1>
-                <div className="flex flex-col px-6">
+                <div className="flex flex-col">
                     <div className="slider-container">
                         {dogs.length === 1 ? (
                             // 한 마리일 때는 일반 div로 표시
@@ -63,6 +69,9 @@ export default function RequestList({ missionInfo }: RequestListProps) {
                     </div>
                     <RequestListAccordion
                         petMissionAskInfos={missionInfo.petMissionAskInfos}
+                        status={status}
+                        userId={userId}
+                        receiverId={missionInfo.receiverId}
                     />
                 </div>
             </div>

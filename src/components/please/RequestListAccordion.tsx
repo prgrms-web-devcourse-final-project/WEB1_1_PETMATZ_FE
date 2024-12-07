@@ -5,8 +5,13 @@ import { Request, RequestListAccordionProps } from '@/types/please';
 
 export default function RequestListAccordion({
     petMissionAskInfos,
+    status,
+    userId,
+    receiverId,
 }: RequestListAccordionProps) {
     const [showMenu, setShowMenu] = useState(false);
+
+    const canRegister = status === 'INP' && userId === receiverId;
 
     const requests: Request[] = petMissionAskInfos.map((ask, index) => ({
         id: ask.id || index,
@@ -104,12 +109,16 @@ export default function RequestListAccordion({
                                             <p className="flex-1 text-body-s font-semibold text-gray-900">
                                                 <strong>{request.ask}</strong>{' '}
                                             </p>
-                                            <button
-                                                onClick={handleRegisterRequest}
-                                                className="text-label-m w-fit p-2 text-point-500 hover:bg-gray-200 rounded-lg transition-colors"
-                                            >
-                                                기록하기
-                                            </button>
+                                            {canRegister && (
+                                                <button
+                                                    onClick={
+                                                        handleRegisterRequest
+                                                    }
+                                                    className="text-label-m w-fit p-2 text-point-500 hover:bg-gray-200 rounded-lg transition-colors"
+                                                >
+                                                    기록하기
+                                                </button>
+                                            )}
                                         </div>
                                     </motion.div>
                                 ))}
