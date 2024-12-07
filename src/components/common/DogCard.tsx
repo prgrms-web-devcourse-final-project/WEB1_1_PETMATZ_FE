@@ -39,7 +39,7 @@ export default function DogCard({
         switch (size.toUpperCase()) {
             case 'SMALL':
                 return '소형견';
-            case 'MIDDLE':
+            case 'MEDIUM':
                 return '중형견';
             case 'LARGE':
                 return '대형견';
