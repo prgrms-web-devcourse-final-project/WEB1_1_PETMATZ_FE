@@ -4,6 +4,7 @@ import {
     PetMissionInfoResponse,
     CreateMissionCommentRequest,
     CreateMissionCommentResponse,
+    MissionAnswerInfoResponse,
 } from '@/types/please';
 import { http } from './base';
 
@@ -48,4 +49,16 @@ export const createMissionContent = async ({
     await http.post<CreateMissionCommentResponse, CreateMissionCommentRequest>(
         '/api/v1/pet/mission/comment',
         { askId, comment, imgURL },
+    );
+
+/**
+ * 특정 미션의 답변 정보를 조회합니다.
+ * @param answerId 조회할 미션 답변의 ID
+ * @returns 미션 답변 정보
+ */
+export const getMissionAnswerInfo = async (
+    answerId: string,
+): Promise<MissionAnswerInfoResponse> =>
+    await http.get<MissionAnswerInfoResponse>(
+        `/api/v1/pet/mission/comment/answer/info?answerId=${answerId}`,
     );
