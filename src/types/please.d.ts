@@ -65,7 +65,9 @@ interface PetMissionInfoResponse extends BaseApiResponse {
 interface MissionInfo {
     id: number;
     careName: string;
+    careId: number;
     receiverName: string;
+    receiverId: number;
     receiverStart: string;
     receiverEnd: string;
     petMissionPetInfos: PetInfo[];
@@ -82,6 +84,9 @@ interface Request {
 
 interface RequestListAccordionProps {
     petMissionAskInfos: Request[];
+    status: string;
+    userId?: number;
+    receiverId?: number;
 }
 
 export type {
