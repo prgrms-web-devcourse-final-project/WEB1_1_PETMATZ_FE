@@ -32,7 +32,7 @@ export default function Header() {
                 >
                     <li
                         className="flex items-center py-[10px] px-[14px] gap-[8px] hover:bg-point-50 active:bg-point-50 rounded-t-lg"
-                        onClick={() => navigate(`/${user?.id}`)}
+                        onClick={() => navigate(`/profile/${user?.id}`)}
                     >
                         <ProfileIcon className="w-[18px] h-[18px]" />
                         <span>내 정보</span>
