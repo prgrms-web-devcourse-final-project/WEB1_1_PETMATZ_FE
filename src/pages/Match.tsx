@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import { useMatchStore, useTitleStore, useUserStore } from '@/stores';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IntroMatch, MatchCard, NoMoreCard } from '@/components/match';
 import FetchMoreCard from '@/components/match/FetchMoreCard';
 import { createChatRoom } from '@/hooks/api/Chat';
@@ -21,6 +21,7 @@ export default function Match() {
     const { setTitle } = useTitleStore();
     const [isModalOpen, setIsModalOpen] = useState(true);
     const navigate = useFadeNavigate();
+    const isFirstFetch = useRef(true);
 
     // 카드 관련 이벤트 핸들러
     const handleDragEnd = (otherId: number) => {
@@ -57,6 +58,8 @@ export default function Match() {
     const handleOnClickResetBtn = () => {
         setIsLastPage(false);
         setCurPage(0);
+
+        if (user) fetchMatchList(user.id);
     };
 
     // 인트로 관련 이벤트 핸들러
@@ -66,7 +69,10 @@ export default function Match() {
     };
 
     useEffect(() => {
-        if (!(matchList.length > 0) && user) fetchMatchList(user.id);
+        if (!(matchList.length > 0) && user && isFirstFetch.current) {
+            fetchMatchList(user.id);
+            isFirstFetch.current = false;
+        }
 
         const skip = localStorage.getItem('skipMatchIntro');
         if (skip === 'true') {
@@ -74,10 +80,6 @@ export default function Match() {
         }
 
         setTitle('돌봄 매칭');
-
-        return () => {
-            useMatchStore.setState({ isLastPage: false });
-        };
     }, []);
 
     return (
@@ -96,22 +98,22 @@ export default function Match() {
                             />
                         ))}
                         {/* 모든 카드가 사라지면 새로운 데이터를 요청하는 카드 표시 */}
-                        {isLastPage && <NoMoreCard />}
+                        {matchList.length === 0 && isLastPage && <NoMoreCard />}
                         {matchList.length === 0 && !isLastPage && (
                             <FetchMoreCard onFetchMore={handleFetchMore} />
                         )}
                     </AnimatePresence>
                 </div>
-                {!isLastPage && (
+                {!(matchList.length === 0) && (
                     <button
                         className={`btn-solid max-w-[240px] ${(matchList.length === 0 || isLastPage) && 'active:scale-100'}`}
                         onClick={handleOnClickBtn}
-                        disabled={matchList.length === 0 || isLastPage}
+                        disabled={matchList.length === 0 && isLastPage}
                     >
                         우리 멍멍이 부탁하기
                     </button>
                 )}
-                {isLastPage && (
+                {isLastPage && matchList.length === 0 && (
                     <button
                         className={'btn-outline max-w-[240px]'}
                         onClick={handleOnClickResetBtn}
