@@ -7,7 +7,7 @@ import { DogCard, Loading } from '@/components/common';
 import { getSOSDetails, deleteSOSPost } from '@/hooks/api/sos';
 import { SOSDetails } from '@/types/Sos';
 import { useUserStore } from '@/stores';
-import { createChatRoom } from '@/hooks/api/chat';
+import { createChatRoom } from '@/hooks/api/Chat';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -270,7 +270,12 @@ export default function SOSDetail() {
                                     sosDetails.pets[0].temperament ?? ''
                                 }
                                 size={sosDetails.pets[0].size ?? ''}
-                                comment={!!sosDetails.pets[0].comment}
+                                comment={
+                                    sosDetails.pets[0].comment !== ''
+                                        ? sosDetails.pets[0].comment
+                                        : '멍멍이 소개가 없습니다.'
+                                }
+                                isComment={true}
                             />
                         </div>
                     ) : (
@@ -295,7 +300,12 @@ export default function SOSDetail() {
                                         age={pet.age ?? 0}
                                         temperament={pet.temperament ?? ''}
                                         size={pet.size ?? ''}
-                                        comment={false}
+                                        comment={
+                                            pet.comment !== ''
+                                                ? pet.comment
+                                                : '멍멍이 소개가 없습니다.'
+                                        }
+                                        isComment={true}
                                     />
                                 </div>
                             ))}

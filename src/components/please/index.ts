@@ -5,3 +5,4 @@ export { default as MultiSelectBottomSheet } from './MultiSelectBottomSheet';
 export { default as DogInformation } from './DogInformation';
 export { default as RequestList } from './RequestList';
 export { default as RequestListComponent } from './RequestListAccordion';
+export { default as MissionRecordModal } from './MissionRecordModal';

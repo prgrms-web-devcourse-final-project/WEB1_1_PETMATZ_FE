@@ -3,6 +3,8 @@ import {
     CreatePleaseApiResponse,
     PleaseListApiResponse,
     PetMissionInfoResponse,
+    CreateMissionCommentRequest,
+    CreateMissionCommentResponse,
 } from '@/types/please';
 import { http } from './base';
 
@@ -39,4 +41,19 @@ export const getPetMissionInfo = async (
 ): Promise<PetMissionInfoResponse> =>
     await http.get<PetMissionInfoResponse>(
         `/api/v1/pet/mission/Info?petMissionId=${petMissionId}`,
+    );
+
+/**
+ * 미션 돌봄일지를 등록합니다.
+ * @param data 미션 돌봄일지 데이터
+ * @returns API 응답
+ */
+export const createMissionContent = async ({
+    askId,
+    comment,
+    imgURL,
+}: CreateMissionCommentRequest): Promise<CreateMissionCommentResponse> =>
+    await http.post<CreateMissionCommentResponse, CreateMissionCommentRequest>(
+        '/api/v1/pet/mission/comment',
+        { askId, comment, imgURL },
     );

@@ -95,7 +95,7 @@ interface MissionInfo {
 }
 
 interface Request {
-    id: number | null;
+    id: number;
     ask: string;
     comment?: string | null;
     imgURL?: string | null;
@@ -108,6 +108,16 @@ interface RequestListAccordionProps {
     receiverId?: number;
 }
 
+interface CreateMissionCommentRequest {
+    askId: string;
+    comment: string;
+    imgURL: string;
+}
+
+interface CreateMissionCommentResponse extends BaseApiResponse {
+    data: {};
+}
+
 export type {
     FormData,
     CreatePleaseApiRequest,
@@ -116,5 +126,7 @@ export type {
     MissionInfo,
     Request,
     RequestListAccordionProps,
+    CreateMissionCommentRequest,
+    CreateMissionCommentResponse,
     PleaseListApiResponse,
 };

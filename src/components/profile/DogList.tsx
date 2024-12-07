@@ -31,7 +31,7 @@ export default function DogList({
         <>
             <div
                 onClick={handleShowDogsBtn}
-                className="flex justify-between px-6 py-[12.5px] text-body-l font-semibold text-point-900 border-1 border-gray-200 rounded-lg shadow-md cursor-pointer"
+                className="bg-white flex justify-between px-6 py-[12.5px] text-body-l font-semibold text-point-900 border-1 border-gray-200 rounded-lg shadow-md cursor-pointer"
             >
                 <span>등록된 멍멍이 정보</span>
                 <Arrow

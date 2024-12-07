@@ -13,7 +13,8 @@ interface DogCardProps {
     age: number;
     temperament: string;
     size: string;
-    comment?: boolean; // comment가 true일 때만 소개 영역 표시
+    comment?: string;
+    isComment?: boolean; // comment가 true일 때만 강아지 소개 표시
     edit?: boolean; // 수정 버튼 표시 여부
 }
 
@@ -27,7 +28,8 @@ export default function DogCard({
     age,
     temperament,
     size,
-    comment = false,
+    isComment = false,
+    comment = '',
     edit = false,
 }: DogCardProps) {
     const navigate = useFadeNavigate();
@@ -37,7 +39,7 @@ export default function DogCard({
         switch (size.toUpperCase()) {
             case 'SMALL':
                 return '소형견';
-            case 'MIDDLE':
+            case 'MEDIUM':
                 return '중형견';
             case 'LARGE':
                 return '대형견';
@@ -50,16 +52,11 @@ export default function DogCard({
         <div className="flex flex-col border px-6 py-4 rounded-lg shadow-md bg-gray-100 relative">
             <div className="flex items-center gap-4">
                 {/* 프로필 이미지 */}
-                {profileImg ? (
-                    // <img
-                    //     src={profileImg}
-                    //     alt={dogNm}
-                    //     className="w-[72px] h-[72px] rounded-full border border-gray-200 object-cover"
-                    // />
-                    <Profile1 className="w-[72px] h-[72px]" />
-                ) : (
-                    <Profile1 className="w-[72px] h-[72px]" />
-                )}
+                <img
+                    src={profileImg}
+                    alt={dogNm}
+                    className="w-[72px] h-[72px] rounded-full border border-gray-200 object-cover"
+                />
                 <div>
                     <div className="flex items-center mb-2">
                         <h2 className="text-body-l font-extrabold flex items-center">
@@ -93,15 +90,16 @@ export default function DogCard({
                 </div>
             </div>
 
-            {/* comment가 true일 때만 멍멍이 소개 영역 표시 */}
-            {comment && (
+            {/* isComment true일 때만 멍멍이 소개 영역 표시 */}
+            {/* true인 경우 : 돌봄 디테일 페이지 , false인 경우 : 부탁 상세조회 페이지 */}
+            {isComment && (
                 <div className="flex flex-col gap-2 mt-4">
                     <p className="text-label-m font-regular text-gray-400">
                         멍멍이 소개
                     </p>
                     <textarea
                         className="pointer-events-none rounded-lg text-label-l border-gray-200 p-3 w-full"
-                        value="건강하고 귀여운 강아지" // 고정된 소개 텍스트, 실제로는 데이터를 다르게 처리할 수 있음
+                        value={comment}
                         readOnly
                     ></textarea>
                 </div>
