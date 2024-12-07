@@ -4,7 +4,7 @@ import useFadeNavigate from './useFadeNavigate';
 import { useCustomToast } from '@/components/common';
 import { postkakaoSignup } from './api/user';
 import { putImageToS3 } from './api/auth';
-
+import { useUserStore } from '@/stores';
 /**
  * Kakao Signup form types
  */
@@ -70,15 +70,25 @@ const getLocation = () => {
  * @returns {Object} Form methods and handlers
  */
 export default function useKakaoSignupForm() {
+    const { user } = useUserStore();
     const {
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors, isValid },
         control,
     } = useForm<KakaoSignUpInputs>({
         shouldFocusError: false,
         mode: 'onChange',
+        defaultValues: {
+            nickname: user?.nickname || '', // Zustand에서 닉네임 가져오기
+            introduce: '', // introduce 초기화
+            genderBool: true,
+            possible: false,
+            dogSizes: [],
+            mbti: '',
+        },
     });
 
     const [pageNumber, setPageNumber] = useState(3);
@@ -202,6 +212,7 @@ export default function useKakaoSignupForm() {
         onSubmit,
         isValid,
         control,
+        setValue,
         success,
         imgName,
         setImgName,
