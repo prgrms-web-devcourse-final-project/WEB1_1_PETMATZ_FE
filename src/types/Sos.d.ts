@@ -155,7 +155,7 @@ export interface SOSListApiResponse extends BaseApiResponse {
 export interface SOSDetails {
     id: number;
     title: string;
-    paymentType: string;
+    paymentType: 'HOURLY' | 'DAILY' | 'NEGOTIABLE';
     accountId: string;
     comment: string;
     price: number;
