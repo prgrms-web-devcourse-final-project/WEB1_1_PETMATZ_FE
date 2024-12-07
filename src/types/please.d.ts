@@ -48,7 +48,9 @@ interface PetMissionAskInfo {
 }
 
 interface PetMissionInfoResponse extends BaseApiResponse {
+    petMissionAskInfos: any;
     data: {
+        petMissionAskInfos: any;
         result: {
             id: number;
             careName: string;
@@ -78,6 +80,7 @@ interface MissionInfo {
 }
 
 interface Request {
+    isRegistered: any;
     id: number;
     ask: string;
     comment?: string | null;
@@ -86,7 +89,7 @@ interface Request {
 
 interface RequestListAccordionProps {
     petMissionAskInfos: Request[];
-    status: string;
+    status: 'BEF' | 'INP' | 'AFT';
     userId?: number;
     receiverId?: number;
 }
@@ -98,7 +101,18 @@ interface CreateMissionCommentRequest {
 }
 
 interface CreateMissionCommentResponse extends BaseApiResponse {
-    data: {};
+    data: string;
+}
+
+interface MissionDetailInfo {
+    id: number;
+    ask: string;
+    comment: string;
+    imgURL?: string;
+}
+
+interface MissionAnswerInfoResponse extends BaseApiResponse {
+    data: MissionDetailInfo;
 }
 
 export type {
@@ -111,4 +125,5 @@ export type {
     RequestListAccordionProps,
     CreateMissionCommentRequest,
     CreateMissionCommentResponse,
+    MissionAnswerInfoResponse,
 };
