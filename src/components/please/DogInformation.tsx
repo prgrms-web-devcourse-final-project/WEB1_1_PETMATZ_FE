@@ -7,9 +7,10 @@ import { formatDate, formatTime } from '@/utils';
 import { MissionInfo } from '@/types/please';
 interface DogInfoProps {
     missionInfo: MissionInfo;
+    status: string;
 }
 
-export default function DogInformation({ missionInfo }: DogInfoProps) {
+export default function DogInformation({ missionInfo, status }: DogInfoProps) {
     const settings = {
         dots: true,
         infinite: false,
@@ -33,6 +34,10 @@ export default function DogInformation({ missionInfo }: DogInfoProps) {
         temperament: pet.temperament,
         size: pet.size,
     }));
+
+    const getInputClassName = () => {
+        return `input-outline ${status === 'INP' ? 'border-point-300' : ''} flex-1 mr-2 sm:!px-4 px-3`;
+    };
 
     return (
         <main className="p-4 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
@@ -73,6 +78,14 @@ export default function DogInformation({ missionInfo }: DogInfoProps) {
                     </div>
                 </div>
 
+                {status === 'INP' && (
+                    <div className="bg-point-50 rounded-lg p-4 mt-6">
+                        <p className="text-point-500 text-body-s font-semibold">
+                            현재 돌봄이 진행중입니다
+                        </p>
+                    </div>
+                )}
+
                 <div className="space-y-2 mt-6">
                     <div>
                         <p className="text-label-m text-gray-500 mb-2">
@@ -81,13 +94,13 @@ export default function DogInformation({ missionInfo }: DogInfoProps) {
                         <div className="flex items-center">
                             <input
                                 id="startDate"
-                                className="input-outline flex-1 mr-2 sm:!px-4 px-3"
+                                className={getInputClassName()}
                                 value={formatDate(missionInfo.receiverStart)}
                                 readOnly
                             />
                             <input
                                 id="startTime"
-                                className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
+                                className={`input-outline ${status === 'INP' ? 'border-point-300' : ''} text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3`}
                                 value={formatTime(missionInfo.receiverStart)}
                                 readOnly
                             />
@@ -100,24 +113,26 @@ export default function DogInformation({ missionInfo }: DogInfoProps) {
                         <div className="flex items-center">
                             <input
                                 id="startDate"
-                                className="input-outline flex-1 mr-2 sm:!px-4 px-3"
+                                className={getInputClassName()}
                                 value={formatDate(missionInfo.receiverEnd)}
                                 readOnly
                             />
                             <input
                                 id="startTime"
-                                className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
+                                className={`input-outline ${status === 'INP' ? 'border-point-300' : ''} text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3`}
                                 value={formatTime(missionInfo.receiverEnd)}
                                 readOnly
                             />
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-center">
-                    <button className="text-label-m text-gray-600 border-b border-b-gray-600 w-fit my-4">
-                        멍멍이의 부탁 삭제
-                    </button>
-                </div>
+                {status === 'BEF' && (
+                    <div className="flex justify-center">
+                        <button className="text-label-m text-gray-600 border-b border-b-gray-600 w-fit my-4">
+                            멍멍이의 부탁 삭제
+                        </button>
+                    </div>
+                )}
             </div>
         </main>
     );
