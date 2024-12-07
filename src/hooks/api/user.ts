@@ -3,6 +3,7 @@ import {
     EditMyProfileResponse,
     LikeApiRequest,
     LikeApiResponse,
+    LikedUserListApiResponse,
     ProfileApiQueryString,
     ProfileApiResponse,
 } from '@/types/user';
@@ -98,3 +99,10 @@ export const postkakaoSignup = async ({
             profileImg,
         },
     );
+
+/**
+ * GET	liked user list
+ * 나의 찜한 돌봄이 리스트를 불러옵니다.
+ */
+export const getLikedUserList = async (): Promise<LikedUserListApiResponse> =>
+    await http.get<LikedUserListApiResponse>('/api/auth/get-heartlist');
