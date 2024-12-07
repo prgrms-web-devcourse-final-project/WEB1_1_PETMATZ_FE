@@ -23,7 +23,7 @@ const useMatchStore = create<MatchStore>((set, get) => ({
     matchList: [],
     showStamp: false,
     curPage: 0,
-    totalPages: 2,
+    totalPages: 1,
     isLastPage: false,
 
     setCurPage: (state: number) => set({ curPage: state }),
@@ -52,7 +52,9 @@ const useMatchStore = create<MatchStore>((set, get) => ({
     fetchMatchList: async (userId) => {
         const { curPage, totalPages } = get();
 
-        if (curPage > totalPages) {
+        console.log(curPage, totalPages);
+
+        if (curPage >= totalPages) {
             set(() => ({ isLastPage: true }));
             return;
         }

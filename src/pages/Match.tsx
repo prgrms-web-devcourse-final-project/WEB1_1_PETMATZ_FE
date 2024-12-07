@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import { useMatchStore, useTitleStore, useUserStore } from '@/stores';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IntroMatch, MatchCard, NoMoreCard } from '@/components/match';
 import FetchMoreCard from '@/components/match/FetchMoreCard';
 import { createChatRoom } from '@/hooks/api/Chat';
@@ -21,6 +21,7 @@ export default function Match() {
     const { setTitle } = useTitleStore();
     const [isModalOpen, setIsModalOpen] = useState(true);
     const navigate = useFadeNavigate();
+    const isFirstFetch = useRef(true);
 
     // 카드 관련 이벤트 핸들러
     const handleDragEnd = (otherId: number) => {
@@ -68,7 +69,10 @@ export default function Match() {
     };
 
     useEffect(() => {
-        if (!(matchList.length > 0) && user) fetchMatchList(user.id);
+        if (!(matchList.length > 0) && user && isFirstFetch.current) {
+            fetchMatchList(user.id);
+            isFirstFetch.current = false;
+        }
 
         const skip = localStorage.getItem('skipMatchIntro');
         if (skip === 'true') {
@@ -76,10 +80,6 @@ export default function Match() {
         }
 
         setTitle('돌봄 매칭');
-
-        return () => {
-            useMatchStore.setState({ isLastPage: false });
-        };
     }, []);
 
     return (
