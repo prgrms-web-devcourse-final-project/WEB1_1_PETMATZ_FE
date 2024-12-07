@@ -23,7 +23,7 @@ const useMatchStore = create<MatchStore>((set, get) => ({
     matchList: [],
     showStamp: false,
     curPage: 0,
-    totalPages: 1,
+    totalPages: 2,
     isLastPage: false,
 
     setCurPage: (state: number) => set({ curPage: state }),
