@@ -21,3 +21,4 @@ export { default as DogEdit } from './DogEdit';
 export { default as ProfileEdit } from './ProfileEdit';
 export { default as KakaoLogin } from './KakaoLogin';
 export { default as KakaoSignup } from './KakaoSignup';
+export { default as Like } from './Like';

@@ -22,6 +22,7 @@ import {
     PleaseWrite,
     KakaoLogin,
     KakaoSignup,
+    Like,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -85,6 +86,7 @@ export default function AppRoutes() {
                         <Route path="/please/:id" element={<PleaseDetail />} />
                         <Route path="/edit-profile" element={<ProfileEdit />} />
                         <Route path="/sos/:id" element={<SOSDetail />} />
+                        <Route path="/like" element={<Like />} />
                     </Route>
                 </Route>
             </Routes>
