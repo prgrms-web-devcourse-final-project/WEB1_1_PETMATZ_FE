@@ -26,8 +26,8 @@ export default function SOSCard({ item }: SOSCardProps) {
             onClick={() => navigate(`/sos/${item.id}`)}
         >
             <div className="flex-1 h-full flex flex-col gap-[8px]">
-                <div className="text-label-m text-gray-200 font-extrabold">
-                    <span className="py-[4px] px-[8px] bg-point-300 rounded-full">
+                <div className="text-label-m text-white font-extrabold">
+                    <span className="py-[4px] px-[8px] bg-point-500 rounded-full">
                         {item.authorRegion}
                     </span>
                 </div>
