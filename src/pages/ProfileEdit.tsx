@@ -1,26 +1,25 @@
 import Back from '@/assets/images/header/back.svg?react';
 import { useFadeNavigate } from '@/hooks';
 import { useState, useCallback, useEffect } from 'react';
-import { useUserStore } from '@/stores';
-import { getMyProfileInfo, editMyProfileInfo } from '@/hooks/api/profile';
 import ImageSelectBox from '@/components/common/ImageSelectBox';
-import { LocationChange } from '@/components/common/edit-profile';
+import { LocationChange } from '@/components/edit-profile';
 import { useCustomToast } from '@/hooks';
 import { ToastAnchor } from '@/components/common';
 import Loading from '@/components/common/Loading';
+import { editMyProfileInfo, getMyProfileInfo } from '@/hooks/api/user';
 
 export default function ProfileEdit() {
     const { showToast } = useCustomToast();
     const navigate = useFadeNavigate();
-    const { setUser } = useUserStore();
 
+    const [imgFile, setImg] = useState<File | null>(null);
     const [nickname, setNickname] = useState('');
     const [, setRegion] = useState('');
     const [introduction, setIntroduction] = useState('');
     const [preferredSizes, setPreferredSizes] = useState<
         ('SMALL' | 'MEDIUM' | 'LARGE')[]
     >([]);
-    const [isCareAvailable, setIsCareAvailable] = useState(false);
+    const [careAvailable, setIsCareAvailable] = useState(false);
     const [profileImg, setProfileImg] = useState('');
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
 
@@ -42,14 +41,34 @@ export default function ProfileEdit() {
             if (response.ok) {
                 const profile = response.data;
 
-                // Zustand에 사용자 데이터 저장
-                setUser({
-                    id: profile.id,
-                    accountId: profile.accountId,
-                    nickname: profile.nickname,
-                    isRegistered: profile.isRegistered,
-                    region: profile.region,
-                });
+                // if (response.data.imgURL !== '') {
+                //     const id = response.data.id!;
+                //     const imgURL = response.data.imgURL!;
+                //     const img = new FormData();
+                //     img.append('file', imgFile!);
+                //     const type = 'U';
+
+                //     const result = await putImageToS3({
+                //         id,
+                //         imgURL,
+                //         img,
+                //         type,
+                //     });
+
+                //     if (result) {
+                //         setSuccess(true);
+                //         setTimeout(() => {
+                //             navigate('/login');
+                //         }, 3000);
+                //     } else {
+                //         showToast('회원 등록에 실패했습니다!', 'warning');
+                //     }
+                // } else {
+                //     setSuccess(true);
+                //     setTimeout(() => {
+                //         navigate('/login');
+                //     }, 3000);
+                // }
 
                 // 상태 초기화
                 setNickname(profile.nickname || '');
@@ -65,32 +84,32 @@ export default function ProfileEdit() {
         };
 
         fetchProfile();
-    }, [setUser]);
+    }, []);
 
     const handleBackBtn = useCallback(() => {
-        navigate('-1');
+        navigate(-1);
     }, [navigate]);
 
     const handleDeleteAccountBtn = useCallback(() => {
         navigate('/delete-account');
     }, [navigate]);
 
-    const updateProfile = async () => {
+    const updateProfile = useCallback(async () => {
         const response = await editMyProfileInfo({
             nickname,
             preferredSizes,
             introduction,
-            isCareAvailable,
+            careAvailable,
             profileImg,
         });
 
         if (response.ok) {
             console.log('프로필 업데이트 성공:', response.message);
-            navigate('-1');
+            navigate(-1);
         } else {
             console.error('프로필 업데이트 실패:', response.message);
         }
-    };
+    }, [nickname, preferredSizes, introduction, careAvailable, navigate]);
 
     if (isLoading) {
         return (
@@ -127,6 +146,7 @@ export default function ProfileEdit() {
                         bottomSheetLabel="프로필 이미지 선택"
                         imgName={profileImg}
                         setImgName={setProfileImg}
+                        setImg={setImg}
                     />
                 </div>
                 {/* Nickname */}
@@ -211,7 +231,7 @@ export default function ProfileEdit() {
                             <button
                                 onClick={() => setIsCareAvailable(true)}
                                 className={`flex-1 px-[18px] py-1.5 rounded-lg transition-colors duration-300 ${
-                                    isCareAvailable
+                                    careAvailable
                                         ? 'bg-point-500 text-white '
                                         : 'text-gray-300 '
                                 }  -mr-[5px]`}
@@ -221,7 +241,7 @@ export default function ProfileEdit() {
                             <button
                                 onClick={() => setIsCareAvailable(false)}
                                 className={`flex-1 px-[18px] py-1.5 rounded-lg transition-colorsm duration-300 ${
-                                    !isCareAvailable
+                                    !careAvailable
                                         ? 'bg-point-500 text-white '
                                         : 'text-gray-300 '
                                 }  -ml-[5px]`}

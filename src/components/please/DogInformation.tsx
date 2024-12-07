@@ -3,38 +3,13 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './DogInformation.css';
-
+import { formatDate, formatTime } from '@/utils';
+import { MissionInfo } from '@/types/please';
 interface DogInfoProps {
-    dogId?: string;
+    missionInfo: MissionInfo;
 }
 
-// 예시 데이터 - 실제로는 API나 props로 받아올 예정
-const dogs = [
-    {
-        id: 5,
-        dogNm: '예삐',
-        sexNm: '암컷',
-        kindNm: '페키니즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile.png',
-        age: 7,
-        temperament: 'ENTP',
-        size: 'SMALL',
-    },
-    {
-        id: 6,
-        dogNm: '몽이',
-        sexNm: '수컷',
-        kindNm: '말티즈',
-        neuterYn: '중성',
-        profileImg: 'https://example.com/uploads/profile2.png',
-        age: 5,
-        temperament: 'ISFP',
-        size: 'SMALL',
-    },
-];
-
-export default function DogInformation({ dogId }: DogInfoProps) {
+export default function DogInformation({ missionInfo }: DogInfoProps) {
     const settings = {
         dots: true,
         infinite: false,
@@ -47,6 +22,18 @@ export default function DogInformation({ dogId }: DogInfoProps) {
         prevArrow: <SamplePrevArrow />,
     };
 
+    const dogs = missionInfo.petMissionPetInfos.map((pet) => ({
+        id: parseInt(pet.petName, 10),
+        dogNm: pet.petName,
+        sexNm: pet.gender === 'FEMALE' ? '암컷' : '수컷',
+        kindNm: pet.breed,
+        neuterYn: pet.neuterYn,
+        profileImg: pet.profileImg, // 기본 이미지
+        age: pet.age,
+        temperament: pet.temperament,
+        size: pet.size,
+    }));
+
     return (
         <main className="p-4 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             <div className="space-y-4">
@@ -54,38 +41,34 @@ export default function DogInformation({ dogId }: DogInfoProps) {
                     <p>우리가 도와줄 멍멍이는</p>
                 </h1>
                 <div className="slider-container">
-                    <Slider {...settings}>
-                        {dogs.map((dog) => (
-                            <div key={dog.id} className="px-2">
-                                <DogCard
-                                    id={dog.id}
-                                    dogNm={dog.dogNm}
-                                    sexNm={dog.sexNm}
-                                    kindNm={dog.kindNm}
-                                    neuterYn={dog.neuterYn}
-                                    profileImg={dog.profileImg}
-                                    age={dog.age}
-                                    temperament={dog.temperament}
-                                    size={dog.size}
-                                    comment={false}
-                                    edit={false}
-                                />
-                            </div>
-                        ))}
-                    </Slider>
+                    {dogs.length === 1 ? (
+                        // 한 마리일 때는 일반 div로 표시
+                        <div className="px-2">
+                            <DogCard {...dogs[0]} />
+                        </div>
+                    ) : (
+                        // 여러 마리일 때는 슬라이더 사용
+                        <Slider {...settings}>
+                            {dogs.map((dog) => (
+                                <div key={dog.id} className="px-2">
+                                    <DogCard {...dog} />
+                                </div>
+                            ))}
+                        </Slider>
+                    )}
                 </div>
 
                 <div className="space-y-4 !mt-8">
                     <div className="flex gap-5 items-center">
                         <p className="text-label-m text-gray-500">돌봄이</p>
                         <p className="text-body-m font-semibold text-gray-900 ml-2">
-                            솜이누나
+                            {missionInfo.receiverName}
                         </p>
                     </div>
                     <div className="flex gap-5 items-center">
                         <p className="text-label-m text-gray-500">맡김이</p>
                         <p className="text-body-m font-semibold text-gray-900 ml-2">
-                            절미방딩이
+                            {missionInfo.careName}
                         </p>
                     </div>
                 </div>
@@ -99,14 +82,14 @@ export default function DogInformation({ dogId }: DogInfoProps) {
                             <input
                                 id="startDate"
                                 className="input-outline flex-1 mr-2 sm:!px-4 px-3"
-                                value="2024년 11월 28일"
-                                style={{ pointerEvents: 'none' }}
+                                value={formatDate(missionInfo.receiverStart)}
+                                readOnly
                             />
                             <input
                                 id="startTime"
                                 className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
-                                value="오후 01:00"
-                                style={{ pointerEvents: 'none' }}
+                                value={formatTime(missionInfo.receiverStart)}
+                                readOnly
                             />
                         </div>
                     </div>
@@ -118,14 +101,14 @@ export default function DogInformation({ dogId }: DogInfoProps) {
                             <input
                                 id="startDate"
                                 className="input-outline flex-1 mr-2 sm:!px-4 px-3"
-                                value="2024년 11월 29일"
-                                style={{ pointerEvents: 'none' }}
+                                value={formatDate(missionInfo.receiverEnd)}
+                                readOnly
                             />
                             <input
                                 id="startTime"
                                 className="input-outline text-gray-400 md:!w-[135px] w-[105px] sm:!px-4 px-3"
-                                value="오후 03:00"
-                                style={{ pointerEvents: 'none' }}
+                                value={formatTime(missionInfo.receiverEnd)}
+                                readOnly
                             />
                         </div>
                     </div>

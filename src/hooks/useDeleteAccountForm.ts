@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCustomToast } from '@/components/common';
-import { postDeleteAccount } from './api/deleteAccount';
+
 import useFadeNavigate from './useFadeNavigate';
+import { postDeleteAccount } from './api/user';
 
 /**
  * Delete account form input type
@@ -43,7 +44,7 @@ export default function useDeleteAccountForm() {
             if (response.ok) {
                 setSuccess(true);
                 setTimeout(() => {
-                    navigate('/home');
+                    navigate('/');
                 }, 3000);
             } else {
                 console.log(response);

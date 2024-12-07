@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
-import { postLogin } from './api/login';
 import { useUserStore } from '@/stores';
 import useCustomToast from './useCustomToast';
+import { postLogin } from './api/auth';
 
 /**
  * Login form input type

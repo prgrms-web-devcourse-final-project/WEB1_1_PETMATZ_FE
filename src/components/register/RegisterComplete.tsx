@@ -4,6 +4,12 @@ import SmallDog from '@/assets/images/register/registerDog1.svg?react';
 import MiddleDog from '@/assets/images/register/registerDog2.svg?react';
 import LargeDog from '@/assets/images/register/registerDog3.svg?react';
 
+// 종성 존재 여부 확인 함수
+const hasEndConsonant = (str: string) => {
+    const lastChar = str.charAt(str.length - 1);
+    return (lastChar.charCodeAt(0) - 0xac00) % 28 > 0;
+};
+
 export default function RegisterComplete({ getValue }: RegisterCompleteProps) {
     const navigate = useFadeNavigate();
 
@@ -11,6 +17,9 @@ export default function RegisterComplete({ getValue }: RegisterCompleteProps) {
         navigate('/register', { replace: true }); // 새 등록 페이지로 이동
         window.location.reload(); // 상태 초기화
     };
+
+    // 조사 결정
+    const particle = hasEndConsonant(getValue().petName) ? '이는' : '는';
 
     return (
         <div className="flex flex-col justify-between h-screen text-center w-full">
@@ -26,7 +35,7 @@ export default function RegisterComplete({ getValue }: RegisterCompleteProps) {
                 </p>
                 <h2 className="text-body-xl font-extrabold mb-4">
                     <span className="text-point-500">{getValue().petName}</span>
-                    는{' '}
+                    {particle}{' '}
                     <span className="text-point-500">
                         {getValue().temperament}
                     </span>

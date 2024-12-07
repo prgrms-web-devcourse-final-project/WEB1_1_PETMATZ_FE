@@ -3,6 +3,9 @@ import {
     PetListResponse,
     SOSCreateRequest,
     SOSCreateApiResponse,
+    SOSDetailsResponse,
+    SOSDeleteResponse,
+    SOSDeleteRequest,
     SOSListApiRequest,
     SOSListApiResponse,
 } from '@/types/Sos';
@@ -17,6 +20,20 @@ export const createSOSPost = async (
     formData: SOSCreateRequest,
 ): Promise<SOSCreateApiResponse> => {
     return http.post('/api/sosboard', formData);
+};
+
+// sos 디테일 조회 API
+export const getSOSDetails = async (
+    userId: number,
+): Promise<SOSDetailsResponse> => {
+    return await http.get<SOSDetailsResponse>(`/api/sosboard/${userId}`);
+};
+
+// SOS 특정 게시글 삭제 API 함수
+export const deleteSOSPost = async (id: number): Promise<SOSDeleteResponse> => {
+    return await http.delete<SOSDeleteResponse, SOSDeleteRequest>(
+        `/api/sosboard/${id}`,
+    );
 };
 
 /**

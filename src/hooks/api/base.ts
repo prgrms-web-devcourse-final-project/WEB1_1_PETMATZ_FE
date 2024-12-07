@@ -149,12 +149,13 @@ export const http = {
 };
 
 export const httpForImage = {
-    put: async function put<T, D = undefined>(
-        url: string,
-        data?: D,
-    ): Promise<T> {
+    put: async function put<T, D>(url: string, data: File): Promise<T> {
         try {
-            const response = await serviceForImage.put<T>(url, data);
+            const response = await serviceForImage.put<T>(url, data, {
+                headers: {
+                    'Content-Type': data.type, // 이미지 파일의 MIME 타입 설정
+                },
+            });
             return {
                 ok: true,
                 status: response.status,

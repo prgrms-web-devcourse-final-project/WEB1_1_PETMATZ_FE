@@ -20,6 +20,8 @@ import {
     SOSDetail,
     Ranking,
     PleaseWrite,
+    KakaoLogin,
+    KakaoSignup,
 } from '@/pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -46,7 +48,7 @@ export default function AppRoutes() {
                         <Route path="/home" element={<Home />} />
                         <Route path="/profile/:id" element={<Profile />} />
                         <Route path="/sos" element={<SOS />} />
-                        <Route path="/sos/:id" element={<SOSDetail />} />
+
                         <Route path="/chat" element={<Chat />} />
                         <Route path="/please" element={<Please />} />
                         <Route path="/match" element={<Match />} />
@@ -56,6 +58,8 @@ export default function AppRoutes() {
                     <Route index={true} path="/" element={<Intro />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/kakao-login" element={<KakaoLogin />} />
+                    <Route path="/kakao-signup" element={<KakaoSignup />} />
                     <Route
                         path="/forgot-password"
                         element={<ForgotPassword />}
@@ -80,6 +84,7 @@ export default function AppRoutes() {
                         <Route path="/please/write" element={<PleaseWrite />} />
                         <Route path="/please/:id" element={<PleaseDetail />} />
                         <Route path="/edit-profile" element={<ProfileEdit />} />
+                        <Route path="/sos/:id" element={<SOSDetail />} />
                     </Route>
                 </Route>
             </Routes>

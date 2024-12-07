@@ -100,7 +100,7 @@ export interface SOSUpdateRequest extends Partial<SOSCreateRequest> {
 }
 
 // Pet Information
-interface IPet {
+export interface IPet {
     id: number;
     dogRegNo: number;
     dogNm: string;
@@ -116,7 +116,7 @@ interface IPet {
 }
 
 // SOS List Item
-interface ISOSListItem {
+export interface ISOSListItem {
     id: number;
     userId: number;
     accountId: string;
@@ -136,12 +136,12 @@ interface ISOSListItem {
 }
 
 // GET	SOSList All
-interface SOSListApiRequest {
+export interface SOSListApiRequest {
     region: string;
     pageNum?: number;
     size?: number;
 }
-interface SOSListApiResponse extends BaseApiResponse {
+export interface SOSListApiResponse extends BaseApiResponse {
     data: {
         result: {
             totalCount: number;
@@ -152,4 +152,40 @@ interface SOSListApiResponse extends BaseApiResponse {
     };
 }
 
-export type { IPet, ISOSListItem, SOSListApiRequest, SOSListApiResponse };
+export interface SOSDetails {
+    id: number;
+    title: string;
+    paymentType: string;
+    accountId: string;
+    comment: string;
+    price: number;
+    startDate: string;
+    endDate: string;
+    pets: Pet[];
+    authorNickname: string;
+    authorProfileImg: string;
+    authorGender: string; // MALE or FEMALE
+    authorRegion: string;
+    userId: string;
+    updatedAt: string;
+    createdAt: string;
+}
+
+export interface SOSDetailsResponse extends BaseApiResponse {
+    data?: {
+        responseCode: string;
+        result: SOSDetails;
+    };
+}
+// SOS 글 삭제 요청 값
+export interface SOSDeleteRequest {
+    id: number; // 수정할 게시물 ID
+}
+
+// SOS 글 삭제 응답 값
+export interface SOSDeleteResponse extends BaseApiResponse {
+    data?: {
+        responseCode: string;
+        result: SOSDetails;
+    };
+}

@@ -1,25 +1,29 @@
 import { useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { useFadeNavigate } from '@/hooks';
+import { useFadeNavigate, usePetMissionInfo } from '@/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
 import Back from '@/assets/images/header/back.svg?react';
-import { CustomToggle, ToastAnchor } from '@/components/common';
+import { CustomToggle, Loading, ToastAnchor } from '@/components/common';
 import DogInfoComponent from '@/components/please/DogInformation';
 import RequestListComponent from '@/components/please/RequestList';
 
 export default function PleaseDetail() {
     const { id } = useParams();
+    const { data: missionInfo, isLoading, error } = usePetMissionInfo(id!);
     const navigate = useFadeNavigate();
-
     const [isInfoTab, setIsInfoTab] = useState(true);
+    console.log(missionInfo?.result);
 
     const handleBackBtn = useCallback(() => {
-        navigate('/');
+        navigate(-1);
     }, []);
 
     const handleToggleChange = (checked: boolean) => {
         setIsInfoTab(checked);
     };
+
+    if (isLoading) return <Loading />;
+    if (error) return <div>에러가 발생했습니다.</div>;
 
     const pageVariants = {
         initial: {
@@ -75,7 +79,11 @@ export default function PleaseDetail() {
                                     variants={pageVariants}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <DogInfoComponent dogId={id} />
+                                    {missionInfo && (
+                                        <DogInfoComponent
+                                            missionInfo={missionInfo.result}
+                                        />
+                                    )}
                                 </motion.div>
                             ) : (
                                 <motion.div
@@ -87,7 +95,11 @@ export default function PleaseDetail() {
                                     variants={pageVariants}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <RequestListComponent dogId={id} />
+                                    {missionInfo && (
+                                        <RequestListComponent
+                                            missionInfo={missionInfo.result}
+                                        />
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>

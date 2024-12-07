@@ -51,7 +51,7 @@ interface EditMyProfileRequest {
     nickname: string;
     preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
     introduction: string;
-    isCareAvailable: boolean;
+    careAvailable: boolean;
     profileImg: string;
 }
 
@@ -66,4 +66,6 @@ export type {
     ProfileApiResponse,
     EditMyProfileRequest,
     EditMyProfileResponse,
+    LikeApiRequest,
+    LikeApiResponse,
 };

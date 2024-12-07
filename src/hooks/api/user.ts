@@ -1,16 +1,31 @@
 import {
+    EditMyProfileRequest,
+    EditMyProfileResponse,
     LikeApiRequest,
     LikeApiResponse,
     ProfileApiQueryString,
     ProfileApiResponse,
 } from '@/types/user';
-import {
-    ProfileApiQueryString,
-    ProfileApiResponse,
-    EditMyProfileRequest,
-    EditMyProfileResponse,
-} from '@/types/user';
 import { http } from './base';
+import {
+    DeleteAccountApiRequest,
+    DeleteAccountApiResponse,
+} from '@/types/deleteAccount';
+import { KakaoSignupApiRequest, KakaoSignupApiResponse } from '@/types/kakao';
+
+/**
+ * POST	delete account
+ * 회원 탈퇴를 요청합니다.
+ */
+export const postDeleteAccount = async ({
+    password,
+}: DeleteAccountApiRequest): Promise<DeleteAccountApiResponse> =>
+    await http.post<DeleteAccountApiResponse, DeleteAccountApiRequest>(
+        '/api/auth/delete-user',
+        {
+            password,
+        },
+    );
 
 /**
  * GET	Profile informations
@@ -52,4 +67,34 @@ export const editMyProfileInfo = async (
     await http.post<EditMyProfileResponse, EditMyProfileRequest>(
         '/api/auth/edit-myprofile',
         data,
+    );
+
+/**
+ * POST
+ * 카카오 회원가입 정보입력.
+ */
+export const postkakaoSignup = async ({
+    nickname,
+    gender,
+    preferredSizes,
+    introduction,
+    isCareAvailable,
+    mbti,
+    latitude,
+    longitude,
+    profileImg,
+}: KakaoSignupApiRequest): Promise<KakaoSignupApiResponse> =>
+    await http.post<KakaoSignupApiResponse, KakaoSignupApiRequest>(
+        '/api/auth/edit-kakaoprofile',
+        {
+            nickname,
+            gender,
+            preferredSizes,
+            introduction,
+            isCareAvailable,
+            mbti,
+            latitude,
+            longitude,
+            profileImg,
+        },
     );

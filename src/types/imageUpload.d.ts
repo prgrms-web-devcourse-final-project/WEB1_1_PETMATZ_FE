@@ -1,10 +1,8 @@
 //	PUT s3 image upload function
-interface ImageToS3ApiRequest {
-    img: FormData;
-}
 interface ImageToS3Params extends ImageToS3ApiRequest {
     id: number;
     imgURL: string;
+    img: File;
     type: 'P' | 'H' | 'U';
 }
 
