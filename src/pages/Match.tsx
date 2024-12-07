@@ -104,16 +104,16 @@ export default function Match() {
                         )}
                     </AnimatePresence>
                 </div>
-                {!isLastPage && (
+                {!(matchList.length === 0) && (
                     <button
                         className={`btn-solid max-w-[240px] ${(matchList.length === 0 || isLastPage) && 'active:scale-100'}`}
                         onClick={handleOnClickBtn}
-                        disabled={matchList.length === 0 || isLastPage}
+                        disabled={matchList.length === 0 && isLastPage}
                     >
                         우리 멍멍이 부탁하기
                     </button>
                 )}
-                {isLastPage && (
+                {isLastPage && matchList.length === 0 && (
                     <button
                         className={'btn-outline max-w-[240px]'}
                         onClick={handleOnClickResetBtn}
