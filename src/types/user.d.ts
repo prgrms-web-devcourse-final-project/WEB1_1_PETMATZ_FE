@@ -46,6 +46,24 @@ interface LikeApiResponse extends BaseApiResponse {
     };
 }
 
+interface LikedUser {
+    myId: number;
+    heartedId: number;
+    nickname: string;
+    profileImg: string;
+    careAvailable: boolean;
+    preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+}
+
+//	GET liked user list
+interface LikedUserListApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+        heartedUsers: LikedUser[];
+    };
+}
+
 // POST Edit MyProfile informations
 interface EditMyProfileRequest {
     nickname: string;
@@ -62,10 +80,12 @@ interface EditMyProfileResponse extends BaseApiResponse {
 
 export type {
     IUser,
+    LikedUser,
     ProfileApiQueryString,
     ProfileApiResponse,
     EditMyProfileRequest,
     EditMyProfileResponse,
     LikeApiRequest,
     LikeApiResponse,
+    LikedUserListApiResponse,
 };

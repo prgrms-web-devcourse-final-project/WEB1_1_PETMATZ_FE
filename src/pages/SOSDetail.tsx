@@ -7,7 +7,7 @@ import { DogCard, Loading } from '@/components/common';
 import { getSOSDetails, deleteSOSPost } from '@/hooks/api/sos';
 import { SOSDetails } from '@/types/Sos';
 import { useUserStore } from '@/stores';
-import { createChatRoom } from '@/hooks/api/chat';
+import { createChatRoom } from '@/hooks/api/Chat';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';

@@ -11,7 +11,7 @@ import Unheart from '@/assets/images/profile/unheart.svg?react';
 import { DogList, Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
-import { createChatRoom } from '@/hooks/api/chat';
+import { createChatRoom } from '@/hooks/api/Chat';
 import { DogsInfoResponse } from '@/types/dogInfo';
 import { fetchDogsInfo } from '@/hooks/api/dogInfo';
 import { getProfileInfo, postLikeProfile } from '@/hooks/api/user';
@@ -103,7 +103,7 @@ export default function Profile() {
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
-            <div className="w-full bg-white pt-6 pb-12">
+            <div className="w-full bg-gray-50 pt-6 pb-12">
                 <div className="w-full max-w-[600px] mx-auto px-6 flex flex-col gap-4">
                     <h2 className="text-title-s font-extrabold text-gray-800">
                         {isMyProfile ? <p>나의 프로필</p> : <p>안녕하세요!</p>}
@@ -113,7 +113,7 @@ export default function Profile() {
                             <img
                                 src={image}
                                 alt="프로필 이미지"
-                                className="object-cover w-full h-full rounded-full border-[1px] border-gray-200"
+                                className="object-cover w-full h-full rounded-full border-2 border-gray-200"
                             />
                         </div>
                         <div className="flex justify-center items-center gap-2">
@@ -172,12 +172,12 @@ export default function Profile() {
                                     {like ? (
                                         <Heart
                                             onClick={handleLikeBtn}
-                                            className="flex-1 cursor-pointer w-8 h-8"
+                                            className="flex-1 cursor-pointer w-8 h-8 text-warning-200"
                                         />
                                     ) : (
                                         <Unheart
                                             onClick={handleLikeBtn}
-                                            className="flex-1 cursor-pointer w-8 h-8"
+                                            className="flex-1 cursor-pointer w-8 h-8 text-warning-200"
                                         />
                                     )}
                                     <span className="text-label-l text-point-800 font-extrabold">
