@@ -1,7 +1,9 @@
 import Heart from '@/assets/images/profile/heart.svg?react';
+import Unheart from '@/assets/images/profile/unheart.svg?react';
 import { useFadeNavigate } from '@/hooks';
+import { postLikeProfile } from '@/hooks/api/user';
 import type { LikedUser } from '@/types/user';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function LikedUser({
     myId,
@@ -12,9 +14,20 @@ export default function LikedUser({
     preferredSizes,
 }: LikedUser) {
     const navigate = useFadeNavigate();
+    const [like, setLike] = useState(true);
 
     const handleProfileBtn = useCallback(() => {
         navigate(`/profile/${heartedId}`);
+    }, []);
+
+    const handleLikeBtn = useCallback(async () => {
+        await postLikeProfile({ heartedId }).then((response) => {
+            if (response.ok) {
+                setLike((prev) => !prev);
+            } else {
+                console.log(response.error?.msg);
+            }
+        });
     }, []);
 
     return (
@@ -49,7 +62,17 @@ export default function LikedUser({
                     ))}
                 </div>
             </section>
-            <Heart className="cursor-pointer w-8 h-8 text-warning-200" />
+            {like ? (
+                <Heart
+                    onClick={handleLikeBtn}
+                    className="cursor-pointer w-8 h-8 text-warning-200"
+                />
+            ) : (
+                <Unheart
+                    onClick={handleLikeBtn}
+                    className="cursor-pointer w-8 h-8 text-warning-200"
+                />
+            )}
         </li>
     );
 }
