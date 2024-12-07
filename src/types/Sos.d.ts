@@ -37,27 +37,6 @@ export interface PostItemProps {
     onClick?: () => void; // 클릭 이벤트
 }
 
-// SOS 게시물 목록 응답 타입(data 필드)
-export interface SOSListResponse {
-    posts: Post[];
-    totalCount: number;
-    pageNum: number;
-    pageSize: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-}
-
-export interface SOSListApiResponse extends BaseApiResponse {
-    data: SOSListResponse;
-}
-
-// SOS 글 목록 조회 요청 타입
-export interface SOSListRequest {
-    pageNum?: number; // 페이지 번호
-    pageSize?: number; // 페이지당 아이템 수
-    // 필터링은 default : 최신순
-}
-
 // SOS 글 생성 요청 타입
 export interface SOSCreateRequest {
     title: string;
@@ -119,3 +98,58 @@ export interface PetListResponse extends BaseApiResponse {
 export interface SOSUpdateRequest extends Partial<SOSCreateRequest> {
     postId: number; // 수정할 게시물 ID
 }
+
+// Pet Information
+interface IPet {
+    id: number;
+    dogRegNo: number;
+    dogNm: string;
+    sexNm: string;
+    kindNm: string;
+    neuterYn: '중성' | '미중성';
+    profileImg: string;
+    age: number;
+    temperament: string;
+    size: 'SMALL' | 'MEDIUM' | 'LARGE';
+    preferredWalkingLocation: string;
+    comment: string;
+}
+
+// SOS List Item
+interface ISOSListItem {
+    id: number;
+    userId: number;
+    accountId: string;
+    title: string;
+    comment: string;
+    paymentType: 'HOURLY' | 'DAILY' | 'NEGOTIABLE';
+    price: number;
+    startDate: string;
+    endDate: string;
+    authorNickname: string;
+    authorProfileImg: string;
+    authorGender: 'MALE' | 'FEMALE';
+    authorRegion: string;
+    createdAt: string;
+    updatedAt: string;
+    pets: IPet[];
+}
+
+// GET	SOSList All
+interface SOSListApiRequest {
+    region: string;
+    pageNum?: number;
+    size?: number;
+}
+interface SOSListApiResponse extends BaseApiResponse {
+    data: {
+        result: {
+            totalCount: number;
+            totalPages: number;
+            currentPage: number;
+            content: ISOSListItem[];
+        };
+    };
+}
+
+export type { IPet, ISOSListItem, SOSListApiRequest, SOSListApiResponse };
