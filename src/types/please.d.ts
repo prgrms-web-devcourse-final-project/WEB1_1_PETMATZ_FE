@@ -27,6 +27,23 @@ interface CreatePleaseApiResponse extends BaseApiResponse {
     };
 }
 
+// GET	MissionList
+interface PleaseListApiResponse extends BaseApiResponse {
+    data: {
+        result: {
+            missionId: number;
+            comment: string[];
+            petMissionStarted: string;
+            petMissionEnd: string;
+            status: 'BEF' | 'INP' | 'AFT';
+            petInfo: {
+                petId: number;
+                imgURL: string;
+            };
+        };
+    };
+}
+
 // 반려견 정보 타입
 interface PetInfo {
     petName: string;
@@ -99,4 +116,5 @@ export type {
     MissionInfo,
     Request,
     RequestListAccordionProps,
+    PleaseListApiResponse,
 };

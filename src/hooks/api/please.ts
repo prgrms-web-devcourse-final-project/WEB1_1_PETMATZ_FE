@@ -1,9 +1,17 @@
 import {
     CreatePleaseApiRequest,
     CreatePleaseApiResponse,
+    PleaseListApiResponse,
     PetMissionInfoResponse,
 } from '@/types/please';
 import { http } from './base';
+
+/**
+ * GET	MissionList
+ * 멍멍이 부탁을 조회합니다.
+ */
+export const getPleaseList = async (): Promise<PleaseListApiResponse> =>
+    await http.get<PleaseListApiResponse>('/api/v1/pet/mission');
 
 /**
  * POST	Please	Create
