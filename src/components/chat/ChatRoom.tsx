@@ -107,7 +107,7 @@ export default function ChatRoom({
                     </span>
                     <span className="text-label-m text-gray-500 truncate">
                         {chatRoom.lastMessage === 'first'
-                            ? '메세지를 보내보세요.'
+                            ? '첫 메세지를 보내보세요!'
                             : chatRoom.lastMessage}
                     </span>
                 </div>

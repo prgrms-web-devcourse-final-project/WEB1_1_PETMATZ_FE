@@ -2,7 +2,7 @@ import {
     deleteChatRoom,
     getChatMessageList,
     getChatRoomList,
-} from '@/hooks/api/chat';
+} from '@/hooks/api/Chat';
 import { IChatMessage, IChatRoom } from '@/types/chat';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -112,7 +112,18 @@ const useChatStore = create<ChatStore>((set, get) => ({
             console.error('채팅방 리스트 가져오기에 실패했습니다.');
         }
 
-        set({ chatRoomList: data.result });
+        const converted = data.result.map((item) => {
+            if (!isNaN(Number(item.lastMessage))) {
+                return {
+                    ...item,
+                    lastMessage: '돌봄 관련 메시지가 도착했어요!',
+                };
+            }
+
+            return item;
+        });
+
+        set({ chatRoomList: converted });
 
         // 모든 채팅방 구독
         get().subToChatRoomList();
@@ -138,7 +149,7 @@ const useChatStore = create<ChatStore>((set, get) => ({
                     `/topic/chat/${room.chatRoomId}`,
                     (message) => {
                         const newMsg: IChatMessage = JSON.parse(message.body);
-                        if (newMsg.msg_type) {
+                        if (newMsg.msg_type === 'MSG') {
                             set((state) => ({
                                 chatRoomList: state.chatRoomList.map(
                                     (chatRoom) =>
@@ -146,6 +157,38 @@ const useChatStore = create<ChatStore>((set, get) => ({
                                             ? {
                                                   ...chatRoom,
                                                   lastMessage: newMsg.msg,
+                                                  unreadCount:
+                                                      chatRoom.unreadCount + 1,
+                                              }
+                                            : chatRoom,
+                                ),
+                            }));
+                        }
+                        if (newMsg.msg_type === 'PLG') {
+                            set((state) => ({
+                                chatRoomList: state.chatRoomList.map(
+                                    (chatRoom) =>
+                                        chatRoom.chatRoomId === room.chatRoomId
+                                            ? {
+                                                  ...chatRoom,
+                                                  lastMessage:
+                                                      '돌봄 관련 메시지가 도착했어요!',
+                                                  unreadCount:
+                                                      chatRoom.unreadCount + 1,
+                                              }
+                                            : chatRoom,
+                                ),
+                            }));
+                        }
+                        if (newMsg.msg_type === 'END') {
+                            set((state) => ({
+                                chatRoomList: state.chatRoomList.map(
+                                    (chatRoom) =>
+                                        chatRoom.chatRoomId === room.chatRoomId
+                                            ? {
+                                                  ...chatRoom,
+                                                  lastMessage:
+                                                      '돌봄 관련 메시지가 도착했어요!',
                                                   unreadCount:
                                                       chatRoom.unreadCount + 1,
                                               }
@@ -272,16 +315,25 @@ const useChatStore = create<ChatStore>((set, get) => ({
         const subscriptionId = get().subscriptionId;
         const curRoomInfo = get().curRoomInfo;
 
-        if (client) {
-            const { user } = useUserStore.getState();
-            if (subscriptionId) client.unsubscribe(subscriptionId);
-            if (curRoomInfo && user) {
-                client.unsubscribe(
-                    `/topic/chat/${curRoomInfo.chatRoomId}/${user.accountId}`,
-                );
-            }
-            client.deactivate();
+        if (!client || !client.connected) {
+            set({
+                curRoomInfo: null,
+                connectedClient: null,
+                messageList: [],
+                subscriptionId: null,
+            });
+
+            return;
         }
+
+        const { user } = useUserStore.getState();
+        if (subscriptionId) client.unsubscribe(subscriptionId);
+        if (curRoomInfo && user) {
+            client.unsubscribe(
+                `/topic/chat/${curRoomInfo.chatRoomId}/${user.accountId}`,
+            );
+        }
+        client.deactivate();
 
         set({
             curRoomInfo: null,

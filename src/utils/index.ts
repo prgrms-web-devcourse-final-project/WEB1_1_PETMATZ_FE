@@ -8,4 +8,5 @@ export {
 export { default as getDefaultProfileImg } from './getDefaultProfileImg';
 export { default as utcToCustomDateTime } from './utcToCustomDateTime';
 export { default as getFirstErrorMessage } from './getFirstErrorMessage';
+export { default as formatDateWithDay } from './formatDateWithDay';
 export { formatDate, formatTime } from './please/formatDateandTime';
