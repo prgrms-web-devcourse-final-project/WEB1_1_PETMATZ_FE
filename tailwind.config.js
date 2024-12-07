@@ -114,7 +114,6 @@ export default {
         require('autoprefixer'),
         require('./plugins/buttonPlugin'),
         require('./plugins/inputPlugin'),
-        require('@tailwindcss/line-clamp'),
         flowbite.plugin(),
     ],
 };
