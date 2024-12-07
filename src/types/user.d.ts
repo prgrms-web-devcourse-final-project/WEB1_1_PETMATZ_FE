@@ -80,6 +80,7 @@ interface EditMyProfileResponse extends BaseApiResponse {
 
 export type {
     IUser,
+    LikedUser,
     ProfileApiQueryString,
     ProfileApiResponse,
     EditMyProfileRequest,

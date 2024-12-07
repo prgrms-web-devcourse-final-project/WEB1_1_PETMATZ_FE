@@ -39,9 +39,17 @@ export default function Like() {
                 </h1>
             </header>
             <ul className="bg-white flex-1 flex flex-col justify-start overflow-y-auto pb-2.5">
-                <LikedUser />
-                <LikedUser />
-                <LikedUser />
+                {data?.data.heartedUsers.map((heartedUser, index) => (
+                    <LikedUser
+                        key={index}
+                        myId={heartedUser.myId}
+                        heartedId={heartedUser.heartedId}
+                        nickname={heartedUser.nickname}
+                        profileImg={heartedUser.profileImg}
+                        careAvailable={heartedUser.careAvailable}
+                        preferredSizes={heartedUser.preferredSizes}
+                    />
+                ))}
             </ul>
         </div>
     );
