@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getPetMissionInfo } from './api/please';
+import { getPetMissionInfo } from '../api/please';
 import { PetMissionInfoResponse } from '@/types/please';
 
 export default function usePetMissionInfo(petMissionId: string) {
