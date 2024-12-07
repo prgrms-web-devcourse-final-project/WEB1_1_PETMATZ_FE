@@ -270,7 +270,12 @@ export default function SOSDetail() {
                                     sosDetails.pets[0].temperament ?? ''
                                 }
                                 size={sosDetails.pets[0].size ?? ''}
-                                comment={!!sosDetails.pets[0].comment}
+                                comment={
+                                    sosDetails.pets[0].comment !== ''
+                                        ? sosDetails.pets[0].comment
+                                        : '멍멍이 소개가 없습니다.'
+                                }
+                                isComment={true}
                             />
                         </div>
                     ) : (
@@ -295,7 +300,12 @@ export default function SOSDetail() {
                                         age={pet.age ?? 0}
                                         temperament={pet.temperament ?? ''}
                                         size={pet.size ?? ''}
-                                        comment={false}
+                                        comment={
+                                            pet.comment !== ''
+                                                ? pet.comment
+                                                : '멍멍이 소개가 없습니다.'
+                                        }
+                                        isComment={true}
                                     />
                                 </div>
                             ))}
