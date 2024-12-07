@@ -52,7 +52,9 @@ interface PetMissionInfoResponse extends BaseApiResponse {
         result: {
             id: number;
             careName: string;
+            careId: number;
             receiverName: string;
+            receiverId: number;
             receiverStart: string;
             receiverEnd: string;
             petMissionPetInfos: PetInfo[];
