@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
 import { Request, RequestListAccordionProps } from '@/types/please';
 import MissionRecordModal from './MissionRecordModal';
+import { getMissionAnswerInfo } from '@/hooks/api/please';
 
 interface ModalState {
     isOpen: boolean;
@@ -18,17 +19,20 @@ export default function RequestListAccordion({
     receiverId,
 }: RequestListAccordionProps) {
     const [showMenu, setShowMenu] = useState(false);
-    // 각 미션별 모달 상태를 관리하는 객체
     const [modalStates, setModalStates] = useState<Record<number, ModalState>>(
         {},
     );
+    const [updatedRequests, setUpdatedRequests] = useState<Request[]>(
+        petMissionAskInfos.map((ask) => ({
+            id: ask.id,
+            ask: ask.ask,
+            comment: ask.comment || '',
+            imgURL: ask.imgURL || null,
+            isRegistered: Boolean(ask.comment || ask.imgURL),
+        })),
+    );
 
     const canRegister = status === 'INP' && userId === receiverId;
-
-    const requests: Request[] = petMissionAskInfos.map((ask, index) => ({
-        id: ask.id || index,
-        ask: ask.ask,
-    }));
 
     const handleShowRequestsBtn = useCallback(() => {
         setShowMenu((prev) => !prev);
@@ -46,17 +50,45 @@ export default function RequestListAccordion({
         }));
     }, []);
 
-    const handleCloseModal = useCallback((askId: number) => {
-        setModalStates((prev) => ({
-            ...prev,
-            [askId]: {
-                isOpen: false,
-                selectedRequest: null,
-                comment: '',
-                imagePreview: null,
-            },
-        }));
-    }, []);
+    // 개별 미션 정보를 업데이트하는 함수
+    const updateSingleMission = async (askId: number) => {
+        const response = await getMissionAnswerInfo(askId.toString());
+
+        if (response.data) {
+            setUpdatedRequests((prevRequests) =>
+                prevRequests.map((req) =>
+                    req.id === askId
+                        ? {
+                              ...req,
+                              comment: response.data.comment || '',
+                              imgURL: response.data.imgURL || null,
+                              isRegistered: true,
+                          }
+                        : req,
+                ),
+            );
+        }
+    };
+
+    const handleCloseModal = useCallback(
+        async (askId: number, shouldRefresh: boolean) => {
+            setModalStates((prev) => ({
+                ...prev,
+                [askId]: {
+                    isOpen: false,
+                    selectedRequest: null,
+                    comment: '',
+                    imagePreview: null,
+                },
+            }));
+
+            if (shouldRefresh) {
+                // 즉시 해당 미션 정보를 업데이트
+                await updateSingleMission(askId);
+            }
+        },
+        [],
+    );
 
     return (
         <div className="flex flex-col">
@@ -102,15 +134,13 @@ export default function RequestListAccordion({
                                 className="flex flex-col gap-4 mt-4"
                                 variants={{
                                     open: {
-                                        transition: {
-                                            staggerChildren: 0.07,
-                                        },
+                                        transition: { staggerChildren: 0.07 },
                                     },
                                 }}
                                 initial="closed"
                                 animate="open"
                             >
-                                {requests.map((request, index) => (
+                                {updatedRequests.map((request, index) => (
                                     <motion.div
                                         key={request.id}
                                         className="bg-gray-100 rounded-lg px-4 py-3"
@@ -124,10 +154,7 @@ export default function RequestListAccordion({
                                                     damping: 24,
                                                 },
                                             },
-                                            closed: {
-                                                opacity: 0,
-                                                y: 20,
-                                            },
+                                            closed: { opacity: 0, y: 20 },
                                         }}
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
@@ -139,21 +166,42 @@ export default function RequestListAccordion({
                                         </div>
                                         <div className="flex items-center px-2 py-1">
                                             <p className="flex-1 text-body-s font-semibold text-gray-900">
-                                                <strong>{request.ask}</strong>{' '}
+                                                <strong>{request.ask}</strong>
                                             </p>
-                                            {canRegister && (
-                                                <button
-                                                    onClick={() =>
-                                                        handleRegisterRequest(
-                                                            request,
-                                                        )
-                                                    }
-                                                    className="text-label-m w-fit p-2 text-point-500 hover:bg-gray-200 rounded-lg transition-colors"
-                                                >
-                                                    기록하기
-                                                </button>
-                                            )}
+                                            {canRegister &&
+                                                !request.isRegistered && (
+                                                    <button
+                                                        onClick={() =>
+                                                            handleRegisterRequest(
+                                                                request,
+                                                            )
+                                                        }
+                                                        className="text-label-m w-fit p-2 text-point-500 hover:bg-gray-200 rounded-lg transition-colors"
+                                                    >
+                                                        기록하기
+                                                    </button>
+                                                )}
                                         </div>
+
+                                        {(request.imgURL ||
+                                            request.comment) && (
+                                            <div className="mt-4 px-2 py-2 bg-white rounded-lg flex items-center gap-4">
+                                                {request.imgURL && (
+                                                    <div className="w-1/2 h-1/2 flex-shrink-0">
+                                                        <img
+                                                            src={request.imgURL}
+                                                            alt="Mission record"
+                                                            className="w-full h-full object-cover rounded-lg"
+                                                        />
+                                                    </div>
+                                                )}
+                                                {request.comment && (
+                                                    <p className="text-body-s text-gray-700 flex-1 line-clamp-3">
+                                                        {request.comment}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
                                     </motion.div>
                                 ))}
                             </motion.div>
@@ -162,11 +210,13 @@ export default function RequestListAccordion({
                 )}
             </AnimatePresence>
 
-            {requests.map((request) => (
+            {updatedRequests.map((request) => (
                 <MissionRecordModal
                     key={request.id}
                     isOpen={modalStates[request.id]?.isOpen || false}
-                    onClose={() => handleCloseModal(request.id)}
+                    onClose={(shouldRefresh) =>
+                        handleCloseModal(request.id, shouldRefresh)
+                    }
                     askId={request.id}
                 />
             ))}

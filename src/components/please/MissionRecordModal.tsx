@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import CustomInput from '@/components/common/CustomInput';
-import { createMissionContent } from '@/hooks/api/please';
+import { useMissionRecord } from '@/hooks/please';
+import { useParams } from 'react-router-dom';
 
 interface RecordModalProps {
     isOpen: boolean;
-    onClose: () => void;
+    onClose: (shouldRefresh?: any) => void;
     askId: number;
 }
 
@@ -18,9 +19,20 @@ export default function MissionRecordModal({
     onClose,
     askId,
 }: RecordModalProps) {
+    const { id: petMissionId } = useParams();
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    // const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const { recordMission } = useMissionRecord({
+        petMissionId: petMissionId!,
+        onSuccess: () => {
+            onClose();
+        },
+        onError: (error) => {
+            // 에러 처리 (예: Toast 메시지 표시)
+            console.error(error);
+        },
+    });
 
     const {
         register,
@@ -59,14 +71,12 @@ export default function MissionRecordModal({
         });
 
         /// api 호출 로직
-        const response = await createMissionContent({
+        await recordMission({
             askId: askId.toString(),
             comment: data.comment,
-            imgURL: 'Y', // 추후 put 요청을 통해 s3 url 전달, 이미지 없을경우 빈 문자열, 이미지 있으면 Y 전달
+            image: selectedImage || undefined,
         });
-        console.log(response);
-
-        // onClose();
+        onClose(true);
     };
 
     if (!isOpen) return null;
