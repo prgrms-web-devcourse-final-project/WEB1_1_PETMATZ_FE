@@ -1,5 +1,4 @@
 import { useFadeNavigate } from '@/hooks';
-import Profile1 from '@/assets/images/profile/profile1.svg?react';
 import MaleIcon from '@/assets/images/gender/male.svg?react';
 import FemaleIcon from '@/assets/images/gender/female.svg?react';
 
