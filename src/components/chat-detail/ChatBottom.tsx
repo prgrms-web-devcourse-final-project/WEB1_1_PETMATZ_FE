@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 // SVG
 import SendIcon from '@/assets/images/chat/send.svg?react';
-import { getDefaultProfileImg } from '@/utils';
 
 export default function ChatBottom() {
     const { curRoomInfo, sendMsg } = useChatStore();
@@ -41,9 +40,7 @@ export default function ChatBottom() {
             {curRoomInfo ? (
                 <img
                     className="w-[32px] h-[32px] rounded-full border-[0.5px] border-gray-200"
-                    src={getDefaultProfileImg(
-                        curRoomInfo.other.profileURL || 'profile1',
-                    )}
+                    src={curRoomInfo.other.profileURL || ''}
                 />
             ) : (
                 <div className="w-[32px] h-[32px] bg-gray-300 rounded-full animate-pulse border-[0.5px] border-gray-200" />

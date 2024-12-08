@@ -1,6 +1,6 @@
 import { useFadeNavigate } from '@/hooks';
 import { IChatMessage, IChatUser } from '@/types/chat';
-import { getDefaultProfileImg, utcToLocalDateTime } from '@/utils';
+import { utcToLocalDateTime } from '@/utils';
 
 // SVG
 import ArrowRightIcon from '@/assets/images/arrow/arrowRight.svg?react';
@@ -19,9 +19,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                     <div className="flex items-end gap-[8px]">
                         <img
                             className="w-[28px] h-[28px] rounded-full border-[0.5px] border-gray-200"
-                            src={getDefaultProfileImg(
-                                other.profileURL || 'profile1',
-                            )}
+                            src={other.profileURL || ''}
                         />
                         <div className="max-w-[238px] py-[12px] px-[16px] bg-gray-200 text-gray-900 text-label-l font-semibold rounded-t-2xl rounded-br-2xl break-words">
                             {message.msg}
@@ -40,9 +38,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                     <div className="flex items-end gap-[8px]">
                         <img
                             className="w-[28px] h-[28px] rounded-full border-[0.5px] border-gray-200"
-                            src={getDefaultProfileImg(
-                                other.profileURL || 'profile1',
-                            )}
+                            src={other.profileURL || ''}
                         />
                         <div className="max-w-[238px] p-[16px] bg-gray-200 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-br-2xl flex items-center gap-[10px]">
                             <div className="flex flex-col justify-center gap-[2px]">
@@ -55,9 +51,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(
-                                    other.profileURL || 'profile1',
-                                )}
+                                src={other.profileURL || ''}
                                 alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div
@@ -83,9 +77,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                     <div className="flex items-end gap-[8px]">
                         <img
                             className="w-[28px] h-[28px] rounded-full border-[0.5px] border-gray-200"
-                            src={getDefaultProfileImg(
-                                other.profileURL || 'profile1',
-                            )}
+                            src={other.profileURL || ''}
                         />
                         <div className="max-w-[238px] p-[16px] bg-gray-200 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-br-2xl flex items-center gap-[10px]">
                             <div className="flex flex-col justify-center gap-[2px]">
@@ -98,9 +90,7 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(
-                                    other.profileURL || 'profile1',
-                                )}
+                                src={other.profileURL || ''}
                                 alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div

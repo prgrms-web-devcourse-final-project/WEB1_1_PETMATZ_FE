@@ -1,7 +1,6 @@
 import { useFadeNavigate } from '@/hooks';
 import { Dropdown } from '@/components/common';
 import { useChatStore } from '@/stores';
-import { getDefaultProfileImg } from '@/utils';
 
 // SVG
 import ArrowLeftIcon from '@/assets/images/arrow/arrowLeft.svg?react';
@@ -46,9 +45,7 @@ export default function ChatDetailTitle() {
                         <div className="flex-1 flex items-center gap-[12px]">
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(
-                                    curRoomInfo.other.profileURL || 'profile1',
-                                )}
+                                src={curRoomInfo.other.profileURL || ''}
                                 alt={`${curRoomInfo.other.userName}님의 프로필 이미지`}
                             />
                             <span className="text-point-900 text-label-l font-extrabold">

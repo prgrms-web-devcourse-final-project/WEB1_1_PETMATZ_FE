@@ -1,6 +1,6 @@
 import { useFadeNavigate } from '@/hooks';
 import { IChatRoom } from '@/types/chat';
-import { getDefaultProfileImg, utcToCustomDateTime } from '@/utils';
+import { utcToCustomDateTime } from '@/utils';
 import { useState } from 'react';
 
 // SVG
@@ -97,9 +97,7 @@ export default function ChatRoom({
             <div className="flex items-center py-[10px] px-[24px] gap-[10px] cursor-pointer w-full min-w-[360px]">
                 <img
                     className="w-[52px] h-[52px] border-[0.5px] border-gray-200 rounded-full"
-                    src={getDefaultProfileImg(
-                        chatRoom.other.profileURL || 'profile1',
-                    )}
+                    src={chatRoom.other.profileURL || ''}
                 />
                 <div className="flex flex-col flex-1 truncate">
                     <span className="text-body-s font-extrabold text-point-900">

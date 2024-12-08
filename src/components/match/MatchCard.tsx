@@ -6,7 +6,6 @@ import { useFadeNavigate } from '@/hooks';
 import ArrowRightIcon from '@/assets/images/arrow/arrowRight.svg?react';
 import HeartIcon from '@/assets/images/match/heart.svg?react';
 import GraphIcon from '@/assets/images/match/graph.svg?react';
-import ProfileIcon from '@/assets/images/profile/profile1.svg?react';
 import PawStampIcon from '@/assets/images/match/pawStamp.svg?react';
 
 interface MatchCardProps {
@@ -78,7 +77,10 @@ export default function MatchCard({
                     {card.region}
                 </span>
                 <div className="px-[9px]">
-                    <ProfileIcon className="w-[100px] h-[100px] border-1 border-gray-200 rounded-full" />
+                    <img
+                        src={card.profileImg || ''}
+                        className="w-[100px] h-[100px] border-1 border-gray-200 rounded-full"
+                    />
                 </div>
                 <div className="flex flex-col justify-center items-center gap-[24px] w-full">
                     <div

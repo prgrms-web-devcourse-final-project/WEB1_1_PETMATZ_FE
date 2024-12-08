@@ -1,5 +1,5 @@
 import { IChatMessage, IChatUser } from '@/types/chat';
-import { getDefaultProfileImg, utcToLocalDateTime } from '@/utils';
+import { utcToLocalDateTime } from '@/utils';
 
 // SVG
 import ArrowLeftIcon from '@/assets/images/arrow/arrowLeft.svg?react';
@@ -43,9 +43,7 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(
-                                    other.profileURL || 'profile1',
-                                )}
+                                src={other.profileURL || ''}
                                 alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div className="flex flex-col justify-center gap-[2px]">
@@ -80,9 +78,7 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(
-                                    other.profileURL || 'profile1',
-                                )}
+                                src={other.profileURL || ''}
                                 alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div className="flex flex-col justify-center gap-[2px]">
