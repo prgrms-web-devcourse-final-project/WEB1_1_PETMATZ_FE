@@ -14,17 +14,21 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
     const navigate = useFadeNavigate();
     return (
         <>
-            <div className="flex flex-col items-end gap-[4px]">
-                <div className="flex items-end gap-[8px]">
-                    <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl break-words">
-                        {message.msg}
+            {message.msg_type === 'MSG' && (
+                <div className="flex flex-col items-end gap-[4px]">
+                    <div className="flex items-end gap-[8px]">
+                        <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl break-words">
+                            {message.msg}
+                        </div>
+                    </div>
+                    <div className="flex items-center text-gray-500 text-label-s gap-[4px]">
+                        <span>{utcToLocalDateTime(message.msgTimestamp)}</span>
+                        <span>
+                            {message.readStatus ? '(읽음)' : '(안읽음)'}
+                        </span>
                     </div>
                 </div>
-                <div className="flex items-center text-gray-500 text-label-s gap-[4px]">
-                    <span>{utcToLocalDateTime(message.msgTimestamp)}</span>
-                    <span>{message.readStatus ? '(읽음)' : '(안읽음)'}</span>
-                </div>
-            </div>
+            )}
             {message.msg_type === 'PLG' && (
                 <div className="flex flex-col items-end gap-[4px]">
                     <div className="flex items-end gap-[8px]">
