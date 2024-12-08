@@ -80,8 +80,10 @@ interface PetMissionInfoResponse extends BaseApiResponse {
             id: number;
             careName: string;
             careId: number;
+            careEmail: string;
             receiverName: string;
             receiverId: number;
+            receiverEmail: string;
             receiverStart: string;
             receiverEnd: string;
             petMissionPetInfos: PetInfo[];
@@ -95,8 +97,10 @@ interface MissionInfo {
     id: number;
     careName: string;
     careId: number;
+    careEmail: string;
     receiverName: string;
     receiverId: number;
+    receiverEmail: string;
     receiverStart: string;
     receiverEnd: string;
     petMissionPetInfos: PetInfo[];

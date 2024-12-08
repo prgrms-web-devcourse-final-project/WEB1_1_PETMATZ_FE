@@ -20,13 +20,17 @@ export default function PleaseDetail() {
     const navigate = useFadeNavigate();
     const [isInfoTab, setIsInfoTab] = useTabState(id!);
     const { showToast } = useCustomToast();
-    // console.log(missionInfo?.result);
 
     const {
         status: missionStatus,
         changeMissionStatus,
         updateInitialStatus,
-    } = useMissionStatus('BEF', Number(id)!);
+    } = useMissionStatus(
+        'BEF',
+        Number(id)!,
+        missionInfo?.result.careEmail || '',
+        missionInfo?.result.receiverEmail || '',
+    );
 
     // API 데이터 로딩 완료 시 상태 업데이트
     useEffect(() => {
