@@ -3,18 +3,18 @@ import { useFadeNavigate } from '@/hooks';
 // SVG
 import PuppyWithBowlIcon from '@/assets/images/chat/puppyWithBowl.svg?react';
 
-export default function NonChatRoom() {
+export default function NonPlease() {
     const navigate = useFadeNavigate();
 
     return (
-        <div className="flex flex-col justify-center items-center gap-[8px] bg-point-50 h-full">
+        <div className="flex flex-col justify-center items-center gap-[8px] bg-point-50 flex-1">
             <PuppyWithBowlIcon className="w-[67px] h-[90px]" />
             <div className="flex flex-col justify-center items-center gap-[4px]">
                 <span className="text-body-s font-extrabold text-gray-900 text-center">
-                    아직 나눈 대화가 없어요.
+                    멍멍이와 추억이 아직 없어요.
                 </span>
                 <span className="text-label-s text-gray-500 text-center">
-                    매칭받기와 부탁하기로 멍멍이를 맡겨봐요!
+                    매칭받기와 부탁하기로 멍멍이를 돌보거나 맡겨봐요!
                 </span>
             </div>
             <div className="flex items-center justify-center gap-[8px]">

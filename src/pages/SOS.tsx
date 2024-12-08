@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SOSTabMenu from '@/components/sos/SOSTabMenu';
+import TabMenu from '@/components/common/TabMenu';
 import useFetchSOSList from '@/hooks/sos/useFetchSOSList';
 import { Loading } from '@/components/common';
 import { SOSCard, SOSNonContent } from '@/components/sos';
 import { useTitleStore } from '@/stores';
+import { sosTabs } from '@/constants/sos';
 
 // SVG
 import PencilIcon from '@/assets/images/sos/pencil.svg?react';
@@ -73,7 +74,11 @@ export default function SOS() {
             ref={scrollRef}
             className="relative h-full bg-gray-100 overflow-y-auto"
         >
-            <SOSTabMenu activeTab={activeTab} onTabChange={setActiveTab} />
+            <TabMenu
+                tabs={sosTabs}
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+            />
             {isLoading ? (
                 <Loading />
             ) : isEmptyContent ? (
@@ -96,7 +101,7 @@ export default function SOS() {
                     transform: `translateY(${buttonPosition}px)`,
                     transition: 'transform 0.2s ease',
                 }}
-                className="absolute bottom-[16px] right-[16px] flex items-center justify-center w-[70px] h-[70px] text-gray-100 rounded-full shadow-xl bg-point-300 opacity-75 cursor-pointer hover:opacity-100 active:opacity-100"
+                className="absolute bottom-[16px] right-[16px] flex items-center justify-center w-[70px] h-[70px] text-white rounded-full shadow-xl bg-point-500 opacity-75 cursor-pointer hover:opacity-100 active:opacity-100"
                 onClick={() => navigate('/sos/write')}
             >
                 <PencilIcon className="w-[35px] h-[35px]" />
