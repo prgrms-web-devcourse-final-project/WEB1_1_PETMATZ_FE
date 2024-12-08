@@ -1,10 +1,4 @@
-import {
-    formatDateWithDay,
-    formatDateWithTime,
-    getDefaultProfileImg,
-} from '@/utils';
-import { ISOSListItem } from '@/types/Sos';
-import { PAYMENT_TYPE } from '@/constants/sos';
+import { formatDateWithTime } from '@/utils';
 
 // SVG
 import CalendarIcon from '@/assets/images/sos/calender.svg?react';
