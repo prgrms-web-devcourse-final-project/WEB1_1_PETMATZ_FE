@@ -200,21 +200,42 @@ export default function DogEdit() {
                     <label className="text-label-m font-normal text-gray-500 mb-2 block">
                         나이
                     </label>
-                    <input
-                        type="number"
-                        value={age}
-                        onChange={(e) => {
-                            const value = e.target.value;
+                    <div className="flex items-center">
+                        <button
+                            className="px-2 py-1.5 mr-2 bg-point-400 rounded-lg text-white hover:bg-point-400 active:bg-point-600 focus:outline-none"
+                            onClick={() =>
+                                setAge((prev) => Math.max(prev - 1, 0))
+                            } // 최소값 0 제한
+                        >
+                            -
+                        </button>
+                        <input
+                            type="number"
+                            value={age === 0 ? 0 : age} // age가 0일 때 빈 문자열로 표시
+                            onChange={(e) => {
+                                let value = e.target.value;
 
-                            // 값이 비어 있으면 0으로 설정, 최대 2자리 숫자까지만 허용
-                            if (value === '') {
-                                setAge(0);
-                            } else if (Number(value) <= 20) {
-                                setAge(Number(value));
-                            }
-                        }}
-                        className="w-12 text-body-m font-normal text-gray-900 outline-none focus:ring-0 border border-gray-200 rounded-lg px-3 py-2.5 "
-                    />
+                                if (value === '') {
+                                    setAge(0);
+                                } else {
+                                    const numericValue = Math.min(
+                                        Number(value),
+                                        20,
+                                    ); // 최대값 20 제한
+                                    setAge(numericValue);
+                                }
+                            }}
+                            className="w-12 text-body-m font-normal rounded-lg text-gray-900 outline-none focus:ring-0 border-t border-b border-gray-200 px-3 py-2.5 text-center"
+                        />
+                        <button
+                            className="px-2 py-1.5 ml-2 bg-point-400 rounded-lg text-white hover:bg-point-400 active:bg-point-600 focus:outline-none"
+                            onClick={() =>
+                                setAge((prev) => Math.min(prev + 1, 20))
+                            } // 최대값 20 제한
+                        >
+                            +
+                        </button>
+                    </div>
                 </div>
 
                 <div className="mb-4">
