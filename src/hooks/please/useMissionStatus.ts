@@ -5,6 +5,8 @@ import { usePleaseStore } from '@/stores/usePleaseStore';
 export default function useMissionStatus(
     initialStatus: 'BEF' | 'INP' | 'AFT',
     petMissionId: number,
+    careEmail: string,
+    receiverEmail: string,
 ) {
     const { setMissionStatus, getMissionStatus } = usePleaseStore();
     const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +28,15 @@ export default function useMissionStatus(
             setError(null);
 
             try {
-                await updateMissionStatus(petMissionId, newStatus);
+                console.log('careEmail', careEmail);
+                console.log('receiverEmail', receiverEmail);
+
+                await updateMissionStatus(
+                    petMissionId,
+                    newStatus,
+                    careEmail,
+                    receiverEmail,
+                );
                 setMissionStatus(petMissionId, newStatus);
                 return true;
             } catch (err) {
@@ -37,7 +47,7 @@ export default function useMissionStatus(
                 setIsLoading(false);
             }
         },
-        [petMissionId, setMissionStatus],
+        [petMissionId, setMissionStatus, careEmail, receiverEmail],
     );
 
     return {

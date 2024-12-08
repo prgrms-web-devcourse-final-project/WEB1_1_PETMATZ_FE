@@ -80,9 +80,13 @@ export const getMissionAnswerInfo = async (
 export const updateMissionStatus = async (
     petMissionId: number,
     missionStatusZip: 'BEF' | 'INP' | 'AFT',
+    careEmail: string,
+    receiverEmail: string,
 ): Promise<void> => {
     return await http.put('/api/v1/pet/mission', {
         petMissionId,
         missionStatusZip,
+        receiverEmail: careEmail,
+        careEmail: receiverEmail,
     });
 };
