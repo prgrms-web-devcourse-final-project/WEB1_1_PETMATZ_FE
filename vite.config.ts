@@ -13,7 +13,26 @@ export default defineConfig({
         mkcert(),
         VitePWA({
             registerType: 'autoUpdate',
-            includeAssets: ['favicon.ico'],
+            devOptions: {
+                enabled: true,
+            },
+            workbox: {
+                globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+            },
+            includeAssets: [
+                '/favicons/favicon-32px.ico',
+                '/favicons/favicon-96px.ico',
+                '/icons/icon-24px.png',
+                '/icons/icon-32px.png',
+                '/icons/icon-48px.png',
+                '/icons/icon-64px.png',
+                '/icons/icon-72px.png',
+                '/icons/icon-96px.png',
+                '/icons/icon-144px.png',
+                '/icons/icon-192px.png',
+                '/icons/icon-256px.png',
+                '/icons/icon-512px.png',
+            ],
             manifest: {
                 name: 'PETMATZ',
                 short_name: 'PETMATZ',
