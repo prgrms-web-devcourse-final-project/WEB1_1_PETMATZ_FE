@@ -4,11 +4,10 @@ import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
 import { Request, RequestListAccordionProps } from '@/types/please';
 import MissionRecordModal from './MissionRecordModal';
 import { getMissionAnswerInfo } from '@/hooks/api/please';
-
 interface ModalState {
     isOpen: boolean;
     selectedRequest: Request | null;
-    comment: string;
+    comment: string | null;
     imagePreview: string | null;
 }
 
@@ -29,6 +28,7 @@ export default function RequestListAccordion({
             comment: ask.comment || '',
             imgURL: ask.imgURL || null,
             isRegistered: Boolean(ask.comment || ask.imgURL),
+            isTemporarilyHidden: false,
         })),
     );
 
@@ -39,15 +39,18 @@ export default function RequestListAccordion({
     }, []);
 
     const handleRegisterRequest = useCallback((request: Request) => {
-        setModalStates((prev) => ({
-            ...prev,
-            [request.id]: {
-                isOpen: true,
-                selectedRequest: request,
-                comment: '',
-                imagePreview: null,
-            },
-        }));
+        if (!request.isRegistered) {
+            // 모달 상태 설정
+            setModalStates((prev) => ({
+                ...prev,
+                [request.id]: {
+                    isOpen: true,
+                    selectedRequest: request,
+                    comment: null,
+                    imagePreview: null,
+                },
+            }));
+        }
     }, []);
 
     // 개별 미션 정보를 업데이트하는 함수
@@ -62,7 +65,9 @@ export default function RequestListAccordion({
                               ...req,
                               comment: response.data.comment || '',
                               imgURL: response.data.imgURL || null,
-                              isRegistered: true,
+                              isRegistered: Boolean(
+                                  response.data.comment || response.data.imgURL,
+                              ),
                           }
                         : req,
                 ),
@@ -71,20 +76,35 @@ export default function RequestListAccordion({
     };
 
     const handleCloseModal = useCallback(
-        async (askId: number, shouldRefresh: boolean) => {
+        async (askId: number, shouldRefresh: boolean = false) => {
+            // 모달 상태 초기화
             setModalStates((prev) => ({
                 ...prev,
                 [askId]: {
                     isOpen: false,
                     selectedRequest: null,
-                    comment: '',
+                    comment: null,
                     imagePreview: null,
                 },
             }));
 
             if (shouldRefresh) {
-                // 즉시 해당 미션 정보를 업데이트
+                // 등록 성공 시 업데이트
                 await updateSingleMission(askId);
+            } else {
+                // 취소 시에도 isRegistered 상태를 false로 유지
+                // 이렇게 하면 '작성하기' 버튼이 계속 보이게 됨
+                setUpdatedRequests((prev) =>
+                    prev.map((req) =>
+                        req.id === askId
+                            ? {
+                                  ...req,
+                                  isRegistered: false, // 핵심 수정 부분
+                                  isTemporarilyHidden: false,
+                              }
+                            : req,
+                    ),
+                );
             }
         },
         [],
@@ -169,7 +189,8 @@ export default function RequestListAccordion({
                                                 <strong>{request.ask}</strong>
                                             </p>
                                             {canRegister &&
-                                                !request.isRegistered && (
+                                                (!request.isRegistered ||
+                                                    request.isTemporarilyHidden) && (
                                                     <button
                                                         onClick={() =>
                                                             handleRegisterRequest(
@@ -196,7 +217,7 @@ export default function RequestListAccordion({
                                                     </div>
                                                 )}
                                                 {request.comment && (
-                                                    <p className="text-body-s text-gray-700 flex-1 line-clamp-3">
+                                                    <p className="text-body-s text-gray-700 flex-1">
                                                         {request.comment}
                                                     </p>
                                                 )}
@@ -214,8 +235,8 @@ export default function RequestListAccordion({
                 <MissionRecordModal
                     key={request.id}
                     isOpen={modalStates[request.id]?.isOpen || false}
-                    onClose={(shouldRefresh) =>
-                        handleCloseModal(request.id, shouldRefresh)
+                    onClose={(shouldRefresh = false) =>
+                        handleCloseModal(request.id, shouldRefresh === true)
                     }
                     askId={request.id}
                 />

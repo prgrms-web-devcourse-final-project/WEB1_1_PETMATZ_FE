@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 interface RecordModalProps {
     isOpen: boolean;
-    onClose: (shouldRefresh?: any) => void;
+    onClose: (shouldRefresh?: boolean) => void;
     askId: number;
 }
 
@@ -152,7 +152,7 @@ export default function MissionRecordModal({
                         <div className="flex gap-4 justify-center mt-4">
                             <button
                                 type="button"
-                                onClick={onClose}
+                                onClick={() => onClose(false)}
                                 className="px-6 py-2 bg-gray-200 rounded-lg text-gray-600"
                             >
                                 취소
