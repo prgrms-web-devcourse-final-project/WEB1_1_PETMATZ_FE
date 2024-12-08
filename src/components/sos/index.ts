@@ -6,5 +6,4 @@ export { default as PaymentSection } from './forms/PaymentSection';
 export { default as PaymentInput } from './forms/PaymentInput';
 export { default as PaymentTypeSelect } from './forms/PaymentTypeSelect';
 export { default as SOSCard } from './SOSCard';
-export { default as SOSTabMenu } from './SOSTabMenu';
 export { default as SOSNonContent } from './SOSNonContent';
