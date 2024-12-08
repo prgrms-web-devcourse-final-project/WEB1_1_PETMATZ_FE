@@ -7,12 +7,14 @@ import { useCustomToast } from '@/hooks';
 import { ToastAnchor } from '@/components/common';
 import Loading from '@/components/common/Loading';
 import { editMyProfileInfo, getMyProfileInfo } from '@/hooks/api/user';
+import { httpForImage } from '@/hooks/api/base';
+import { BaseApiResponse } from '@/types/baseResponse';
 
 export default function ProfileEdit() {
     const { showToast } = useCustomToast();
     const navigate = useFadeNavigate();
 
-    const [_, setImg] = useState<File | null>(null);
+    const [imgFile, setImg] = useState<File | null>(null);
     const [nickname, setNickname] = useState('');
     const [, setRegion] = useState('');
     const [introduction, setIntroduction] = useState('');
@@ -40,35 +42,6 @@ export default function ProfileEdit() {
             const response = await getMyProfileInfo();
             if (response.ok) {
                 const profile = response.data;
-
-                // if (response.data.imgURL !== '') {
-                //     const id = response.data.id!;
-                //     const imgURL = response.data.imgURL!;
-                //     const img = new FormData();
-                //     img.append('file', imgFile!);
-                //     const type = 'U';
-
-                //     const result = await putImageToS3({
-                //         id,
-                //         imgURL,
-                //         img,
-                //         type,
-                //     });
-
-                //     if (result) {
-                //         setSuccess(true);
-                //         setTimeout(() => {
-                //             navigate('/login');
-                //         }, 3000);
-                //     } else {
-                //         showToast('회원 등록에 실패했습니다!', 'warning');
-                //     }
-                // } else {
-                //     setSuccess(true);
-                //     setTimeout(() => {
-                //         navigate('/login');
-                //     }, 3000);
-                // }
 
                 // 상태 초기화
                 setNickname(profile.nickname || '');
@@ -104,13 +77,25 @@ export default function ProfileEdit() {
         });
 
         if (response.ok) {
-            console.log('프로필 업데이트 성공:', response.message);
-            showToast('프로필 수정완료', 'success');
-            setTimeout(() => {
-                navigate(-1);
-            }, 2000);
+            if (response.resultImgURL !== '') {
+                const imgURL = response.resultImgURL;
+                const img = imgFile!;
+
+                const result = await httpForImage.put<BaseApiResponse, File>(
+                    imgURL,
+                    img,
+                );
+
+                if (result.ok) {
+                    showToast('프로필 업데이트에 성공했습니다!', 'success');
+                } else {
+                    showToast('이미지 업로드를 실패했습니다!', 'warning');
+                }
+            } else {
+                showToast('프로필 업데이트에 성공했습니다!', 'success');
+            }
         } else {
-            console.error('프로필 업데이트 실패:', response.message);
+            showToast('프로필 업데이트에 실패했습니다!', 'warning');
         }
     }, [nickname, preferredSizes, introduction, careAvailable, navigate]);
 
