@@ -66,7 +66,7 @@ interface PetInfo {
 
 // 미션 요청 정보 타입
 interface PetMissionAskInfo {
-    id: number | null;
+    id: number;
     comment: string | null;
     ask: string;
     imgURL: string | null;
@@ -105,11 +105,12 @@ interface MissionInfo {
 }
 
 interface Request {
-    isRegistered: any;
     id: number;
     ask: string;
     comment?: string | null;
     imgURL?: string | null;
+    isRegistered?: boolean;
+    isTemporarilyHidden?: boolean;
 }
 
 interface RequestListAccordionProps {
