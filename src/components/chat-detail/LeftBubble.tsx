@@ -40,12 +40,12 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                                 other.profileURL || 'profile1',
                             )}
                         />
-                        <div className="max-w-[238px] p-[16px] bg-violet-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-br-2xl flex items-center gap-[10px]">
+                        <div className="max-w-[238px] p-[16px] bg-gray-200 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-br-2xl flex items-center gap-[10px]">
                             <div className="flex flex-col justify-center gap-[2px]">
-                                <span className="text-gray-100 text-label-m font-extrabold">
+                                <span className="text-gray-900 text-label-m font-extrabold">
                                     부탁 전송완료
                                 </span>
-                                <span className="text-detail text-violet-300">
+                                <span className="text-detail text-gray-500">
                                     멍멍이 부탁을 전송했어요!
                                 </span>
                             </div>
@@ -60,9 +60,9 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                                 onClick={() =>
                                     navigate(`/please/${message.msg}`)
                                 }
-                                className="flex items-center justify-center w-[24px] h-[24px] p-[5px] bg-violet-400 rounded-full cursor-pointer hover:bg-violet-600 active:bg-violet-600"
+                                className="flex items-center justify-center w-[24px] h-[24px] p-[5px] bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 active:bg-gray-400"
                             >
-                                <ArrowRightIcon className="text-violet-50" />
+                                <ArrowRightIcon className="text-gray-50" />
                             </div>
                         </div>
                     </div>
@@ -83,12 +83,12 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                                 other.profileURL || 'profile1',
                             )}
                         />
-                        <div className="max-w-[238px] p-[16px] bg-violet-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-br-2xl flex items-center gap-[10px]">
+                        <div className="max-w-[238px] p-[16px] bg-gray-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-br-2xl flex items-center gap-[10px]">
                             <div className="flex flex-col justify-center gap-[2px]">
                                 <span className="text-gray-100 text-label-m font-extrabold">
                                     돌봄완료
                                 </span>
-                                <span className="text-detail text-violet-300">
+                                <span className="text-detail text-gray-300">
                                     멍멍이 돌봄이 완료되었어요!
                                 </span>
                             </div>
@@ -103,9 +103,9 @@ export default function LeftBubble({ other, message }: LeftBubbleProps) {
                                 onClick={() =>
                                     navigate(`/please/${message.msg}`)
                                 }
-                                className="flex items-center justify-center w-[24px] h-[24px] p-[5px] bg-violet-400 rounded-full cursor-pointer hover:bg-violet-600 active:bg-violet-600"
+                                className="flex items-center justify-center w-[24px] h-[24px] p-[5px] bg-gray-400 rounded-full cursor-pointer hover:bg-gray-600 active:bg-gray-600"
                             >
-                                <ArrowRightIcon className="text-violet-50" />
+                                <ArrowRightIcon className="text-gray-50" />
                             </div>
                         </div>
                     </div>
