@@ -1,5 +1,4 @@
 import { useFadeNavigate } from '@/hooks';
-import Profile1 from '@/assets/images/profile/profile1.svg?react';
 import MaleIcon from '@/assets/images/gender/male.svg?react';
 import FemaleIcon from '@/assets/images/gender/female.svg?react';
 
@@ -109,7 +108,7 @@ export default function DogCard({
             {edit && (
                 <button
                     className="mt-4 text-sm text-blue-500 absolute right-6 top-0"
-                    onClick={() => navigate(`/dog-edit/${id}`)}
+                    onClick={() => navigate(`/edit-dog/${id}`)}
                 >
                     수정
                 </button>
