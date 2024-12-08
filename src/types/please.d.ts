@@ -110,7 +110,7 @@ interface Request {
 }
 
 interface RequestListAccordionProps {
-    petMissionAskInfos: Request[];
+    petMissionAskInfos: PetMissionAskInfo[];
     status: string;
     userId?: number;
     receiverId?: number;
