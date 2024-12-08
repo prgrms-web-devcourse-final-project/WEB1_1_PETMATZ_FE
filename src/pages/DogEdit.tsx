@@ -143,11 +143,8 @@ export default function DogEdit() {
                     imgURL,
                     imgFile,
                 );
-                if (res.ok)
-                    showToast('강아지 정보가 업데이트 되었습니다.', 'success');
-                else {
+                if (!res.ok)
                     showToast('이미지 업로드에 실패했습니다.', 'warning');
-                }
             }
 
             showToast('강아지 정보가 업데이트 되었습니다.', 'success');
