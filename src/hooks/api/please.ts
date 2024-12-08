@@ -70,3 +70,19 @@ export const getMissionAnswerInfo = async (
     await http.get<MissionAnswerInfoResponse>(
         `/api/v1/pet/mission/comment/answer/info?answerId=${answerId}`,
     );
+
+/**
+ * 멍멍이 미션의 상태를 변경합니다.
+ * @param petMissionId 미션 ID
+ * @param missionStatusZip 변경할 상태 ('BEF' | 'INP' | 'AFT')
+ * @returns API 응답
+ */
+export const updateMissionStatus = async (
+    petMissionId: number,
+    missionStatusZip: 'BEF' | 'INP' | 'AFT',
+): Promise<void> => {
+    return await http.put('/api/v1/pet/mission', {
+        petMissionId,
+        missionStatusZip,
+    });
+};
