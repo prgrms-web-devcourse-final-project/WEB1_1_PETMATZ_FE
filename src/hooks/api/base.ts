@@ -154,6 +154,7 @@ export const httpForImage = {
             const response = await serviceForImage.put<T>(url, data, {
                 headers: {
                     'Content-Type': data.type, // 이미지 파일의 MIME 타입 설정
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
                 },
             });
             return {
