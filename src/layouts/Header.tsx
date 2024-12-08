@@ -9,14 +9,19 @@ import { useFadeNavigate } from '@/hooks';
 import ExitIcon from '@/assets/images/header/exit.svg?react';
 import ProfileIcon from '@/assets/images/header/profile.svg?react';
 import HeartIcon from '@/assets/images/profile/heart.svg?react';
+import { postLogout } from '@/hooks/api/auth';
 
 export default function Header() {
     const { title } = useTitleStore();
     const { user } = useUserStore();
     const navigate = useFadeNavigate();
 
-    const handleClickLogout = () => {
-        // 로그아웃 로직
+    const handleClickLogout = async () => {
+        const { ok } = await postLogout();
+
+        if (!ok) return;
+
+        navigate('/');
     };
 
     return (
