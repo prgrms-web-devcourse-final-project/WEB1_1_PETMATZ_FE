@@ -9,3 +9,4 @@ export { default as ImageSelectBox } from './ImageSelectBox';
 export { default as MultiSelectTag } from './MultiSelectTag';
 export { default as DogCard } from './DogCard';
 export { default as PageNotFound } from './PageNotFound';
+export { default as TabMenu } from './TabMenu';

@@ -27,7 +27,7 @@ export default function Chat() {
 
     return (
         <main className="flex flex-col h-full overflow-hidden bg-gray-100">
-            <div className="flex flex-col h-full overflow-y-auto">
+            <div className="flex flex-col h-full overflow-y-auto divide-y-1 divide-point-100">
                 {isLoading ? (
                     <Loading />
                 ) : chatRoomList.length > 0 ? (
