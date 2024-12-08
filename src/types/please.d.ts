@@ -27,20 +27,28 @@ interface CreatePleaseApiResponse extends BaseApiResponse {
     };
 }
 
+interface IPleaseItem {
+    missionId: number;
+    comment: string[];
+    petMissionStarted: string;
+    petMissionEnd: string;
+    status: 'BEF' | 'INP' | 'AFT';
+    petInfo: {
+        petId: number;
+        imgURL: string;
+    }[];
+    petMissionUsers: {
+        roleType: 'DOL' | 'MAL';
+        userId: number;
+        userNickname: string;
+        userProfileURL: string;
+    }[];
+}
+
 // GET	MissionList
 interface PleaseListApiResponse extends BaseApiResponse {
     data: {
-        result: {
-            missionId: number;
-            comment: string[];
-            petMissionStarted: string;
-            petMissionEnd: string;
-            status: 'BEF' | 'INP' | 'AFT';
-            petInfo: {
-                petId: number;
-                imgURL: string;
-            };
-        };
+        result: IPleaseItem[];
     };
 }
 
@@ -129,4 +137,5 @@ export type {
     CreateMissionCommentRequest,
     CreateMissionCommentResponse,
     PleaseListApiResponse,
+    IPleaseItem,
 };
