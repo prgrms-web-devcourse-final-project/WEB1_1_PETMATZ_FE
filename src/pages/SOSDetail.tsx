@@ -163,7 +163,7 @@ export default function SOSDetail() {
                     <div className="flex-1 flex flex-col border-t-2 border-point-500">
                         <div className="flex items-center gap-[4px] p-[8px] bg-point-50 border-b-1 border-point-200">
                             <CalendarIcon className="w-[20px] h-[20px]" />
-                            <div className="flex flex-col text-gray-500 text-label-m">
+                            <div className="flex flex-col text-gray-500 text-label-m font-extrabold">
                                 <span>
                                     {formatDateWithTime(sosDetails.startDate)}
                                 </span>
