@@ -12,7 +12,7 @@ export default function ProfileEdit() {
     const { showToast } = useCustomToast();
     const navigate = useFadeNavigate();
 
-    const [imgFile, setImg] = useState<File | null>(null);
+    const [_, setImg] = useState<File | null>(null);
     const [nickname, setNickname] = useState('');
     const [, setRegion] = useState('');
     const [introduction, setIntroduction] = useState('');

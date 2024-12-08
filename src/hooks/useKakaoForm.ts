@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import useFadeNavigate from './useFadeNavigate';
 import { useCustomToast } from '@/components/common';
 import { postkakaoSignup } from './api/user';
-import { putImageToS3 } from './api/auth';
+// import { putImageToS3 } from './api/auth';
 import { useUserStore } from '@/stores';
 /**
  * Kakao Signup form types
@@ -98,7 +98,7 @@ export default function useKakaoSignupForm() {
     const [showModal, setShowModal] = useState(false);
     const { showToast, isToastActive } = useCustomToast();
     const navigate = useFadeNavigate();
-    const [imgFile, setImg] = useState<File | null>(null);
+    const [_, setImg] = useState<File | null>(null);
 
     /**
      * Handles form submission
