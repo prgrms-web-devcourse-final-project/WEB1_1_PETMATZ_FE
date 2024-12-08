@@ -1,5 +1,5 @@
+import ReactDOM from 'react-dom';
 import { Loading, PageNotFound } from '@/components/common';
-
 import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
@@ -8,6 +8,8 @@ import Star from '@/assets/images/profile/star.svg?react';
 import Lvl from '@/assets/images/profile/lvl.svg?react';
 import Heart from '@/assets/images/profile/heart.svg?react';
 import Unheart from '@/assets/images/profile/unheart.svg?react';
+import LvlInfoBtn from '@/assets/images/lvlInfoBtn.svg?react';
+import FootCircle from '@/assets/images/footCircle.svg?react';
 import { DogList, Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
@@ -26,6 +28,7 @@ export default function Profile() {
     const [like, setLike] = useState(false);
     const { setTitle } = useTitleStore();
     const [showMenu, setShowMenu] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const userId = id || '';
     const isMyProfile = id == user?.id;
@@ -91,6 +94,11 @@ export default function Profile() {
         });
     }, [data]);
 
+    const handleModalBtn = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsOpen((prev) => !prev);
+    }, []);
+
     if (userLoading || dogsLoading || !user) {
         return <Loading />;
     }
@@ -100,6 +108,79 @@ export default function Profile() {
     }
 
     const profileData = data.data;
+
+    const modalContent = (
+        <div
+            onClick={handleModalBtn}
+            className="fixed inset-0 mx-auto flex justify-center items-center z-50 w-full min-w-[360px] max-w-[768px]"
+        >
+            <div className="absolute inset-0 bg-dim opacity-90"></div>
+            <section
+                onClick={(e) => e.stopPropagation()}
+                className="absolute rounded-2xl bg-white p-6 flex flex-col gap-4"
+            >
+                <div className="flex flex-col items-center gap-1">
+                    <FootCircle className="text-point-500" />
+                    <div className="flex flex-col items-center gap-2">
+                        <h1 className="text-body-xl text-gray-900 font-extrabold">
+                            돌봄등급
+                        </h1>
+                        <div className="flex flex-col items-center text-label-m text-gray-500">
+                            <span>돌봄 완료 횟수에 따른</span>
+                            <span>등급을 부여 받게 되요!!</span>
+                        </div>
+                    </div>
+                </div>
+                <ul className="flex flex-col gap-2">
+                    <li className="px-[18.5px] py-[10px] flex gap-[10px] justify-center items-center">
+                        <Lvl className="text-[#FFE53E]" />
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            펫비기너
+                        </span>
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            0~3회
+                        </span>
+                    </li>
+                    <li className="px-[18.5px] py-[10px] flex gap-[10px] justify-center items-center">
+                        <Lvl className="text-[#FFBF3E]" />
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            펫프렌드
+                        </span>
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            4~12회
+                        </span>
+                    </li>
+                    <li className="px-[18.5px] py-[10px] flex gap-[10px] justify-center items-center">
+                        <Lvl className="text-[#BCFF3E]" />
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            펫패밀리
+                        </span>
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            13~25회
+                        </span>
+                    </li>
+                    <li className="px-[18.5px] py-[10px] flex gap-[10px] justify-center items-center">
+                        <Lvl className="text-[#3EB2FF]" />
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            펫메이트
+                        </span>
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            26~49회
+                        </span>
+                    </li>
+                    <li className="px-[18.5px] py-[10px] flex gap-[10px] justify-center items-center">
+                        <Lvl className="text-point-500" />
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            펫마스터
+                        </span>
+                        <span className="text-body-s text-gray-900 font-semibold">
+                            50회 이상
+                        </span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    );
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
@@ -152,7 +233,7 @@ export default function Profile() {
                                                 26
                                               ? 'text-[#3EB2FF]'
                                               : profileData.recommendationCount >=
-                                                  16
+                                                  13
                                                 ? 'text-[#BCFF3E]'
                                                 : profileData.recommendationCount >=
                                                     4
@@ -160,11 +241,27 @@ export default function Profile() {
                                                   : 'text-[#FFE53E]'
                                     }
                                 />
-                                <span className="text-label-s text-gray-500 font-semibold">
-                                    돌봄등급
-                                </span>
+                                <div
+                                    onClick={handleModalBtn}
+                                    className="flex cursor-pointer"
+                                >
+                                    <span className="text-label-s text-gray-500 font-semibold">
+                                        돌봄등급
+                                    </span>
+                                    <LvlInfoBtn className="text-gray-500" />
+                                </div>
                                 <span className="text-label-l text-point-800 font-extrabold">
-                                    마스터
+                                    {profileData.careCompletionCount >= 50
+                                        ? '펫마스터'
+                                        : profileData.careCompletionCount >= 26
+                                          ? '펫메이트'
+                                          : profileData.careCompletionCount >=
+                                              13
+                                            ? '펫패밀리'
+                                            : profileData.careCompletionCount >=
+                                                4
+                                              ? '펫프렌드'
+                                              : '펫비기너'}
                                 </span>
                             </article>
                             {!isMyProfile && (
@@ -244,6 +341,7 @@ export default function Profile() {
                     />
                 </div>
             </div>
+            {isOpen && ReactDOM.createPortal(modalContent, document.body)}
         </div>
     );
 }

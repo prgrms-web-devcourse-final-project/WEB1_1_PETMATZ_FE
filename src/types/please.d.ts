@@ -67,9 +67,9 @@ interface PetInfo {
 // 미션 요청 정보 타입
 interface PetMissionAskInfo {
     id: number;
-    comment: string | null;
+    comment: string;
     ask: string;
-    imgURL: string | null;
+    imgURL: string;
 }
 
 interface PetMissionInfoResponse extends BaseApiResponse {

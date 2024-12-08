@@ -149,7 +149,7 @@ export const http = {
 };
 
 export const httpForImage = {
-    put: async function put<T, D>(url: string, data: File): Promise<T> {
+    put: async function put<T, _>(url: string, data: File): Promise<T> {
         try {
             const response = await serviceForImage.put<T>(url, data, {
                 headers: {

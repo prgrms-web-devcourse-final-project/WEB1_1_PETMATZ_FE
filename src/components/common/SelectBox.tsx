@@ -40,11 +40,11 @@ export default function SelectBox({
     const modalContent = (
         <div
             onClick={toggleSelectBox}
-            className="fixed mx-auto inset-0 z-50 bg-dim opacity-90 flex justify-center min-w-[360px] max-w-[768px] cursor-pointer"
+            className="fixed mx-auto inset-0 z-50 bg-[rgba(0,0,0,0.8)] flex justify-center min-w-[360px] max-w-[768px] cursor-pointer"
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="absolute w-full bottom-0 rounded-t-2xl bg-white opacity-100"
+                className="absolute w-full bottom-0 rounded-t-2xl bg-white"
             >
                 <div className="rounded-t-2xl text-body-m text-gray-900 font-extrabold h-[52px] flex items-center justify-center">{`${label}(을/를) 선택해주세요.`}</div>
                 <ul className="overflow-y-auto max-h-[192px]">

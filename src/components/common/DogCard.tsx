@@ -110,7 +110,7 @@ export default function DogCard({
             {edit && (
                 <button
                     className="mt-4 text-sm text-blue-500 absolute right-6 top-0"
-                    onClick={() => navigate(`/dog-edit/${id}`)}
+                    onClick={() => navigate(`/edit-dog/${id}`)}
                 >
                     수정
                 </button>

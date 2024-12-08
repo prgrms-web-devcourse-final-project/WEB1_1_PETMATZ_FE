@@ -12,7 +12,7 @@ export default function ProfileEdit() {
     const { showToast } = useCustomToast();
     const navigate = useFadeNavigate();
 
-    const [imgFile, setImg] = useState<File | null>(null);
+    const [_, setImg] = useState<File | null>(null);
     const [nickname, setNickname] = useState('');
     const [, setRegion] = useState('');
     const [introduction, setIntroduction] = useState('');
@@ -105,7 +105,10 @@ export default function ProfileEdit() {
 
         if (response.ok) {
             console.log('프로필 업데이트 성공:', response.message);
-            navigate(-1);
+            showToast('프로필 수정완료', 'success');
+            setTimeout(() => {
+                navigate(-1);
+            }, 2000);
         } else {
             console.error('프로필 업데이트 실패:', response.message);
         }
@@ -266,14 +269,7 @@ export default function ProfileEdit() {
                         maxLength={50}
                     />
                 </div>
-                <div className="flex items-center justify-center mb-8">
-                    <button
-                        onClick={handleDeleteAccountBtn}
-                        className="text-label-l  underline text-gray-400 p-1"
-                    >
-                        회원탈퇴
-                    </button>
-                </div>
+
                 {/* Submit Button */}
                 <ToastAnchor>
                     <button
@@ -288,6 +284,14 @@ export default function ProfileEdit() {
                         수정 완료
                     </button>
                 </ToastAnchor>
+                <div className="flex items-center justify-center mt-8">
+                    <button
+                        onClick={handleDeleteAccountBtn}
+                        className="text-label-l  underline text-gray-400 p-1"
+                    >
+                        회원탈퇴
+                    </button>
+                </div>
             </div>
         </div>
     );
