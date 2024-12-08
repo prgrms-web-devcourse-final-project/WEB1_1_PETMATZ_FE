@@ -1,5 +1,5 @@
+import ReactDOM from 'react-dom';
 import { Loading, PageNotFound } from '@/components/common';
-
 import { useTitleStore, useUserStore } from '@/stores';
 import { ProfileApiResponse } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
@@ -8,6 +8,7 @@ import Star from '@/assets/images/profile/star.svg?react';
 import Lvl from '@/assets/images/profile/lvl.svg?react';
 import Heart from '@/assets/images/profile/heart.svg?react';
 import Unheart from '@/assets/images/profile/unheart.svg?react';
+import LvlInfoBtn from '@/assets/images/lvlInfoBtn.svg?react';
 import { DogList, Label, Tag } from '@/components/profile';
 import { useCallback, useEffect, useState } from 'react';
 import { useFadeNavigate } from '@/hooks';
@@ -26,6 +27,7 @@ export default function Profile() {
     const [like, setLike] = useState(false);
     const { setTitle } = useTitleStore();
     const [showMenu, setShowMenu] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const userId = id || '';
     const isMyProfile = id == user?.id;
@@ -91,6 +93,11 @@ export default function Profile() {
         });
     }, [data]);
 
+    const handleModalBtn = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsOpen((prev) => !prev);
+    }, []);
+
     if (userLoading || dogsLoading || !user) {
         return <Loading />;
     }
@@ -100,6 +107,21 @@ export default function Profile() {
     }
 
     const profileData = data.data;
+
+    const modalContent = (
+        <div
+            onClick={handleModalBtn}
+            className="fixed inset-0 mx-auto z-50 w-full min-w-[360px] max-w-[768px]"
+        >
+            <div className="absolute inset-0 bg-dim opacity-90"></div>
+            <div
+                onClick={(e) => e.stopPropagation()}
+                className="absolute m-auto rounded-t-2xl bg-white"
+            >
+                모달
+            </div>
+        </div>
+    );
 
     return (
         <div className="bg-gray-100 h-full overflow-y-auto">
@@ -160,11 +182,27 @@ export default function Profile() {
                                                   : 'text-[#FFE53E]'
                                     }
                                 />
-                                <span className="text-label-s text-gray-500 font-semibold">
-                                    돌봄등급
-                                </span>
+                                <div
+                                    onClick={handleModalBtn}
+                                    className="flex cursor-pointer"
+                                >
+                                    <span className="text-label-s text-gray-500 font-semibold">
+                                        돌봄등급
+                                    </span>
+                                    <LvlInfoBtn className="text-gray-500" />
+                                </div>
                                 <span className="text-label-l text-point-800 font-extrabold">
-                                    마스터
+                                    {profileData.careCompletionCount >= 50
+                                        ? '펫마스터'
+                                        : profileData.careCompletionCount >= 26
+                                          ? '펫메이트'
+                                          : profileData.careCompletionCount >=
+                                              16
+                                            ? '펫패밀리'
+                                            : profileData.careCompletionCount >=
+                                                4
+                                              ? '펫프렌드'
+                                              : '펫비기너'}
                                 </span>
                             </article>
                             {!isMyProfile && (
@@ -244,6 +282,7 @@ export default function Profile() {
                     />
                 </div>
             </div>
+            {isOpen && ReactDOM.createPortal(modalContent, document.body)}
         </div>
     );
 }
