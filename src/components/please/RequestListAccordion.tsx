@@ -4,6 +4,8 @@ import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
 import { Request, RequestListAccordionProps } from '@/types/please';
 import MissionRecordModal from './MissionRecordModal';
 import { getMissionAnswerInfo } from '@/hooks/api/please';
+import { usePleaseStore } from '@/stores';
+import { useParams } from 'react-router-dom';
 interface ModalState {
     isOpen: boolean;
     selectedRequest: Request | null;
@@ -17,6 +19,7 @@ export default function RequestListAccordion({
     userId,
     receiverId,
 }: RequestListAccordionProps) {
+    const { id: missionId } = useParams<{ id: string }>();
     const [showMenu, setShowMenu] = useState(false);
     const [modalStates, setModalStates] = useState<Record<number, ModalState>>(
         {},
@@ -53,7 +56,6 @@ export default function RequestListAccordion({
         }
     }, []);
 
-    // 개별 미션 정보를 업데이트하는 함수
     const updateSingleMission = async (askId: number) => {
         const response = await getMissionAnswerInfo(askId.toString());
 
@@ -72,6 +74,15 @@ export default function RequestListAccordion({
                         : req,
                 ),
             );
+
+            // 완료 상태 즉시 업데이트
+            usePleaseStore
+                .getState()
+                .setMissionRequestCompletion(
+                    Number(missionId),
+                    askId,
+                    Boolean(response.data.comment || response.data.imgURL),
+                );
         }
     };
 
@@ -91,23 +102,24 @@ export default function RequestListAccordion({
             if (shouldRefresh) {
                 // 등록 성공 시 업데이트
                 await updateSingleMission(askId);
-            } else {
-                // 취소 시에도 isRegistered 상태를 false로 유지
-                // 이렇게 하면 '작성하기' 버튼이 계속 보이게 됨
-                setUpdatedRequests((prev) =>
-                    prev.map((req) =>
-                        req.id === askId
-                            ? {
-                                  ...req,
-                                  isRegistered: false, // 핵심 수정 부분
-                                  isTemporarilyHidden: false,
-                              }
-                            : req,
-                    ),
+
+                // 요청의 실제 완료 상태를 기반으로 완료 여부 결정
+                const response = await getMissionAnswerInfo(askId.toString());
+                const isRequestCompleted = Boolean(
+                    response.data?.comment || response.data?.imgURL,
                 );
+
+                // 완료 상태를 안전하게 업데이트
+                usePleaseStore
+                    .getState()
+                    .setMissionRequestCompletion(
+                        Number(missionId),
+                        askId,
+                        isRequestCompleted,
+                    );
             }
         },
-        [],
+        [missionId],
     );
 
     return (
