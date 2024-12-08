@@ -66,10 +66,10 @@ interface PetInfo {
 
 // 미션 요청 정보 타입
 interface PetMissionAskInfo {
-    id: number | null;
-    comment: string | null;
+    id: number;
+    comment: string;
     ask: string;
-    imgURL: string | null;
+    imgURL: string;
 }
 
 interface PetMissionInfoResponse extends BaseApiResponse {
@@ -110,7 +110,7 @@ interface Request {
 }
 
 interface RequestListAccordionProps {
-    petMissionAskInfos: PetMissionAskInfo[];
+    petMissionAskInfos: Request[];
     status: string;
     userId?: number;
     receiverId?: number;
