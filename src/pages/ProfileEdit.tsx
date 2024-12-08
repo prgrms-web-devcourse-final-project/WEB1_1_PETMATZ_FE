@@ -9,6 +9,7 @@ import Loading from '@/components/common/Loading';
 import { editMyProfileInfo, getMyProfileInfo } from '@/hooks/api/user';
 import { httpForImage } from '@/hooks/api/base';
 import { BaseApiResponse } from '@/types/baseResponse';
+import { useUserStore } from '@/stores';
 
 export default function ProfileEdit() {
     const { showToast } = useCustomToast();
@@ -24,6 +25,7 @@ export default function ProfileEdit() {
     const [careAvailable, setIsCareAvailable] = useState(false);
     const [profileImg, setProfileImg] = useState('');
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
+    const { user } = useUserStore();
 
     const SIZE_LABELS: Record<'SMALL' | 'MEDIUM' | 'LARGE', string> = {
         SMALL: '소형견',
@@ -60,8 +62,8 @@ export default function ProfileEdit() {
     }, []);
 
     const handleBackBtn = useCallback(() => {
-        navigate(-1);
-    }, [navigate]);
+        navigate(`/profile/${user?.id}`);
+    }, [navigate, user]);
 
     const handleDeleteAccountBtn = useCallback(() => {
         navigate('/delete-account');
@@ -76,15 +78,18 @@ export default function ProfileEdit() {
             profileImg,
         });
 
+        console.log('프로필 수정 api 응답 : ', response);
+
         if (response.ok) {
-            if (response.resultImgURL !== '') {
-                const imgURL = response.resultImgURL;
+            if (response.data.resultImgURL !== '') {
+                const imgURL = response.data.resultImgURL;
                 const img = imgFile!;
 
                 const result = await httpForImage.put<BaseApiResponse, File>(
                     imgURL,
                     img,
                 );
+                console.log('이미지 업로드 api 응답 : ', result);
 
                 if (result.ok) {
                     showToast('프로필 업데이트에 성공했습니다!', 'success');
@@ -97,7 +102,14 @@ export default function ProfileEdit() {
         } else {
             showToast('프로필 업데이트에 실패했습니다!', 'warning');
         }
-    }, [nickname, preferredSizes, introduction, careAvailable, navigate]);
+    }, [
+        nickname,
+        preferredSizes,
+        introduction,
+        careAvailable,
+        navigate,
+        imgFile,
+    ]);
 
     if (isLoading) {
         return (
