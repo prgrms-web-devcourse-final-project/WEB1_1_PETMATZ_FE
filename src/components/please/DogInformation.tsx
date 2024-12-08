@@ -7,7 +7,7 @@ import { formatDate, formatTime } from '@/utils';
 import { MissionInfo } from '@/types/please';
 interface DogInfoProps {
     missionInfo: MissionInfo;
-    status: string;
+    status: 'BEF' | 'INP' | 'AFT';
 }
 
 export default function DogInformation({ missionInfo, status }: DogInfoProps) {
@@ -78,10 +78,22 @@ export default function DogInformation({ missionInfo, status }: DogInfoProps) {
                     </div>
                 </div>
 
-                {status === 'INP' && (
-                    <div className="bg-point-50 rounded-lg p-4 mt-6">
-                        <p className="text-point-500 text-body-s font-semibold">
-                            현재 돌봄이 진행중입니다
+                {(status === 'INP' || status === 'AFT') && (
+                    <div
+                        className={`rounded-lg p-4 mt-6 ${
+                            status === 'INP' ? 'bg-point-50' : 'bg-gray-100'
+                        }`}
+                    >
+                        <p
+                            className={`text-body-s font-semibold ${
+                                status === 'INP'
+                                    ? 'text-point-500'
+                                    : 'text-gray-500'
+                            }`}
+                        >
+                            {status === 'INP'
+                                ? '현재 돌봄이 진행중입니다'
+                                : '돌봄이 완료되었습니다'}
                         </p>
                     </div>
                 )}
