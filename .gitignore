@@ -24,3 +24,5 @@ dist-ssr
 
 # Inviroment
 .env
+
+dev-dist
