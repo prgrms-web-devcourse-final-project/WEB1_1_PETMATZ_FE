@@ -13,7 +13,6 @@ interface IMatch {
 
 // GET MatchList
 interface MatchListApiRequest {
-    userId?: number;
     page?: number;
     size?: number;
 }

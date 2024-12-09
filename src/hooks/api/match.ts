@@ -11,13 +11,12 @@ import { BaseApiResponse } from '@/types/baseResponse';
  * 매칭 리스트를 가져옵니다.
  */
 export const getMatchList = async ({
-    userId,
     page,
     size,
 }: MatchListApiRequest): Promise<MatchListApiResponse> =>
     await http.get<MatchListApiResponse, MatchListApiRequest>(
         '/api/match/showmetz',
-        { userId, page, size },
+        { page, size },
     );
 
 /**
