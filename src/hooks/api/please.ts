@@ -90,3 +90,12 @@ export const updateMissionStatus = async (
         careEmail: receiverEmail,
     });
 };
+
+/**
+ * 돌봄이 추천 API
+ * @param userId 추천할 돌봄이의 사용자 ID
+ * @returns API 응답
+ */
+export const recommendCaregiver = async (userId: number): Promise<void> => {
+    return await http.post('/api/auth/update-recommendation', { userId });
+};

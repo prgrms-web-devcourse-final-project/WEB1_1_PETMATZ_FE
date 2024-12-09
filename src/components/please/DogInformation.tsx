@@ -5,12 +5,21 @@ import 'slick-carousel/slick/slick-theme.css';
 import './DogInformation.css';
 import { formatDate, formatTime } from '@/utils';
 import { MissionInfo } from '@/types/please';
+import { useRecommendation } from '@/hooks/please';
+import Thumb from '@/assets/images/thumb_up.svg?react';
 interface DogInfoProps {
     missionInfo: MissionInfo;
     status: 'BEF' | 'INP' | 'AFT';
+    userId?: number;
 }
 
-export default function DogInformation({ missionInfo, status }: DogInfoProps) {
+export default function DogInformation({
+    missionInfo,
+    status,
+    userId,
+}: DogInfoProps) {
+    const { isRecommended, handleRecommend } = useRecommendation();
+
     const settings = {
         dots: true,
         infinite: false,
@@ -37,6 +46,12 @@ export default function DogInformation({ missionInfo, status }: DogInfoProps) {
 
     const getInputClassName = () => {
         return `input-outline ${status === 'INP' ? 'border-point-300' : ''} flex-1 mr-2 sm:!px-4 px-3`;
+    };
+
+    const onRecommendCaregiver = () => {
+        if (missionInfo.receiverId) {
+            handleRecommend(missionInfo.receiverId);
+        }
     };
 
     return (
@@ -78,7 +93,25 @@ export default function DogInformation({ missionInfo, status }: DogInfoProps) {
                     </div>
                 </div>
 
-                {(status === 'INP' || status === 'AFT') && (
+                {status === 'AFT' && userId === missionInfo.careId && (
+                    <div className="flex items-center justify-center gap-2 mt-4 p-4 bg-point-50 rounded-lg">
+                        <p className="text-body-m text-point-500">
+                            {missionInfo.receiverName} 돌봄이를 추천해주세요!
+                        </p>
+                        <button
+                            onClick={onRecommendCaregiver}
+                            className={`p-2 rounded-full transition-colors duration-300 ${
+                                isRecommended
+                                    ? 'bg-point-600 text-white'
+                                    : 'bg-white text-gray-500 border border-gray-300'
+                            }`}
+                        >
+                            <Thumb size={24} />
+                        </button>
+                    </div>
+                )}
+
+                {status === 'INP' && (
                     <div
                         className={`rounded-lg p-4 mt-6 ${
                             status === 'INP' ? 'bg-point-50' : 'bg-gray-100'
@@ -91,9 +124,7 @@ export default function DogInformation({ missionInfo, status }: DogInfoProps) {
                                     : 'text-gray-500'
                             }`}
                         >
-                            {status === 'INP'
-                                ? '현재 돌봄이 진행중입니다'
-                                : '돌봄이 완료되었습니다'}
+                            현재 돌봄이 진행중입니다
                         </p>
                     </div>
                 )}

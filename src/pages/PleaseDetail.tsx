@@ -167,6 +167,7 @@ export default function PleaseDetail() {
                                         <DogInfoComponent
                                             missionInfo={missionInfo.result}
                                             status={missionStatus}
+                                            userId={missionInfo.result.careId}
                                         />
                                     )}
                                 </motion.div>
