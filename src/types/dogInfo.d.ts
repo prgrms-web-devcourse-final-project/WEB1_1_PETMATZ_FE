@@ -45,6 +45,12 @@ export interface DogProfileRequestBody {
 export interface DogProfileResponse extends BaseApiResponse {
     responseCode: string;
     message: string; // Success message (e.g., "댕댕이 정보가 업데이트 완료되었습니다.")
+    data: {
+        result: {
+            UUID: number;
+            imgURL: string;
+        };
+    };
 }
 
 // 멍멍이 삭제 요청값

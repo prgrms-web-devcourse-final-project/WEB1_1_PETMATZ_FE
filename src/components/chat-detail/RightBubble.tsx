@@ -1,5 +1,5 @@
 import { IChatMessage, IChatUser } from '@/types/chat';
-import { getDefaultProfileImg, utcToLocalDateTime } from '@/utils';
+import { utcToLocalDateTime } from '@/utils';
 
 // SVG
 import ArrowLeftIcon from '@/assets/images/arrow/arrowLeft.svg?react';
@@ -14,17 +14,21 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
     const navigate = useFadeNavigate();
     return (
         <>
-            <div className="flex flex-col items-end gap-[4px]">
-                <div className="flex items-end gap-[8px]">
-                    <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl break-words">
-                        {message.msg}
+            {message.msg_type === 'MSG' && (
+                <div className="flex flex-col items-end gap-[4px]">
+                    <div className="flex items-end gap-[8px]">
+                        <div className="max-w-[238px] py-[12px] px-[16px] bg-point-500 text-gray-100 text-label-l font-semibold rounded-t-2xl rounded-bl-2xl break-words">
+                            {message.msg}
+                        </div>
+                    </div>
+                    <div className="flex items-center text-gray-500 text-label-s gap-[4px]">
+                        <span>{utcToLocalDateTime(message.msgTimestamp)}</span>
+                        <span>
+                            {message.readStatus ? '(읽음)' : '(안읽음)'}
+                        </span>
                     </div>
                 </div>
-                <div className="flex items-center text-gray-500 text-label-s gap-[4px]">
-                    <span>{utcToLocalDateTime(message.msgTimestamp)}</span>
-                    <span>{message.readStatus ? '(읽음)' : '(안읽음)'}</span>
-                </div>
-            </div>
+            )}
             {message.msg_type === 'PLG' && (
                 <div className="flex flex-col items-end gap-[4px]">
                     <div className="flex items-end gap-[8px]">
@@ -39,9 +43,7 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(
-                                    other.profileURL || 'profile1',
-                                )}
+                                src={other.profileURL || ''}
                                 alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div className="flex flex-col justify-center gap-[2px]">
@@ -76,9 +78,7 @@ export default function RightBubble({ other, message }: LeftBubbleProps) {
                             </div>
                             <img
                                 className="w-[36px] h-[36px] rounded-full border-[0.5px] border-gray-200"
-                                src={getDefaultProfileImg(
-                                    other.profileURL || 'profile1',
-                                )}
+                                src={other.profileURL || ''}
                                 alt={`${other.userName}님의 프로필 사진`}
                             />
                             <div className="flex flex-col justify-center gap-[2px]">
