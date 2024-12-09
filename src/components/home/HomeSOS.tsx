@@ -1,10 +1,13 @@
-import ArrowRight from '@/assets/images/intro/arrowRight.svg?react';
-import Profile2 from '@/assets/images/profile/profile2.svg?react';
 import CryDog from '@/assets/images/dogs/dogCry.svg?react';
 import { useFadeNavigate } from '@/hooks';
+import { useCallback } from 'react';
 
 export default function HomeSOS() {
     const navigate = useFadeNavigate();
+
+    const handleSOSBtn = useCallback(() => {
+        navigate('/sos');
+    }, [navigate]);
 
     return (
         <div className=" w-full h-auto">
@@ -12,7 +15,10 @@ export default function HomeSOS() {
                 <h2 className="text-body-xl font-extrabold text-gray-800">
                     도와줘 멍멍
                 </h2>
-                <button className="text-label-m font-semibold text-gray-400">
+                <button
+                    onClick={handleSOSBtn}
+                    className="text-label-m font-semibold text-gray-400"
+                >
                     더보기
                 </button>
             </div>
@@ -24,7 +30,10 @@ export default function HomeSOS() {
                     <p className="text-label-m font-semibold text-gray-600 mb-[18px]">
                         갑자기 맡길 사람이 없다면?
                     </p>
-                    <button className="btn-solid h-[31px] w-[108px] text-label-m font-extrabold">
+                    <button
+                        onClick={handleSOSBtn}
+                        className="btn-solid h-[31px] w-[108px] text-label-m font-extrabold"
+                    >
                         SOS 보내기
                     </button>
                 </div>

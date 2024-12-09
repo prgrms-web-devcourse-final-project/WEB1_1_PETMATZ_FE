@@ -8,28 +8,34 @@ interface PetMissionUser {
     roleType: string;
 }
 
+// `petInfoList` 배열의 요소 타입 정의
 interface PetInfo {
+    age: number;
+    breed: string;
+    gender: 'MALE' | 'FEMALE';
+    neuterYn: '중성' | '미중성';
     petId: number;
-    imgURL: string;
+    petName: string;
+    profileImg?: string; // 이미지가 없는 경우를 대비해 optional로 처리
+    temperament: string;
 }
 
-interface PetMissionResult {
-    petMissionUsers: PetMissionUser[];
-    missionId: number;
-    comment: string[];
-    petMissionStarted: string; // ISO8601 날짜 문자열
-    petMissionEnd: string; // ISO8601 날짜 문자열
+// `result` 배열의 각 요소 타입 정의
+export interface PetMissionResult {
+    comment: string[]; // 댓글 배열
+    petInfoList: PetInfo[]; // 반려동물 정보 리스트
+    petMissionId: number; // 고유 ID
+    roleType: 'MAL' | 'DOL'; // 역할 타입
     status: 'BEF' | 'INP' | 'AFT'; // 상태 값 제한
-    petInfo: PetInfo[];
+    userId: number; // 사용자 ID
 }
 
 // API 응답 타입 정의
 interface MainPageMissionResponse extends BaseApiResponse {
-    path: string;
-    responseCode: string;
-    message: string;
-    result: PetMissionResult[]; // result 배열의 타입 지정
-    timeStamp: string; // ISO8601 날짜 문자열
+    data: {
+        responseCode: string;
+        result: PetMissionResult[]; // result 배열의 타입 지정
+    };
 }
 
 // 랭킹 데이터 타입 정의

@@ -1,17 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
-import { getLikedUserList } from '@/hooks/api/user';
 import { useFadeNavigate } from '@/hooks';
-import { Loading } from '@/components/common';
 import { useCallback } from 'react';
 
-export default function HomeLike() {
-    const navigate = useFadeNavigate();
+interface RankingItem {
+    rank: number; // 순위
+    nickname: string; // 닉네임
+    score: number; // 점수
+    profileImage?: string; // 프로필 이미지 (선택적 속성)
+}
 
-    // API 호출
-    const { data, isLoading } = useQuery({
-        queryKey: ['likedList'],
-        queryFn: () => getLikedUserList(),
-    });
+interface HeartedUser {
+    heartedId: number; // 유저 ID
+    nickname: string; // 닉네임
+    profileImg: string; // 프로필 이미지 URL
+}
+
+interface LikedListData {
+    data: {
+        heartedUsers: HeartedUser[]; // 찜한 돌봄이 리스트
+    };
+}
+
+interface HomeLikeProps {
+    likedListData: LikedListData; // 전체 찜한 리스트 데이터
+}
+
+export default function HomeLike({ likedListData }: HomeLikeProps) {
+    const navigate = useFadeNavigate();
 
     // "더보기" 버튼 클릭 시 전체 찜한 돌봄이 리스트로 이동
     const handleMoreClick = () => {
@@ -26,12 +40,8 @@ export default function HomeLike() {
         [navigate],
     );
 
-    if (isLoading) {
-        return <Loading />;
-    }
-
     // 데이터 뒤에서 4개 가져오기
-    const lastFourHeartedUsers = data?.data.heartedUsers.slice(-4);
+    const lastFourHeartedUsers = likedListData?.data.heartedUsers.slice(-4);
 
     return (
         <div className="bg-gray-50 rounded-lg border border-point-500">

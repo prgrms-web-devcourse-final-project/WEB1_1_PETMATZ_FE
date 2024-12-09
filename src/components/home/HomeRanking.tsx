@@ -1,15 +1,24 @@
 import ArrowRight from '@/assets/images/arrow/arrowRight.svg?react';
 import DogFoot from '@/assets/images/intro/dogFoot.svg?react';
-import { mainTopRanking } from '@/hooks/api/home'; // API 호출 함수
-import { RankingItem, RankingResponse } from '@/types/home'; // 타입 가져오기
+import { RankingItem, RankingResponse } from '@/types/home';
 import Slider from 'react-slick';
-import { useQuery } from '@tanstack/react-query';
+import { useFadeNavigate } from '@/hooks';
+import { useCallback } from 'react';
 
-export default function HomeRanking() {
-    const { data, isLoading } = useQuery<RankingResponse, Error>({
-        queryKey: ['rankingData'], // 캐싱 키
-        queryFn: mainTopRanking, // 데이터 패칭 함수
-    });
+interface HomeRankingProps {
+    rankingData: RankingResponse | undefined;
+}
+
+export default function HomeRanking({ rankingData }: HomeRankingProps) {
+    const navigate = useFadeNavigate();
+
+    const handleMatchBtn = useCallback(() => {
+        navigate('/match');
+    }, [navigate]);
+
+    const handleRankBtn = useCallback(() => {
+        navigate('/ranking');
+    }, [navigate]);
 
     const sliderSettings = {
         vertical: true, // 세로 슬라이드
@@ -21,16 +30,12 @@ export default function HomeRanking() {
         arrows: false, // 화살표 비활성화
         dots: false, // 아래 점 표시 비활성화
     };
-    if (!data?.ok || !data?.data) {
+    if (!rankingData?.ok || !rankingData?.data) {
         return <div>데이터를 가져올 수 없습니다.</div>;
     }
-    const rankingData: RankingItem[] = data.data;
+    const rankDatas: RankingItem[] = rankingData.data;
 
-    if (isLoading) {
-        return <div>로딩 중...</div>;
-    }
-
-    if (!rankingData || rankingData.length === 0) {
+    if (!rankDatas || rankDatas.length === 0) {
         return <div>랭킹 데이터가 없습니다.</div>;
     }
 
@@ -45,7 +50,7 @@ export default function HomeRanking() {
 
             <div className="w-full h-16 rounded-2xl bg-white px-6 mb-4 overflow-hidden">
                 <Slider {...sliderSettings}>
-                    {rankingData.map((rank) => (
+                    {rankDatas.map((rank) => (
                         <div key={rank.userId} className="w-full h-[15px]">
                             <div className="flex w-full justify-between">
                                 <p className="text-label-m font-extrabold text-gray-900">
@@ -60,15 +65,18 @@ export default function HomeRanking() {
                 </Slider>
             </div>
             <div className="flex flex-col gap-4 w-full h-[216px] rounded-2xl bg-white px-6 py-[18px]">
-                <div className="flex justify-between items-center">
+                <button
+                    onClick={handleRankBtn}
+                    className="flex justify-between items-center"
+                >
                     <p className="flex justify-between items-center w-full text-label-m font-extrabold text-gray-700 bg-point-50 px-[18px] py-3 rounded-full cursor-pointer rounded-bl-2xl">
                         우리동네 돌봄이 랭킹 보러가기
                         <ArrowRight className="w-3 h-3" />
                     </p>
-                </div>
+                </button>
                 {/* 랭킹 목록 */}
                 <div className="flex flex-col gap-3 w-full h-[123px]">
-                    {rankingData
+                    {rankDatas
                         .slice(0, 5)
                         .map((rank: RankingItem, index: number) => (
                             <div
@@ -105,7 +113,10 @@ export default function HomeRanking() {
                         ))}
                 </div>
             </div>
-            <div className="flex justify-between items-center w-full h-[83px] bg-point-50 rounded-2xl mt-6 px-6 py-[18px]">
+            <button
+                onClick={handleMatchBtn}
+                className="flex justify-between items-center w-full h-[83px] bg-point-50 rounded-2xl mt-6 px-6 py-[18px]"
+            >
                 <div>
                     <p className="bg-white w-fit px-2 py-1 rounded-[30px] text-label-s font-semibold mb-2 text-gray-900">
                         우리동네 돌봄이 만나기
@@ -115,7 +126,7 @@ export default function HomeRanking() {
                     </p>
                 </div>
                 <DogFoot className="w-[42px] h-[37px]" />
-            </div>
+            </button>
         </div>
     );
 }
