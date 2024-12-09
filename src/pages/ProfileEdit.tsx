@@ -69,6 +69,10 @@ export default function ProfileEdit() {
         navigate('/delete-account');
     }, [navigate]);
 
+    const handleChangePasswordBtn = useCallback(() => {
+        navigate('/change-password');
+    }, [navigate]);
+
     const updateProfile = useCallback(async () => {
         const response = await editMyProfileInfo({
             nickname,
@@ -281,6 +285,14 @@ export default function ProfileEdit() {
                         수정 완료
                     </button>
                 </ToastAnchor>
+                <div className="flex items-center justify-center mt-8">
+                    <button
+                        onClick={handleChangePasswordBtn}
+                        className="text-label-l  underline text-gray-400 p-1"
+                    >
+                        비밀번호 변경
+                    </button>
+                </div>
                 <div className="flex items-center justify-center mt-8">
                     <button
                         onClick={handleDeleteAccountBtn}
