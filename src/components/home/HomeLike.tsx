@@ -1,28 +1,6 @@
 import { useFadeNavigate } from '@/hooks';
 import { useCallback } from 'react';
-
-interface RankingItem {
-    rank: number; // 순위
-    nickname: string; // 닉네임
-    score: number; // 점수
-    profileImage?: string; // 프로필 이미지 (선택적 속성)
-}
-
-interface HeartedUser {
-    heartedId: number; // 유저 ID
-    nickname: string; // 닉네임
-    profileImg: string; // 프로필 이미지 URL
-}
-
-interface LikedListData {
-    data: {
-        heartedUsers: HeartedUser[]; // 찜한 돌봄이 리스트
-    };
-}
-
-interface HomeLikeProps {
-    likedListData: LikedListData; // 전체 찜한 리스트 데이터
-}
+import { HomeLikeProps } from '@/types/home';
 
 export default function HomeLike({ likedListData }: HomeLikeProps) {
     const navigate = useFadeNavigate();
@@ -40,7 +18,6 @@ export default function HomeLike({ likedListData }: HomeLikeProps) {
         [navigate],
     );
 
-    // 데이터 뒤에서 4개 가져오기
     const lastFourHeartedUsers = likedListData?.data.heartedUsers.slice(-4);
 
     return (

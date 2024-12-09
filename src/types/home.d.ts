@@ -50,4 +50,25 @@ interface RankingItem {
 interface RankingResponse extends BaseApiResponse {
     data: RankingItem[]; // 배열을 포함하는 객체
 }
-export type { MainPageMissionResponse, RankingResponse, RankingItem };
+interface HeartedUser {
+    heartedId: number; // 유저 ID
+    nickname: string; // 닉네임
+    profileImg: string; // 프로필 이미지 URL
+}
+
+interface LikedListData {
+    data: {
+        heartedUsers: HeartedUser[]; // 찜한 돌봄이 리스트
+    };
+}
+
+interface HomeLikeProps {
+    likedListData: LikedListData; // 전체 찜한 리스트 데이터
+}
+
+export type {
+    MainPageMissionResponse,
+    RankingResponse,
+    RankingItem,
+    HomeLikeProps,
+};
