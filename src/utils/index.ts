@@ -10,3 +10,4 @@ export { default as getFirstErrorMessage } from './getFirstErrorMessage';
 export { default as formatDateWithDay } from './formatDateWithDay';
 export { formatDate, formatTime } from './please/formatDateandTime';
 export { default as formatDateWithTime } from './formatDateWithTime';
+export { default as convertToUTC } from './convertToUTC';
