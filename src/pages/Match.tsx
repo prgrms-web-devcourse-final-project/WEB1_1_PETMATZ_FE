@@ -31,7 +31,7 @@ export default function Match() {
         }
     };
     const handleFetchMore = () => {
-        if (user) fetchMatchList(user.id);
+        if (user) fetchMatchList();
     };
     const handleOnClickBtn = async () => {
         if (matchList.length > 0) {
@@ -59,7 +59,7 @@ export default function Match() {
         setIsLastPage(false);
         setCurPage(0);
 
-        if (user) fetchMatchList(user.id);
+        if (user) fetchMatchList();
     };
 
     // 인트로 관련 이벤트 핸들러
@@ -70,7 +70,7 @@ export default function Match() {
 
     useEffect(() => {
         if (!(matchList.length > 0) && user && isFirstFetch.current) {
-            fetchMatchList(user.id);
+            fetchMatchList();
             isFirstFetch.current = false;
         }
 

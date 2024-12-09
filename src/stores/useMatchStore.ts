@@ -10,7 +10,7 @@ interface MatchStore {
     matchList: MatchWidthColor[];
     showStamp: boolean;
     removeMatch: (userId: number, otherId: number) => void;
-    fetchMatchList: (userId: number) => void;
+    fetchMatchList: () => void;
     setShowStamp: (state: boolean) => void;
     curPage: number;
     totalPages: number;
@@ -49,7 +49,7 @@ const useMatchStore = create<MatchStore>((set, get) => ({
             ),
         }));
     },
-    fetchMatchList: async (userId) => {
+    fetchMatchList: async () => {
         const { curPage, totalPages } = get();
 
         if (curPage >= totalPages) {
@@ -58,7 +58,6 @@ const useMatchStore = create<MatchStore>((set, get) => ({
         }
 
         const { ok, data, error, status } = await getMatchList({
-            userId,
             page: curPage,
             size: 5,
         });
