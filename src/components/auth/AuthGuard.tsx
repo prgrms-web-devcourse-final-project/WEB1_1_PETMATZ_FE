@@ -20,7 +20,7 @@ export default function AuthGuard({
         const { ok, data } = await getMyProfileInfo();
 
         if (!ok) {
-            navigate(redirectTo || '/login');
+            navigate(redirectTo || '/');
         } else {
             const { id, accountId, nickname, isRegistered, region } = data;
             setUser({ id, accountId, nickname, isRegistered, region });

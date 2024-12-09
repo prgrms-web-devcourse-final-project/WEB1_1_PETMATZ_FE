@@ -52,7 +52,8 @@ export default function DogList({
                             age={dog.age}
                             temperament={dog.temperament}
                             size={dog.size}
-                            comment={true}
+                            comment={dog.comment}
+                            isComment={true}
                             edit={isMyProfile}
                         />
                     ))}

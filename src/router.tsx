@@ -81,7 +81,7 @@ export default function AppRoutes() {
                         <Route path="/sos/write" element={<SOSWrite />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/ranking" element={<Ranking />} />
-                        <Route path="/dog-edit/:id" element={<DogEdit />} />
+                        <Route path="/edit-dog/:dogId" element={<DogEdit />} />
                         <Route path="/please/write" element={<PleaseWrite />} />
                         <Route path="/please/:id" element={<PleaseDetail />} />
                         <Route path="/edit-profile" element={<ProfileEdit />} />

@@ -1,6 +1,6 @@
 import { ChatRoom, NonChatRoom } from '@/components/chat';
 import { Loading } from '@/components/common';
-import { useChatStore, useTitleStore, useUserStore } from '@/stores';
+import { useChatStore, useTitleStore } from '@/stores';
 import { useEffect, useState } from 'react';
 
 export default function Chat() {

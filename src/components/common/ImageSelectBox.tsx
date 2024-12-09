@@ -72,7 +72,7 @@ export default function ImageSelectBox({
                                 <img
                                     src={
                                         chosenImgName.startsWith('profile')
-                                            ? `src/assets/images/profile/${chosenImgName}.svg`
+                                            ? `/profile/${chosenImgName}.svg`
                                             : chosenImgName
                                     }
                                     alt="프로필 이미지"
@@ -93,19 +93,19 @@ export default function ImageSelectBox({
                                 className="cursor-pointer"
                             />
                             <img
-                                src={`src/assets/images/profile/profile1.svg`}
+                                src={`/profile/profile1.svg`}
                                 alt="기본 프로필 이미지 1"
                                 onClick={() => handleChooseImg('profile1')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                             <img
-                                src={`src/assets/images/profile/profile2.svg`}
+                                src={`/profile/profile2.svg`}
                                 alt="기본 프로필 이미지 2"
                                 onClick={() => handleChooseImg('profile2')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
                             />
                             <img
-                                src={`src/assets/images/profile/profile3.svg`}
+                                src={`/profile/profile3.svg`}
                                 alt="기본 프로필 이미지 3"
                                 onClick={() => handleChooseImg('profile3')}
                                 className="w-[56px] h-[56px] rounded-full border-[1px] border-gray-200 cursor-pointer"
@@ -140,7 +140,7 @@ export default function ImageSelectBox({
                         <img
                             src={
                                 imgName.startsWith('profile')
-                                    ? `src/assets/images/profile/${imgName}.svg`
+                                    ? `/profile/${imgName}.svg`
                                     : imgName
                             }
                             alt="기본 프로필 이미지"

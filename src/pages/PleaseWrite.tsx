@@ -15,7 +15,7 @@ import {
     useForm,
 } from 'react-hook-form';
 import { useUserStore } from '@/stores';
-import { getFirstErrorMessage } from '@/utils';
+import { convertToUTC, getFirstErrorMessage } from '@/utils';
 
 // SVG
 import ArrowLeftIcon from '@/assets/images/arrow/arrowLeft.svg?react';
@@ -49,21 +49,21 @@ export default function PleaseWrite() {
         const validationErrors = validateDateTimeFields();
 
         if (validationErrors) {
-            console.log('서브밋 valid', validationErrors);
             onError(validationErrors);
             return;
         }
 
         if (!receiverId) return;
 
-        const missionStarted = new Date(
-            `${data.startDate}T${data.startTime}`,
-        ).toISOString();
-        const missionEnd = new Date(
-            `${data.endDate}T${data.endTime}`,
-        ).toISOString();
+        const missionStarted = convertToUTC(data.startDate, data.startTime);
+        const missionEnd = convertToUTC(data.endDate, data.endTime);
+
+        console.log(data.startDate, data.startTime);
         const petMissionAsk = data.dynamicInputs.map((input) => input.value);
         const petId = data.multiSelect.map((pet) => String(pet.id));
+
+        console.log('미션 시작일', missionStarted);
+        console.log('미션 종료일', missionEnd);
 
         const { ok, data: res } = await createPlease({
             missionEnd,

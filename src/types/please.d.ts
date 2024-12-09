@@ -66,20 +66,24 @@ interface PetInfo {
 
 // 미션 요청 정보 타입
 interface PetMissionAskInfo {
-    id: number | null;
-    comment: string | null;
+    id: number;
+    comment: string;
     ask: string;
-    imgURL: string | null;
+    imgURL: string;
 }
 
 interface PetMissionInfoResponse extends BaseApiResponse {
+    petMissionAskInfos: any;
     data: {
+        petMissionAskInfos: any;
         result: {
             id: number;
             careName: string;
             careId: number;
+            careEmail: string;
             receiverName: string;
             receiverId: number;
+            receiverEmail: string;
             receiverStart: string;
             receiverEnd: string;
             petMissionPetInfos: PetInfo[];
@@ -93,8 +97,10 @@ interface MissionInfo {
     id: number;
     careName: string;
     careId: number;
+    careEmail: string;
     receiverName: string;
     receiverId: number;
+    receiverEmail: string;
     receiverStart: string;
     receiverEnd: string;
     petMissionPetInfos: PetInfo[];
@@ -107,11 +113,13 @@ interface Request {
     ask: string;
     comment?: string | null;
     imgURL?: string | null;
+    isRegistered?: boolean;
+    isTemporarilyHidden?: boolean;
 }
 
 interface RequestListAccordionProps {
     petMissionAskInfos: Request[];
-    status: string;
+    status: 'BEF' | 'INP' | 'AFT';
     userId?: number;
     receiverId?: number;
 }
@@ -123,7 +131,18 @@ interface CreateMissionCommentRequest {
 }
 
 interface CreateMissionCommentResponse extends BaseApiResponse {
-    data: {};
+    data: string;
+}
+
+interface MissionDetailInfo {
+    id: number;
+    ask: string;
+    comment: string;
+    imgURL?: string;
+}
+
+interface MissionAnswerInfoResponse extends BaseApiResponse {
+    data: MissionDetailInfo;
 }
 
 export type {
@@ -136,6 +155,7 @@ export type {
     RequestListAccordionProps,
     CreateMissionCommentRequest,
     CreateMissionCommentResponse,
+    MissionAnswerInfoResponse,
     PleaseListApiResponse,
     IPleaseItem,
 };

@@ -74,8 +74,11 @@ interface EditMyProfileRequest {
 }
 
 interface EditMyProfileResponse extends BaseApiResponse {
-    responseCode: string; // 응답 코드 (예: "SU")
-    message: string; // 응답 메시지 (예: "Success.")
+    data: {
+        responseCode: string; // 응답 코드 (예: "SU")
+        message: string; // 응답 메시지 (예: "Success.")
+        resultImgURL: string;
+    };
 }
 
 export type {

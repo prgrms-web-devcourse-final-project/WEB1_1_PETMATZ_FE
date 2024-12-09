@@ -5,6 +5,7 @@ import {
     PetMissionInfoResponse,
     CreateMissionCommentRequest,
     CreateMissionCommentResponse,
+    MissionAnswerInfoResponse,
 } from '@/types/please';
 import { http } from './base';
 
@@ -57,3 +58,44 @@ export const createMissionContent = async ({
         '/api/v1/pet/mission/comment',
         { askId, comment, imgURL },
     );
+
+/**
+ * 특정 미션의 답변 정보를 조회합니다.
+ * @param answerId 조회할 미션 답변의 ID
+ * @returns 미션 답변 정보
+ */
+export const getMissionAnswerInfo = async (
+    answerId: string,
+): Promise<MissionAnswerInfoResponse> =>
+    await http.get<MissionAnswerInfoResponse>(
+        `/api/v1/pet/mission/comment/answer/info?answerId=${answerId}`,
+    );
+
+/**
+ * 멍멍이 미션의 상태를 변경합니다.
+ * @param petMissionId 미션 ID
+ * @param missionStatusZip 변경할 상태 ('BEF' | 'INP' | 'AFT')
+ * @returns API 응답
+ */
+export const updateMissionStatus = async (
+    petMissionId: number,
+    missionStatusZip: 'BEF' | 'INP' | 'AFT',
+    careEmail: string,
+    receiverEmail: string,
+): Promise<void> => {
+    return await http.put('/api/v1/pet/mission', {
+        petMissionId,
+        missionStatusZip,
+        receiverEmail: careEmail,
+        careEmail: receiverEmail,
+    });
+};
+
+/**
+ * 돌봄이 추천 API
+ * @param userId 추천할 돌봄이의 사용자 ID
+ * @returns API 응답
+ */
+export const recommendCaregiver = async (userId: number): Promise<void> => {
+    return await http.post('/api/auth/update-recommendation', { userId });
+};

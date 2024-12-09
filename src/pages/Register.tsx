@@ -64,7 +64,7 @@ export default function Register() {
         if (step > 1) {
             setStep((prevStep) => prevStep - 1);
         } else {
-            navigate('/');
+            navigate(-1);
         }
     }, [step, navigate]);
 

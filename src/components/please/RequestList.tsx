@@ -8,7 +8,7 @@ import { MissionInfo } from '@/types/please';
 
 interface RequestListProps {
     missionInfo: MissionInfo;
-    status: string;
+    status: 'BEF' | 'INP' | 'AFT';
     userId?: number;
 }
 
