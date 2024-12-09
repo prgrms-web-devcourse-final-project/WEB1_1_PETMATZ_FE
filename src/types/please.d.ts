@@ -61,7 +61,7 @@ interface PetInfo {
     neuterYn: string; // '중성' | '미중성',
     temperament: string;
     size: string;
-    profileImg: string;
+    imgURL: string;
 }
 
 // 미션 요청 정보 타입
