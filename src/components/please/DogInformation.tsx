@@ -7,6 +7,7 @@ import { formatDate, formatTime } from '@/utils';
 import { MissionInfo } from '@/types/please';
 import { useRecommendation } from '@/hooks/please';
 import Thumb from '@/assets/images/thumb_up.svg?react';
+
 interface DogInfoProps {
     missionInfo: MissionInfo;
     status: 'BEF' | 'INP' | 'AFT';
@@ -60,12 +61,9 @@ export default function DogInformation({
                 <h1 className="sm:text-title-s text-body-l font-extrabold text-gray-800 sm:pt-8 pt-1 pb-1">
                     <p>우리가 도와줄 멍멍이는</p>
                 </h1>
-                <div className="slider-container">
+                <div className="slider-container !px-0">
                     {dogs.length === 1 ? (
-                        // 한 마리일 때는 일반 div로 표시
-                        <div className="px-2">
-                            <DogCard {...dogs[0]} />
-                        </div>
+                        <DogCard {...dogs[0]} />
                     ) : (
                         // 여러 마리일 때는 슬라이더 사용
                         <Slider {...settings}>
