@@ -21,7 +21,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
         speed: 500, // 슬라이드 속도
         slidesToShow: 1, // 한 번에 보여줄 슬라이드 수
         slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
-        arrows: true, // 좌우 화살표 표시
+        arrows: false, // 좌우 화살표 표시
     };
 
     const navigate = useFadeNavigate();
