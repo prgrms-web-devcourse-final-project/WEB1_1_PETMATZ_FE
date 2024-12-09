@@ -21,7 +21,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
         speed: 500, // 슬라이드 속도
         slidesToShow: 1, // 한 번에 보여줄 슬라이드 수
         slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
-        arrows: true, // 좌우 화살표 표시
+        arrows: false, // 좌우 화살표 표시
     };
 
     const navigate = useFadeNavigate();
@@ -50,7 +50,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
         ) || [];
 
     return (
-        <div className="w-full h-auto flex flex-col gap-6">
+        <div className="w-full h-auto flex flex-col gap-6 ">
             {/* 상단 알림 */}
             <button onClick={handleHelpBtn}>
                 {missionData?.ok ? (
@@ -114,7 +114,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
                             {/* 토글 상태에 따라 내용 변경 */}
                             <div>
                                 {isInfoTab ? (
-                                    <div className="flex flex-col gap rounded-lg">
+                                    <div className="flex flex-col rounded-lg">
                                         <Slider {...sliderSettings}>
                                             {takenCareDogs?.map(
                                                 (dog: PetMissionResult) => (
