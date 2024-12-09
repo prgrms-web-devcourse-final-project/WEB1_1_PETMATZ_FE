@@ -62,12 +62,16 @@ export const postLikeProfile = async ({
  * POST Edit MyProfile informations
  * 나의 프로필 정보를 수정합니다.
  */
-export const editMyProfileInfo = async (
-    data: EditMyProfileRequest,
-): Promise<EditMyProfileResponse> =>
+export const editMyProfileInfo = async ({
+    nickname,
+    preferredSizes,
+    introduction,
+    careAvailable,
+    profileImg,
+}: EditMyProfileRequest): Promise<EditMyProfileResponse> =>
     await http.post<EditMyProfileResponse, EditMyProfileRequest>(
         '/api/auth/edit-myprofile',
-        data,
+        { nickname, preferredSizes, introduction, careAvailable, profileImg },
     );
 
 /**

@@ -1,4 +1,4 @@
-import { getMatchList, postMatchFail } from '@/hooks/api/match';
+import { getMatchList } from '@/hooks/api/match';
 import { IMatch } from '@/types/match';
 import { create } from 'zustand';
 
@@ -34,7 +34,7 @@ const useMatchStore = create<MatchStore>((set, get) => ({
 
     setShowStamp: (state) => set(() => ({ showStamp: state })),
 
-    removeMatch: async (userId, otherId) => {
+    removeMatch: async (_, otherId) => {
         // 데이터가 없어서 API 호출 로직 주석처리
         // const { ok } = await postMatchFail({
         //     userId,
@@ -51,8 +51,6 @@ const useMatchStore = create<MatchStore>((set, get) => ({
     },
     fetchMatchList: async (userId) => {
         const { curPage, totalPages } = get();
-
-        console.log(curPage, totalPages);
 
         if (curPage >= totalPages) {
             set(() => ({ isLastPage: true }));

@@ -5,12 +5,22 @@ import 'slick-carousel/slick/slick-theme.css';
 import './DogInformation.css';
 import { formatDate, formatTime } from '@/utils';
 import { MissionInfo } from '@/types/please';
+import { useRecommendation } from '@/hooks/please';
+import Thumb from '@/assets/images/thumb_up.svg?react';
+
 interface DogInfoProps {
     missionInfo: MissionInfo;
-    status: string;
+    status: 'BEF' | 'INP' | 'AFT';
+    userId?: number;
 }
 
-export default function DogInformation({ missionInfo, status }: DogInfoProps) {
+export default function DogInformation({
+    missionInfo,
+    status,
+    userId,
+}: DogInfoProps) {
+    const { isRecommended, handleRecommend } = useRecommendation();
+
     const settings = {
         dots: true,
         infinite: false,
@@ -39,18 +49,21 @@ export default function DogInformation({ missionInfo, status }: DogInfoProps) {
         return `input-outline ${status === 'INP' ? 'border-point-300' : ''} flex-1 mr-2 sm:!px-4 px-3`;
     };
 
+    const onRecommendCaregiver = () => {
+        if (missionInfo.receiverId) {
+            handleRecommend(missionInfo.receiverId);
+        }
+    };
+
     return (
         <main className="p-4 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             <div className="space-y-4">
                 <h1 className="sm:text-title-s text-body-l font-extrabold text-gray-800 sm:pt-8 pt-1 pb-1">
                     <p>우리가 도와줄 멍멍이는</p>
                 </h1>
-                <div className="slider-container">
+                <div className="slider-container !px-0">
                     {dogs.length === 1 ? (
-                        // 한 마리일 때는 일반 div로 표시
-                        <div className="px-2">
-                            <DogCard {...dogs[0]} />
-                        </div>
+                        <DogCard {...dogs[0]} />
                     ) : (
                         // 여러 마리일 때는 슬라이더 사용
                         <Slider {...settings}>
@@ -78,9 +91,37 @@ export default function DogInformation({ missionInfo, status }: DogInfoProps) {
                     </div>
                 </div>
 
+                {status === 'AFT' && userId === missionInfo.careId && (
+                    <div className="flex items-center justify-center gap-2 mt-4 p-4 bg-point-50 rounded-lg">
+                        <p className="text-body-m text-point-500">
+                            {missionInfo.receiverName} 돌봄이를 추천해주세요!
+                        </p>
+                        <button
+                            onClick={onRecommendCaregiver}
+                            className={`p-2 rounded-full transition-colors duration-300 ${
+                                isRecommended
+                                    ? 'bg-point-600 text-white'
+                                    : 'bg-white text-gray-500 border border-gray-300'
+                            }`}
+                        >
+                            <Thumb size={24} />
+                        </button>
+                    </div>
+                )}
+
                 {status === 'INP' && (
-                    <div className="bg-point-50 rounded-lg p-4 mt-6">
-                        <p className="text-point-500 text-body-s font-semibold">
+                    <div
+                        className={`rounded-lg p-4 mt-6 ${
+                            status === 'INP' ? 'bg-point-50' : 'bg-gray-100'
+                        }`}
+                    >
+                        <p
+                            className={`text-body-s font-semibold ${
+                                status === 'INP'
+                                    ? 'text-point-500'
+                                    : 'text-gray-500'
+                            }`}
+                        >
                             현재 돌봄이 진행중입니다
                         </p>
                     </div>

@@ -126,6 +126,24 @@ export default function ChatDetail() {
         };
     }, [chatRoomId, user, isNewMsg, connectedClient, isScroll]);
 
+    // 메시지 목록 변경 시 하단 스크롤 이동
+    useEffect(() => {
+        if (!scrollContainerRef.current) return;
+
+        const scrollContainer = scrollContainerRef.current;
+
+        const isNearBottom =
+            scrollContainer.scrollTop + scrollContainer.clientHeight >=
+            scrollContainer.scrollHeight * 0.8;
+
+        if (isNearBottom) {
+            scrollContainer.scrollTo({
+                top: scrollContainer.scrollHeight,
+                behavior: 'smooth',
+            });
+        }
+    }, [messageList]);
+
     // 무한 스크롤 처리
     useEffect(() => {
         if (isFirstFetch.current || !messageList.length) return;

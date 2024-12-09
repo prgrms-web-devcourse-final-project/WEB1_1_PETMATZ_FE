@@ -11,7 +11,7 @@ export default function IntroMatch({ onClose }: IntroMatchProps) {
     return (
         <div
             onClick={onClose}
-            className="fixed mx-auto inset-0 z-50 bg-dim opacity-90 flex flex-col justify-center items-center min-w-[360px] max-w-[768px] cursor-pointer gap-[82px]"
+            className="fixed mx-auto inset-0 z-50 bg-dim opacity-90 flex flex-col justify-center items-center min-w-[360px] max-w-[768px] cursor-pointer gap-[72px]"
         >
             <motion.div
                 className="w-[240px] h-[480px] flex items-center justify-center"
