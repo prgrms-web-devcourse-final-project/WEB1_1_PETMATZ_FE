@@ -11,7 +11,7 @@ export default function HomeSOS() {
 
     return (
         <div className=" w-full h-auto">
-            <div className="flex justify-between items-center  mb-[18px]">
+            <div className="flex justify-between items-center mb-[18px]">
                 <h2 className="text-body-xl font-extrabold text-gray-800">
                     도와줘 멍멍
                 </h2>

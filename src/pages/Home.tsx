@@ -9,7 +9,7 @@ import { getLikedUserList } from '@/hooks/api/user';
 import { mainPageMission } from '@/hooks/api/home';
 import { RankingResponse, MainPageMissionResponse } from '@/types/home';
 import { LikedUserListApiResponse } from '@/types/user';
-
+import { Loading } from '@/components/common';
 export default function Home() {
     const { setTitle } = useTitleStore();
 
@@ -47,7 +47,11 @@ export default function Home() {
         isRankingLoading || isLikedListLoading || isMissionLoading;
 
     if (isLoading) {
-        return <div>로딩 중...</div>;
+        return (
+            <div className="h-full w-full flex justify-center items-center bg-white">
+                <Loading />
+            </div>
+        );
     }
 
     return (

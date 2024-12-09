@@ -21,7 +21,7 @@ export default function HomeLike({ likedListData }: HomeLikeProps) {
     const lastFourHeartedUsers = likedListData?.data.heartedUsers.slice(-4);
 
     return (
-        <div className="bg-gray-50 rounded-lg border border-point-500">
+        <div className="bg-gray-50 rounded-lg">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-body-xl font-extrabold text-gray-800">
                     최근에 찜한 돌봄이
@@ -33,7 +33,7 @@ export default function HomeLike({ likedListData }: HomeLikeProps) {
                     더보기
                 </button>
             </div>
-            <div className="flex justify-start space-x-4 px-6">
+            <div className="flex justify-start space-x-5 px-6">
                 {/* 뒤에서 가져온 찜한 돌봄이 리스트 렌더링 */}
                 {lastFourHeartedUsers?.map((heartedUser, index) => (
                     <div
