@@ -1,1 +1,1 @@
-export { default as AuthGaurd } from './AuthGard';
+export { default as AuthGaurd } from './AuthGuard';
