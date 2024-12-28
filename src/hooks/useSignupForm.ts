@@ -137,6 +137,7 @@ export default function useSignupForm() {
         }
         setLoading(true);
         // 여기에 로그인 로직을 구현하세요
+        console.log(data);
         const {
             email,
             verificationCode,
