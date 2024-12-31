@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import Arrow from '@/assets/images/arrow/arrowBig.svg?react';
 import { DogCard } from '../common';
 import { useFadeNavigate } from '@/hooks';
@@ -7,25 +7,19 @@ import { DogsInfoResponse } from '@/types/dogInfo';
 interface DogListPropsType {
     dogsData: DogsInfoResponse;
     isMyProfile: boolean;
-    showMenu: boolean;
-    setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function DogList({
-    dogsData,
-    isMyProfile,
-    showMenu,
-    setShowMenu,
-}: DogListPropsType) {
+export default function DogList({ dogsData, isMyProfile }: DogListPropsType) {
+    const [showMenu, setShowMenu] = useState(false);
     const navigate = useFadeNavigate();
 
     const handleAddDogBtn = useCallback(() => {
         navigate('/register');
-    }, []);
+    }, [navigate]);
 
     const handleShowDogsBtn = useCallback(() => {
         setShowMenu((prev) => !prev);
-    }, []);
+    }, [setShowMenu]);
 
     return (
         <>

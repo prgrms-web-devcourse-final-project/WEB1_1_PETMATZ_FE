@@ -15,20 +15,28 @@ export default function LikedUser({
 }: LikedUser) {
     const navigate = useFadeNavigate();
     const [like, setLike] = useState(true);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const handleProfileBtn = useCallback(() => {
         navigate(`/profile/${heartedId}`);
-    }, []);
+    }, [heartedId, navigate]);
 
     const handleLikeBtn = useCallback(async () => {
+        if (isUpdating) return;
+
+        setIsUpdating(true);
+        const previousLikeState = like;
+        setLike((prev) => !prev); // Optimistically update UI
+
         await postLikeProfile({ heartedId }).then((response) => {
-            if (response.ok) {
-                setLike((prev) => !prev);
-            } else {
+            if (!response.ok) {
                 console.log(response.error?.msg);
+                setLike(previousLikeState); // Revert on errors
             }
         });
-    }, []);
+
+        setIsUpdating(false);
+    }, [heartedId, like, setLike, isUpdating]);
 
     return (
         <li className="w-full max-w-[600px] mx-auto px-6 py-[10px] border-b-2 border-gray-200 flex items-center gap-6">
