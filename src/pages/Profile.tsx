@@ -51,7 +51,7 @@ export default function Profile() {
 
     useEffect(() => {
         setTitle('프로필');
-    }, []);
+    }, [setTitle]);
 
     useEffect(() => {
         if (!data) {
@@ -67,7 +67,7 @@ export default function Profile() {
 
     const handleEditBtn = useCallback(() => {
         navigate('/edit-profile');
-    }, []);
+    }, [navigate]);
 
     const handleChatBtn = useCallback(async () => {
         const entrustedEmail = data!.data.accountId; // 상대방 이메일
@@ -81,7 +81,7 @@ export default function Profile() {
                 }
             },
         );
-    }, [data, user]);
+    }, [data, user, navigate]);
 
     const handleLikeBtn = useCallback(async () => {
         const heartedId = data!.data.id;
