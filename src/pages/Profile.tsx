@@ -26,8 +26,8 @@ export default function Profile() {
         '/src/assets/images/profile/profile1.svg',
     );
     const [like, setLike] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
     const { setTitle } = useTitleStore();
-    const [showMenu, setShowMenu] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
     const userId = id || '';
@@ -51,7 +51,7 @@ export default function Profile() {
 
     useEffect(() => {
         setTitle('프로필');
-    }, []);
+    }, [setTitle]);
 
     useEffect(() => {
         if (!data) {
@@ -67,7 +67,7 @@ export default function Profile() {
 
     const handleEditBtn = useCallback(() => {
         navigate('/edit-profile');
-    }, []);
+    }, [navigate]);
 
     const handleChatBtn = useCallback(async () => {
         const entrustedEmail = data!.data.accountId; // 상대방 이메일
@@ -81,18 +81,25 @@ export default function Profile() {
                 }
             },
         );
-    }, [data, user]);
+    }, [data, user, navigate]);
 
     const handleLikeBtn = useCallback(async () => {
+        if (isUpdating) return;
+
+        setIsUpdating(true);
+        const previousLikeState = like;
+        setLike((prev) => !prev); // Optimistically update UI
+
         const heartedId = data!.data.id;
         await postLikeProfile({ heartedId }).then((response) => {
-            if (response.ok) {
-                setLike((prev) => !prev);
-            } else {
+            if (!response.ok) {
                 console.log(response.error?.msg);
+                setLike(previousLikeState); // Revert on errors
             }
         });
-    }, [data]);
+
+        setIsUpdating(false);
+    }, [data, like, isUpdating]);
 
     const handleModalBtn = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -333,12 +340,7 @@ export default function Profile() {
                         <Tag text={profileData.region} />
                     </article>
                     <div className="border-[0.5px] border-gray-300 my-4"></div>
-                    <DogList
-                        dogsData={dogsData}
-                        isMyProfile={isMyProfile}
-                        showMenu={showMenu}
-                        setShowMenu={setShowMenu}
-                    />
+                    <DogList dogsData={dogsData} isMyProfile={isMyProfile} />
                 </div>
             </div>
             {isOpen && ReactDOM.createPortal(modalContent, document.body)}
