@@ -28,7 +28,6 @@ export default function Profile() {
     const [like, setLike] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const { setTitle } = useTitleStore();
-    const [showMenu, setShowMenu] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
     const userId = id || '';
@@ -341,12 +340,7 @@ export default function Profile() {
                         <Tag text={profileData.region} />
                     </article>
                     <div className="border-[0.5px] border-gray-300 my-4"></div>
-                    <DogList
-                        dogsData={dogsData}
-                        isMyProfile={isMyProfile}
-                        showMenu={showMenu}
-                        setShowMenu={setShowMenu}
-                    />
+                    <DogList dogsData={dogsData} isMyProfile={isMyProfile} />
                 </div>
             </div>
             {isOpen && ReactDOM.createPortal(modalContent, document.body)}
