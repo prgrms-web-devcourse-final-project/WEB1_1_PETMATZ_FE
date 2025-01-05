@@ -5,11 +5,6 @@ import {
 } from '@/types/imageUpload';
 import { http, httpForImage } from './base';
 import {
-    NewPasswordApiRequest,
-    PasswordApiResponse,
-    TemporaryPasswordApiRequest,
-} from '@/types/password';
-import {
     CheckVerificationCodeApiRequest,
     CheckVerificationCodeApiResponse,
     EmailVerificationCodeApiRequest,
@@ -18,7 +13,13 @@ import {
     SignupApiResponse,
 } from '@/types/signup';
 import { BaseApiResponse } from '@/types/baseResponse';
-import { LoginApiRequest, LoginApiResponse } from '@/types/user';
+import {
+    LoginApiRequest,
+    LoginApiResponse,
+    NewPasswordApiRequest,
+    PasswordApiResponse,
+    TemporaryPasswordApiRequest,
+} from '@/types/user';
 
 /**
  * POST Logout

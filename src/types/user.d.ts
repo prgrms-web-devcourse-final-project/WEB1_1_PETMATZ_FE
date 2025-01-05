@@ -36,6 +36,30 @@ interface LoginApiResponse extends BaseApiResponse {
     };
 }
 
+/**
+ * ForgotPassword form input type
+ */
+interface ForgotPasswordInputs {
+    /** User's email address */
+    email: string;
+}
+
+//	POST temporary password
+interface TemporaryPasswordApiRequest {
+    accountId: string;
+}
+//	POST new password
+interface NewPasswordApiRequest {
+    currentPassword: string;
+    newPassword: string;
+}
+interface PasswordApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+    };
+}
+
 interface IUser {
     id: number;
     accountId: string;
@@ -121,6 +145,10 @@ export type {
     LoginInputs,
     LoginApiRequest,
     LoginApiResponse,
+    ForgotPasswordInputs,
+    TemporaryPasswordApiRequest,
+    NewPasswordApiRequest,
+    PasswordApiResponse,
     IUser,
     LikedUser,
     ProfileApiQueryString,
