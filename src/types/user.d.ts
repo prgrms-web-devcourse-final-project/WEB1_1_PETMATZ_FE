@@ -56,14 +56,6 @@ interface ChangePasswordInputs {
     confirmPassword: string;
 }
 
-/**
- * Delete account form input type
- */
-interface DeleteAccountInputs {
-    /** User's password */
-    password: string;
-}
-
 //	POST temporary password
 interface TemporaryPasswordApiRequest {
     accountId: string;
@@ -74,6 +66,25 @@ interface NewPasswordApiRequest {
     newPassword: string;
 }
 interface PasswordApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+    };
+}
+
+/**
+ * Delete account form input type
+ */
+interface DeleteAccountInputs {
+    /** User's password */
+    password: string;
+}
+
+//	POST delete account
+interface DeleteAccountApiRequest {
+    password: string;
+}
+interface DeleteAccountApiResponse extends BaseApiResponse {
     data: {
         responseCode: string;
         message: string;
@@ -167,10 +178,12 @@ export type {
     LoginApiResponse,
     ForgotPasswordInputs,
     ChangePasswordInputs,
-    DeleteAccountInputs,
     TemporaryPasswordApiRequest,
     NewPasswordApiRequest,
     PasswordApiResponse,
+    DeleteAccountInputs,
+    DeleteAccountApiRequest,
+    DeleteAccountApiResponse,
     IUser,
     LikedUser,
     ProfileApiQueryString,
