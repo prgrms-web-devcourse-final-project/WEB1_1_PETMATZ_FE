@@ -36,7 +36,7 @@ export default function useUserInfoForm<T extends FieldValues>(
         }
         setIsLoading(true);
         await onSubmitCallback(data);
-        setIsLoading(true);
+        setIsLoading(false);
     };
 
     return {
