@@ -4,7 +4,6 @@ import {
     ImageUploadErrorApiResponse,
 } from '@/types/imageUpload';
 import { http, httpForImage } from './base';
-import { LoginApiRequest, LoginApiResponse } from '@/types/login';
 import {
     NewPasswordApiRequest,
     PasswordApiResponse,
@@ -19,6 +18,7 @@ import {
     SignupApiResponse,
 } from '@/types/signup';
 import { BaseApiResponse } from '@/types/baseResponse';
+import { LoginApiRequest, LoginApiResponse } from '@/types/user';
 
 /**
  * POST Logout

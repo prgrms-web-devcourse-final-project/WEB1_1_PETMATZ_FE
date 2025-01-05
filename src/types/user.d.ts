@@ -1,5 +1,41 @@
 import { BaseApiResponse } from './baseResponse';
 
+/**
+ * Login form input type
+ */
+interface LoginInputs {
+    /** User's email address */
+    accountId: string;
+    /** User's password */
+    password: string;
+}
+
+//	POST login
+interface LoginApiRequest {
+    accountId: string;
+    password: string;
+}
+interface LoginApiResponse extends BaseApiResponse {
+    data: {
+        responseCode: string;
+        message: string;
+        id: number;
+        accountId: string;
+        nickname: string;
+        loginRole: string;
+        loginType: string;
+        role: string;
+        preferredSize: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+        gender: string;
+        isRegistered: boolean;
+        recommendationCount: number;
+        careCompletionCount: number;
+        isCareAvailable: boolean;
+        mbti: string;
+        region: string;
+    };
+}
+
 interface IUser {
     id: number;
     accountId: string;
@@ -82,6 +118,9 @@ interface EditMyProfileResponse extends BaseApiResponse {
 }
 
 export type {
+    LoginInputs,
+    LoginApiRequest,
+    LoginApiResponse,
     IUser,
     LikedUser,
     ProfileApiQueryString,
