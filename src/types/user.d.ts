@@ -44,6 +44,18 @@ interface ForgotPasswordInputs {
     email: string;
 }
 
+/**
+ * ChangePassword form input type
+ */
+interface ChangePasswordInputs {
+    /** User's current password */
+    currentPassword: string;
+    /** User's new password */
+    newPassword: string;
+    /** User's confirm password */
+    confirmPassword: string;
+}
+
 //	POST temporary password
 interface TemporaryPasswordApiRequest {
     accountId: string;
@@ -146,6 +158,7 @@ export type {
     LoginApiRequest,
     LoginApiResponse,
     ForgotPasswordInputs,
+    ChangePasswordInputs,
     TemporaryPasswordApiRequest,
     NewPasswordApiRequest,
     PasswordApiResponse,
