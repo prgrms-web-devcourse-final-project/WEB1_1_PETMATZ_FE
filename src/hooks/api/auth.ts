@@ -4,20 +4,18 @@ import {
     ImageUploadErrorApiResponse,
 } from '@/types/imageUpload';
 import { http, httpForImage } from './base';
+import { BaseApiResponse } from '@/types/baseResponse';
 import {
     CheckVerificationCodeApiRequest,
     CheckVerificationCodeApiResponse,
     EmailVerificationCodeApiRequest,
     EmailVerificationCodeApiResponse,
-    SignupApiRequest,
-    SignupApiResponse,
-} from '@/types/signup';
-import { BaseApiResponse } from '@/types/baseResponse';
-import {
     LoginApiRequest,
     LoginApiResponse,
     NewPasswordApiRequest,
     PasswordApiResponse,
+    SignupApiRequest,
+    SignupApiResponse,
     TemporaryPasswordApiRequest,
 } from '@/types/user';
 
