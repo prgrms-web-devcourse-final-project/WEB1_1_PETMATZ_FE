@@ -4,21 +4,20 @@ import {
     ImageUploadErrorApiResponse,
 } from '@/types/imageUpload';
 import { http, httpForImage } from './base';
-import { LoginApiRequest, LoginApiResponse } from '@/types/login';
-import {
-    NewPasswordApiRequest,
-    PasswordApiResponse,
-    TemporaryPasswordApiRequest,
-} from '@/types/password';
+import { BaseApiResponse } from '@/types/baseResponse';
 import {
     CheckVerificationCodeApiRequest,
     CheckVerificationCodeApiResponse,
     EmailVerificationCodeApiRequest,
     EmailVerificationCodeApiResponse,
+    LoginApiRequest,
+    LoginApiResponse,
+    NewPasswordApiRequest,
+    PasswordApiResponse,
     SignupApiRequest,
     SignupApiResponse,
-} from '@/types/signup';
-import { BaseApiResponse } from '@/types/baseResponse';
+    TemporaryPasswordApiRequest,
+} from '@/types/user';
 
 /**
  * POST Logout

@@ -1,8 +1,3 @@
-import {
-    emailValidationType,
-    SignUpInputs,
-    verificationCodeValidationType,
-} from '@/hooks/useSignupForm';
 import { CustomInput, ToastAnchor } from '../common';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,9 +5,13 @@ import {
     postCheckVerificationCode,
     postEmailVerificationCode,
 } from '@/hooks/api/auth';
+import {
+    emailValidationType,
+    SignUpInputs,
+    verificationCodeValidationType,
+} from '@/types/user';
 
 interface FirstStepPropsType {
-    pageNumber: number;
     register: UseFormRegister<SignUpInputs>;
     watch: UseFormWatch<SignUpInputs>;
     emailValidation: emailValidationType;
@@ -26,7 +25,6 @@ interface FirstStepPropsType {
 }
 
 export default function FirstStep({
-    pageNumber,
     register,
     watch,
     emailValidation,
@@ -81,8 +79,9 @@ export default function FirstStep({
                 }
             }
         });
+
         setSending(false);
-    }, [email, sending]);
+    }, [email, sending, showToast]);
 
     const handleNextBtn = useCallback(async () => {
         setLoading(true);
@@ -106,13 +105,14 @@ export default function FirstStep({
                 }
             }
         });
+
         setLoading(false);
         setSentNumber(false);
-    }, [email, verificationCode]);
+    }, [email, verificationCode, setLoading, showToast, setPageNumber]);
 
     return (
         <>
-            <div className={`${pageNumber !== 1 && 'hidden'}`}>
+            <div>
                 {/* 프로그래스바 */}
                 <div className="w-full bg-white h-1">
                     <div className="bg-point-400 h-1 w-[25%]"></div>
@@ -180,9 +180,7 @@ export default function FirstStep({
                     </div>
                 </div>
             </div>
-            <footer
-                className={`w-full max-w-[600px] px-6 py-2.5 mx-auto ${pageNumber !== 1 && 'hidden'}`}
-            >
+            <footer className={`w-full max-w-[600px] px-6 py-2.5 mx-auto`}>
                 <ToastAnchor>
                     <button
                         form="none"

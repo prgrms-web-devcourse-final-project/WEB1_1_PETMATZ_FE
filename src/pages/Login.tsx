@@ -1,46 +1,84 @@
-import { useFadeNavigate, useLoginForm } from '@/hooks';
+import { useFadeNavigate, useUserInfoForm } from '@/hooks';
 import Back from '@/assets/images/header/back.svg?react';
 import Forward from '@/assets/images/login/forward.svg?react';
 import { useCallback } from 'react';
 import { CustomInput, Loading, ToastAnchor } from '@/components/common';
 import { Success } from '@/components/login';
+import { LoginInputs } from '@/types/user';
+import { postLogin } from '@/hooks/api/auth';
+import { useUserStore } from '@/stores';
+import { emailValidation, passwordValidation } from '@/constants/validations';
 
 export default function Login() {
+    /**
+     * Handles form submission.
+     * @param {LoginInputs} data - The submitted form data.
+     * @returns {Promise<void>}
+     */
+    const onSubmitCallback = async (data: LoginInputs): Promise<void> => {
+        await postLogin(data).then((response) => {
+            console.log(response);
+            if (response.ok) {
+                const { id, accountId, nickname, isRegistered, region } =
+                    response.data;
+                setUser({
+                    id,
+                    accountId,
+                    nickname,
+                    isRegistered,
+                    region,
+                });
+                setIsSuccess(true);
+                setTimeout(() => {
+                    navigate('/home');
+                }, 3000);
+            } else {
+                if (response.error?.status === 400) {
+                    showToast('유효하지 않은 입력값입니다!', 'warning');
+                } else if (response.error?.status === 401) {
+                    showToast('로그인 정보가 일치하지 않습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
+            }
+        });
+    };
+
     const {
-        emailValidation,
-        passwordValidation,
         register,
         handleSubmit,
         watch,
         errors,
-        onSubmit,
         isValid,
-        success,
-        loading,
-    } = useLoginForm();
+        isSuccess,
+        setIsSuccess,
+        isLoading,
+        showToast,
+    } = useUserInfoForm<LoginInputs>(onSubmitCallback);
     const navigate = useFadeNavigate();
+    const { setUser } = useUserStore();
 
     const handleBackBtn = useCallback(() => {
         navigate('/');
-    }, []);
+    }, [navigate]);
 
     const handleForgotPWBtn = useCallback(() => {
         navigate('/forgot-password');
-    }, []);
+    }, [navigate]);
 
     const handleRouteToSignUpBtn = useCallback(() => {
         navigate('/signup');
-    }, []);
+    }, [navigate]);
 
-    if (success) {
+    if (isSuccess) {
         return <Success />;
     }
 
     return (
         <>
-            {loading && <Loading />}
+            {isLoading && <Loading />}
             <div
-                className={`${loading && 'hidden'} h-screen bg-gray-100 flex flex-col justify-between overflow-hidden`}
+                className={`${isLoading && 'hidden'} h-screen bg-gray-100 flex flex-col justify-between overflow-hidden`}
             >
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
@@ -60,7 +98,7 @@ export default function Login() {
                             </div>
                             <form
                                 id="login-form"
-                                onSubmit={handleSubmit(onSubmit)}
+                                onSubmit={handleSubmit}
                                 className="flex flex-col"
                             >
                                 <div className="flex flex-col gap-1">

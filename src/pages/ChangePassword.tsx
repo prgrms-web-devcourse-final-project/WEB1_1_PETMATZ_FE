@@ -1,30 +1,59 @@
-import { useChangePasswordForm, useFadeNavigate } from '@/hooks';
+import { useFadeNavigate, useUserInfoForm } from '@/hooks';
 import { useCallback, useState } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
 import Eye from '@/assets/images/change-password/eye.svg?react';
 import { CustomInput, Loading, ToastAnchor } from '@/components/common';
 import { Success } from '@/components/change-password';
+import { ChangePasswordInputs } from '@/types/user';
+import {
+    confirmPasswordValidation,
+    currentPasswordValidation,
+    newPasswordValidation,
+} from '@/constants/validations';
+import { postNewPassword } from '@/hooks/api/auth';
 
 export default function ChangePassword() {
-    const navigate = useFadeNavigate();
+    /**
+     * Handles form submission.
+     * @param {ChangePasswordInputs} data - The submitted form data.
+     * @returns {Promise<void>}
+     */
+    const onSubmitCallback = async (
+        data: ChangePasswordInputs,
+    ): Promise<void> => {
+        const { currentPassword, newPassword } = data;
+        await postNewPassword({ currentPassword, newPassword }).then(
+            (response) => {
+                if (response.ok) {
+                    setIsSuccess(true);
+                } else {
+                    if (response.error?.status === 403) {
+                        showToast('틀린 비밀번호입니다!', 'warning');
+                    } else {
+                        showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                    }
+                }
+            },
+        );
+    };
+
     const {
-        currentPasswordValidation,
-        newPasswordValidation,
-        confirmPasswordValidation,
         register,
         handleSubmit,
         watch,
         errors,
-        onSubmit,
         isValid,
-        success,
-        loading,
-    } = useChangePasswordForm();
+        isSuccess,
+        setIsSuccess,
+        isLoading,
+        showToast,
+    } = useUserInfoForm<ChangePasswordInputs>(onSubmitCallback);
     const [show, setShow] = useState(false);
+    const navigate = useFadeNavigate();
 
     const handleBackBtn = useCallback(() => {
         navigate(-1);
-    }, []);
+    }, [navigate]);
 
     const handlePasswordShowBtn = useCallback(() => {
         setShow((prev) => !prev);
@@ -32,9 +61,9 @@ export default function ChangePassword() {
 
     return (
         <>
-            {loading && <Loading />}
+            {isLoading && <Loading />}
             <div
-                className={`${loading && 'hidden'} h-screen ${success ? 'bg-white' : 'bg-gray-100'} flex flex-col justify-between overflow-hidden`}
+                className={`${isLoading && 'hidden'} h-screen ${isSuccess ? 'bg-white' : 'bg-gray-100'} flex flex-col justify-between overflow-hidden`}
             >
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
@@ -45,7 +74,7 @@ export default function ChangePassword() {
                         비밀번호 변경
                     </h1>
                 </header>
-                {!success ? (
+                {!isSuccess ? (
                     <>
                         <section className="flex-1 flex flex-col justify-start">
                             <div className="bg-white pt-6 pb-12 flex flex-col">
@@ -56,7 +85,7 @@ export default function ChangePassword() {
                                     </div>
                                     <form
                                         id="change-form"
-                                        onSubmit={handleSubmit(onSubmit)}
+                                        onSubmit={handleSubmit}
                                         className="flex flex-col gap-1"
                                     >
                                         <CustomInput
@@ -85,9 +114,9 @@ export default function ChangePassword() {
                                                 placeholder="새로운 비밀번호를 입력해주세요."
                                                 register={register}
                                                 watch={watch}
-                                                validation={
-                                                    newPasswordValidation
-                                                }
+                                                validation={newPasswordValidation(
+                                                    watch,
+                                                )}
                                                 error={
                                                     errors.newPassword?.message
                                                 }
@@ -106,9 +135,9 @@ export default function ChangePassword() {
                                             placeholder="비밀번호를 확인해주세요."
                                             register={register}
                                             watch={watch}
-                                            validation={
-                                                confirmPasswordValidation
-                                            }
+                                            validation={confirmPasswordValidation(
+                                                watch,
+                                            )}
                                             error={
                                                 errors.confirmPassword?.message
                                             }
