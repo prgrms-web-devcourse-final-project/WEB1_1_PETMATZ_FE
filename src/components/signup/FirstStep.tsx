@@ -1,8 +1,3 @@
-import {
-    emailValidationType,
-    SignUpInputs,
-    verificationCodeValidationType,
-} from '@/hooks/useSignupForm';
 import { CustomInput, ToastAnchor } from '../common';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,6 +5,11 @@ import {
     postCheckVerificationCode,
     postEmailVerificationCode,
 } from '@/hooks/api/auth';
+import {
+    emailValidationType,
+    SignUpInputs,
+    verificationCodeValidationType,
+} from '@/types/user';
 
 interface FirstStepPropsType {
     register: UseFormRegister<SignUpInputs>;
@@ -81,7 +81,7 @@ export default function FirstStep({
         });
 
         setSending(false);
-    }, [email, sending]);
+    }, [email, sending, showToast]);
 
     const handleNextBtn = useCallback(async () => {
         setLoading(true);
@@ -108,7 +108,7 @@ export default function FirstStep({
 
         setLoading(false);
         setSentNumber(false);
-    }, [email, verificationCode]);
+    }, [email, verificationCode, setLoading, showToast, setPageNumber]);
 
     return (
         <>

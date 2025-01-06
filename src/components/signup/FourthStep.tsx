@@ -1,4 +1,3 @@
-import { SignUpInputs } from '@/hooks/useSignupForm';
 import {
     Control,
     Controller,
@@ -16,6 +15,7 @@ import { useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import Check from '@/assets/images/forgot-password/check.svg?react';
 import { Option } from '@/hooks/useSelectBox';
+import { SignUpInputs } from '@/types/user';
 
 interface FourthStepPropsType {
     register: UseFormRegister<SignUpInputs>;
@@ -59,11 +59,11 @@ export default function FourthStep({
 
     const handleNextBtn = useCallback(() => {
         setShowModal(true);
-    }, []);
+    }, [setShowModal]);
 
     const handleCancelBtn = useCallback(() => {
         setShowModal(false);
-    }, []);
+    }, [setShowModal]);
 
     const modalContent = (
         <div

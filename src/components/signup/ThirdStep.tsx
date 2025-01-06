@@ -1,11 +1,11 @@
+import { CustomInput, ImageSelectBox } from '../common';
+import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import { useCallback } from 'react';
 import {
     introduceValidationType,
     nicknameValidationType,
     SignUpInputs,
-} from '@/hooks/useSignupForm';
-import { CustomInput, ImageSelectBox } from '../common';
-import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
-import { useCallback } from 'react';
+} from '@/types/user';
 
 interface ThirdStepPropsType {
     register: UseFormRegister<SignUpInputs>;
@@ -35,7 +35,7 @@ export default function ThirdStep({
 
     const handleNextBtn = useCallback(() => {
         setPageNumber((prev) => prev + 1);
-    }, []);
+    }, [setPageNumber]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import { ChangePasswordInputs } from '@/types/user';
+import { ChangePasswordInputs, SignUpInputs } from '@/types/user';
 import { UseFormWatch } from 'react-hook-form';
 
 export const emailValidation = {
@@ -74,3 +74,40 @@ export function confirmPasswordValidation(
             '새 비밀번호와 일치하지 않습니다!',
     };
 }
+
+export const verificationCodeValidation = {
+    required: '인증번호는 필수입니다!',
+};
+
+export function confirmPasswordValidationForSignup(
+    watch: UseFormWatch<SignUpInputs>,
+) {
+    return {
+        required: '비밀번호 확인은 필수입니다!',
+        validate: (value: string | boolean | string[]) =>
+            value === watch('password') || '비밀번호가 일치하지 않아요!',
+    };
+}
+
+export const nicknameValidation = {
+    required: '닉네임은 필수입니다!',
+    minLength: {
+        value: 2,
+        message: '닉네임은 최소 2자 이상이어야 합니다!',
+    },
+    maxLength: {
+        value: 10,
+        message: '닉네임은 최대 10자 이하이어야 합니다!',
+    },
+    pattern: {
+        value: /^[^\d]/,
+        message: '닉네임은 숫자로 시작할 수 없습니다!',
+    },
+};
+
+export const introduceValidation = {
+    maxLength: {
+        value: 50,
+        message: '자기소개는 최대 50자 이하이어야 합니다!',
+    },
+};

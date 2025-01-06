@@ -1,12 +1,12 @@
-import {
-    confirmPasswordValidationType,
-    passwordValidationType,
-    SignUpInputs,
-} from '@/hooks/useSignupForm';
 import { CustomInput } from '../common';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { useCallback, useState } from 'react';
 import Eye from '@/assets/images/change-password/eye.svg?react';
+import {
+    confirmPasswordValidationType,
+    passwordValidationType,
+    SignUpInputs,
+} from '@/types/user';
 
 interface SecondStepPropsType {
     register: UseFormRegister<SignUpInputs>;
@@ -36,7 +36,7 @@ export default function SecondStep({
 
     const handleNextBtn = useCallback(() => {
         setPageNumber((prev) => prev + 1);
-    }, []);
+    }, [setPageNumber]);
 
     return (
         <>

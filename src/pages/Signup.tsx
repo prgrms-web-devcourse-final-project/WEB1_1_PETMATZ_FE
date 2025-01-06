@@ -7,39 +7,135 @@ import {
     Success,
     ThirdStep,
 } from '@/components/signup';
-import { useFadeNavigate, useSelectBox, useSignupForm } from '@/hooks';
-import { useCallback } from 'react';
+import { useFadeNavigate, useSelectBox, useUserInfoForm } from '@/hooks';
+import { useCallback, useState } from 'react';
 import { options } from '@/constants/signup';
+import { SignUpInputs } from '@/types/user';
+import {
+    confirmPasswordValidationForSignup,
+    emailValidation,
+    introduceValidation,
+    nicknameValidation,
+    passwordValidation,
+    verificationCodeValidation,
+} from '@/constants/validations';
+import { postSignup, putImageToS3 } from '@/hooks/api/auth';
+
+// 위치 정보를 가져오는 함수
+const getLocation = () => {
+    return new Promise<{ latitude: string; longitude: string }>(
+        (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    resolve({
+                        latitude: position.coords.latitude.toString(),
+                        longitude: position.coords.longitude.toString(),
+                    });
+                },
+                (error) => {
+                    reject(error);
+                },
+            );
+        },
+    );
+};
 
 export default function Signup() {
-    const navigate = useFadeNavigate();
+    /**
+     * Handles form submission.
+     * @param {SignUpInputs} data - The submitted form data.
+     * @returns {Promise<void>}
+     */
+    const onSubmitCallback = async (data: SignUpInputs): Promise<void> => {
+        console.log(data);
+        const {
+            email,
+            verificationCode,
+            password,
+            nickname,
+            introduce,
+            genderBool,
+            possible,
+            dogSizes,
+            mbti,
+        } = data;
+        const accountId = email;
+        const certificationNumber = verificationCode;
+        const introduction = introduce;
+        const isCareAvailable = possible;
+        const preferredSizes = dogSizes;
+        const gender = genderBool ? 'FEMALE' : 'MALE';
+        const profileImg = imgName.startsWith('profile') ? imgName : '';
+        // 위치 정보 가져오기
+        const { latitude, longitude } = await getLocation();
+        await postSignup({
+            accountId,
+            password,
+            certificationNumber,
+            nickname,
+            gender,
+            preferredSizes,
+            introduction,
+            isCareAvailable,
+            mbti,
+            latitude,
+            longitude,
+            profileImg,
+        }).then(async (response) => {
+            console.log(response);
+            setShowModal(false);
+            if (response.ok) {
+                if (response.data.imgURL !== '') {
+                    const id = response.data.id!;
+                    const imgURL = response.data.imgURL!;
+                    const img = imgFile!;
+                    const type = 'U';
+
+                    const result = await putImageToS3({
+                        id,
+                        imgURL,
+                        img,
+                        type,
+                    });
+
+                    if (result) {
+                        setIsSuccess(true);
+                        setTimeout(() => {
+                            navigate('/login');
+                        }, 3000);
+                    } else {
+                        showToast('회원 등록에 실패했습니다!', 'warning');
+                    }
+                } else {
+                    setIsSuccess(true);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 3000);
+                }
+            } else {
+                if (response.error?.status === 401) {
+                    showToast('회원 등록에 실패했습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
+            }
+        });
+    };
+
     const {
-        pageNumber,
-        setPageNumber,
-        emailValidation,
-        verificationCodeValidation,
-        passwordValidation,
-        confirmPasswordValidation,
-        nicknameValidation,
-        introduceValidation,
         register,
         handleSubmit,
         watch,
         errors,
-        onSubmit,
         isValid,
         control,
-        success,
-        imgName,
-        setImgName,
-        loading,
-        setLoading,
-        showModal,
-        setShowModal,
+        isSuccess,
+        setIsSuccess,
+        isLoading,
+        setIsLoading,
         showToast,
         isToastActive,
-        setImg,
-    } = useSignupForm();
+    } = useUserInfoForm<SignUpInputs>(onSubmitCallback);
     const {
         options: selectOptions,
         selectOption,
@@ -48,6 +144,11 @@ export default function Signup() {
         selectedOption,
         selectBoxRef,
     } = useSelectBox(options);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [imgName, setImgName] = useState('profile1');
+    const [showModal, setShowModal] = useState(false);
+    const [imgFile, setImg] = useState<File | null>(null);
+    const navigate = useFadeNavigate();
 
     const handleBackBtn = useCallback(() => {
         if (pageNumber === 1) {
@@ -55,15 +156,15 @@ export default function Signup() {
         } else {
             setPageNumber((prev) => prev - 1);
         }
-    }, [pageNumber]);
+    }, [pageNumber, navigate, setPageNumber]);
 
-    if (success) return <Success />;
+    if (isSuccess) return <Success />;
 
     return (
         <>
-            {loading && <Loading />}
+            {isLoading && <Loading />}
             <div
-                className={`${loading && 'hidden'} h-screen bg-gray-100 flex flex-col overflow-hidden`}
+                className={`${isLoading && 'hidden'} h-screen bg-gray-100 flex flex-col overflow-hidden`}
             >
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
@@ -76,7 +177,7 @@ export default function Signup() {
                 </header>
                 <form
                     id="signup-form"
-                    onSubmit={handleSubmit(onSubmit)}
+                    onSubmit={handleSubmit}
                     className="h-full flex-1 flex flex-col justify-between"
                 >
                     {pageNumber === 1 && (
@@ -90,7 +191,7 @@ export default function Signup() {
                             errors={errors}
                             isValid={isValid}
                             setPageNumber={setPageNumber}
-                            setLoading={setLoading}
+                            setLoading={setIsLoading}
                             showToast={showToast}
                             isToastActive={isToastActive}
                         />
@@ -100,9 +201,9 @@ export default function Signup() {
                             register={register}
                             watch={watch}
                             passwordValidation={passwordValidation}
-                            confirmPasswordValidation={
-                                confirmPasswordValidation
-                            }
+                            confirmPasswordValidation={confirmPasswordValidationForSignup(
+                                watch,
+                            )}
                             errors={errors}
                             setPageNumber={setPageNumber}
                         />
@@ -127,7 +228,7 @@ export default function Signup() {
                             errors={errors}
                             control={control}
                             isValid={isValid}
-                            loading={loading}
+                            loading={isLoading}
                             showModal={showModal}
                             setShowModal={setShowModal}
                             selectOptions={selectOptions}
