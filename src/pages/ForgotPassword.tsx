@@ -1,32 +1,58 @@
-import { useFadeNavigate, useForgotPasswordForm } from '@/hooks';
+import { useFadeNavigate, useUserInfoForm } from '@/hooks';
 import { useCallback } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
 import { CustomInput, Loading, ToastAnchor } from '@/components/common';
 import { Success } from '@/components/forgot-password';
+import { ForgotPasswordInputs } from '@/types/user';
+import { emailValidation } from '@/constants/validations';
+import { postTemporaryPassword } from '@/hooks/api/auth';
 
 export default function ForgotPassword() {
-    const navigate = useFadeNavigate();
+    /**
+     * Handles form submission.
+     * @param {ForgotPasswordInputs} data - The submitted form data.
+     * @returns {Promise<void>}
+     */
+    const onSubmitCallback = async (
+        data: ForgotPasswordInputs,
+    ): Promise<void> => {
+        const accountId = data.email;
+        await postTemporaryPassword({ accountId }).then((response) => {
+            console.log(response);
+            if (response.ok) {
+                setIsSuccess(true);
+            } else {
+                if (response.error?.status === 404) {
+                    showToast('존재하지 않는 사용자입니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
+            }
+        });
+    };
+
     const {
-        emailValidation,
         register,
         handleSubmit,
         watch,
         errors,
-        onSubmit,
         isValid,
-        success,
-        loading,
-    } = useForgotPasswordForm();
+        isSuccess,
+        setIsSuccess,
+        isLoading,
+        showToast,
+    } = useUserInfoForm<ForgotPasswordInputs>(onSubmitCallback);
+    const navigate = useFadeNavigate();
 
     const handleBackBtn = useCallback(() => {
         navigate('/login');
-    }, []);
+    }, [navigate]);
 
     return (
         <>
-            {loading && <Loading />}
+            {isLoading && <Loading />}
             <div
-                className={`${loading && 'hidden'} h-screen ${success ? 'bg-white' : 'bg-gray-100'} flex flex-col justify-between overflow-hidden`}
+                className={`${isLoading && 'hidden'} h-screen ${isSuccess ? 'bg-white' : 'bg-gray-100'} flex flex-col justify-between overflow-hidden`}
             >
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
@@ -37,7 +63,7 @@ export default function ForgotPassword() {
                         비밀번호 재발급
                     </h1>
                 </header>
-                {!success ? (
+                {!isSuccess ? (
                     <>
                         <section className="flex-1 flex flex-col justify-start">
                             <div className="bg-white pt-6 pb-12 flex flex-col">
@@ -48,7 +74,7 @@ export default function ForgotPassword() {
                                     </div>
                                     <form
                                         id="forgot-form"
-                                        onSubmit={handleSubmit(onSubmit)}
+                                        onSubmit={handleSubmit}
                                     >
                                         <CustomInput
                                             id="email"

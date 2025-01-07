@@ -23,6 +23,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
         slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
         arrows: false, // 좌우 화살표 표시
     };
+    const missionDataState = missionData?.data.result.length !== 0;
 
     const navigate = useFadeNavigate();
 
@@ -44,6 +45,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
         missionData?.data?.result?.filter(
             (item): item is PetMissionResult => item?.roleType === 'DOL',
         ) || [];
+
     const entrustedDogs: PetMissionResult[] =
         missionData?.data?.result?.filter(
             (item): item is PetMissionResult => item?.roleType === 'MAL',
@@ -53,7 +55,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
         <div className="w-full h-auto flex flex-col gap-6 ">
             {/* 상단 알림 */}
             <button onClick={handleHelpBtn}>
-                {missionData?.ok ? (
+                {missionDataState ? (
                     <p className="flex justify-between text-label-m font-extrabold text-gray-700 px-[18px] py-3 bg-point-50 rounded-full rounded-bl-lg">
                         {user?.nickname}님은 현재 부탁을 진행하고 있어요!
                         <ArrowRight className="w-3 h-3" />
@@ -81,7 +83,7 @@ export default function HomeHelpDog({ missionData }: HomeHelpDogProps) {
                     </button>
                 </div>
 
-                {!missionData?.ok ? (
+                {!missionDataState ? (
                     <div className="flex justify-between items-center w-full h-[153px] px-6 py-[18px] bg-white rounded-2xl mt-6">
                         <div>
                             <h2 className="text-body-l font-extrabold mb-2 text-gray-900">

@@ -36,7 +36,7 @@ export default function RequestList({
         sexNm: pet.gender === 'FEMALE' ? '암컷' : '수컷',
         kindNm: pet.breed,
         neuterYn: pet.neuterYn,
-        profileImg: pet.profileImg, // 기본 이미지
+        profileImg: pet.imgURL, // 기본 이미지
         age: pet.age,
         temperament: pet.temperament,
         size: pet.size,

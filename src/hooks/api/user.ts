@@ -1,4 +1,6 @@
 import {
+    DeleteAccountApiRequest,
+    DeleteAccountApiResponse,
     EditMyProfileRequest,
     EditMyProfileResponse,
     LikeApiRequest,
@@ -8,10 +10,6 @@ import {
     ProfileApiResponse,
 } from '@/types/user';
 import { http } from './base';
-import {
-    DeleteAccountApiRequest,
-    DeleteAccountApiResponse,
-} from '@/types/deleteAccount';
 import { KakaoSignupApiRequest, KakaoSignupApiResponse } from '@/types/kakao';
 
 /**

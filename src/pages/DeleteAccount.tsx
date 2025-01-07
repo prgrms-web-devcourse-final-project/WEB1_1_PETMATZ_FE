@@ -1,36 +1,64 @@
-import { useDeleteAccountForm, useFadeNavigate } from '@/hooks';
+import { useFadeNavigate, useUserInfoForm } from '@/hooks';
 import { useCallback } from 'react';
 import Back from '@/assets/images/header/back.svg?react';
 import { CustomInput, Loading, ToastAnchor } from '@/components/common';
 import { Success } from '@/components/delete-account';
+import { DeleteAccountInputs } from '@/types/user';
+import { passwordValidation } from '@/constants/validations';
+import { postDeleteAccount } from '@/hooks/api/user';
 
 export default function ForgotPassword() {
+    /**
+     * Handles form submission.
+     * @param {DeleteAccountInputs} data - The submitted form data.
+     * @returns {Promise<void>}
+     */
+    const onSubmitCallback = async (
+        data: DeleteAccountInputs,
+    ): Promise<void> => {
+        await postDeleteAccount(data).then((response) => {
+            if (response.ok) {
+                setIsSuccess(true);
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
+            } else {
+                console.log(response);
+                if (response.error?.status === 403) {
+                    showToast('비밀번호를 틀렸습니다!', 'warning');
+                } else {
+                    showToast('서버 연결 문제가 발생했습니다!', 'warning');
+                }
+            }
+        });
+    };
+
     const {
-        passwordValidation,
         register,
         handleSubmit,
         watch,
         errors,
-        onSubmit,
         isValid,
-        success,
-        loading,
-    } = useDeleteAccountForm();
+        isSuccess,
+        setIsSuccess,
+        isLoading,
+        showToast,
+    } = useUserInfoForm<DeleteAccountInputs>(onSubmitCallback);
     const navigate = useFadeNavigate();
 
     const handleBackBtn = useCallback(() => {
         navigate(-1);
-    }, []);
+    }, [navigate]);
 
-    if (success) {
+    if (isSuccess) {
         return <Success />;
     }
 
     return (
         <>
-            {loading && <Loading />}
+            {isLoading && <Loading />}
             <div
-                className={`${loading && 'hidden'} h-screen bg-gray-100 flex flex-col justify-between overflow-hidden`}
+                className={`${isLoading && 'hidden'} h-screen bg-gray-100 flex flex-col justify-between overflow-hidden`}
             >
                 <header className="bg-white h-14 w-full flex items-center justify-center">
                     <Back
@@ -50,7 +78,7 @@ export default function ForgotPassword() {
                             </div>
                             <form
                                 id="delete-form"
-                                onSubmit={handleSubmit(onSubmit)}
+                                onSubmit={handleSubmit}
                                 className="flex flex-col"
                             >
                                 <CustomInput
