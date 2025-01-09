@@ -282,6 +282,22 @@ interface LikedUserListApiResponse extends BaseApiResponse {
     };
 }
 
+/**
+ * Profile Edit form types
+ */
+interface ProfileEditInputs {
+    /** User's new nickname */
+    nickname: string;
+    /** User's new preference of dog sizes */
+    preferredSizes: ('SMALL' | 'MEDIUM' | 'LARGE')[];
+    /** User's new introduction */
+    introduction: string;
+    /** User's possibility of caring dogs */
+    careAvailable: boolean;
+    /** User's new profile image */
+    profileImg: string;
+}
+
 // POST Edit MyProfile informations
 interface EditMyProfileRequest {
     nickname: string;
@@ -328,6 +344,7 @@ export type {
     LikedUser,
     ProfileApiQueryString,
     ProfileApiResponse,
+    ProfileEditInputs,
     EditMyProfileRequest,
     EditMyProfileResponse,
     LikeApiRequest,
