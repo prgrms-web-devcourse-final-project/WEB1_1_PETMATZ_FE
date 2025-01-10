@@ -66,8 +66,8 @@ export default function Profile() {
     }, [data, setImage, isMyProfile]);
 
     const handleEditBtn = useCallback(() => {
-        navigate('/edit-profile');
-    }, [navigate]);
+        navigate(`/edit-profile/${id}`);
+    }, [navigate, id]);
 
     const handleChatBtn = useCallback(async () => {
         const entrustedEmail = data!.data.accountId; // 상대방 이메일

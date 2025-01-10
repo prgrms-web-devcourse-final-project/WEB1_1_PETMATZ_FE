@@ -294,8 +294,6 @@ interface ProfileEditInputs {
     introduction: string;
     /** User's possibility of caring dogs */
     careAvailable: boolean;
-    /** User's new profile image */
-    profileImg: string;
 }
 
 // POST Edit MyProfile informations

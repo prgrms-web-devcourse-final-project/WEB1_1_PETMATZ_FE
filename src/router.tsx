@@ -84,7 +84,10 @@ export default function AppRoutes() {
                         <Route path="/edit-dog/:dogId" element={<DogEdit />} />
                         <Route path="/please/write" element={<PleaseWrite />} />
                         <Route path="/please/:id" element={<PleaseDetail />} />
-                        <Route path="/edit-profile" element={<ProfileEdit />} />
+                        <Route
+                            path="/edit-profile/:id"
+                            element={<ProfileEdit />}
+                        />
                         <Route path="/sos/:id" element={<SOSDetail />} />
                         <Route path="/like" element={<Like />} />
                     </Route>
