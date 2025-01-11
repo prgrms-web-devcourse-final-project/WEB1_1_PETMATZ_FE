@@ -18,6 +18,7 @@ export default function useUserInfoForm<T extends FieldValues>(
         watch,
         formState: { errors, isValid },
         control,
+        reset,
     } = useForm<T>({
         mode: 'onChange',
     });
@@ -52,5 +53,6 @@ export default function useUserInfoForm<T extends FieldValues>(
         setIsSuccess,
         showToast,
         isToastActive,
+        reset,
     };
 }
