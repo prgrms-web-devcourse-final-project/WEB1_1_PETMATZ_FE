@@ -123,7 +123,7 @@ export default function ProfileEdit() {
         <>
             {(userLoading || isLoading) && <Loading />}
             <div
-                className={`${isLoading && 'hidden'} h-screen bg-white flex flex-col overflow-y-auto`}
+                className={`${(userLoading || isLoading) && 'hidden'} h-screen bg-white flex flex-col overflow-y-auto`}
             >
                 {/* Header */}
                 <header className="bg-white min-h-14 w-full flex items-center justify-center sticky top-0">
